@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Ghost Blog as Your Github User Page - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called buster My current &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Ghost Blog as Your Github User Page</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-15T19:54:00+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:54 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called <a href="https://github.com/axitkhurana/buster">buster</a></p>
+
+<p>My current github pages are setup using Octopress, both ghost and octopress has its advantages and disadvantages. Every time I&rsquo;m making a new post using octopress, I have to go to some online markdown editor to write my post. Where as Ghost has its inbuilt markdown editor where you can preview your changes as you type. That can be a little annoying. Even though my current setup still uses octopress, I am editing this markdown using Ghost. One disadvantage of ghost is that it stores all the my blog posts in a local sqlite db, where as in octopress, I can see my markdown files and edit and commit changes to the main repository.</p>
+
+<h2>3 Steps</h2>
+
+<ul>
+<li>Setup Ghost Blog</li>
+<li>Generate Static Content using <a href="https://github.com/axitkhurana/buster">Buster</a></li>
+<li>Gotchas.</li>
+</ul>
+
+
+<h3>Setting up Ghost</h3>
+
+<ul>
+<li>Download ghost from <a href="https://ghost.org/download/">here.</a></li>
+<li>Install npm dependencies.</li>
+<li>npm start to run it on your local machine port 2368.</li>
+<li>Click <a href="http://localhost:2368/ghost">here</a> to register a new user and start posting new blog posts.</li>
+<li>If you want, you can download additional themes into /content/themes folder and change the theme in your <a href="http://localhost:2368/ghost/settings">ghost settings.</a></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; npm install
+</span><span class='line'>&gt; npm start</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Generating Static Pages from your ghost blog using <a href="https://github.com/axitkhurana/buster">Buster.</a></h3>
+
+<ul>
+<li>You need wget for buster python package to work.</li>
+<li>Download and install wget and its dependencies from <a href="http://gnuwin32.sourceforge.net/packages/wget.htm">here.</a></li>
+<li>Install <em>libintl-2</em>, <em>libiconv-2</em>, <em>openssl</em> along with <em>wget</em> as given in the end of the wget download page.</li>
+<li>You can install <strong>buster</strong> using pip, and can use <em>buster</em> directly from the command line, but you are likely to face problems if you are using Windows. Instead you can just clone the buster repo and use the <strong>buster.py</strong> directly.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; pip install buster
+</span><span class='line'>&gt; buster setup --gh-repo=&lt;repo-url&gt;
+</span><span class='line'>&gt; buster generate --domain=http://localhost:2368</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>or</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; git clone http://github.com/axitkhurana/buster
+</span><span class='line'>&gt; cd buster
+</span><span class='line'>&gt; python buster/buster.py setup --gh-repo=&lt;repo-url&gt;
+</span><span class='line'>&gt; python buster/buster.py generate --domain=http://localhost:2386</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><strong><em>setup</em></strong> argumet will ask you for the github repo of your userpage and creates a directory named <strong>static</strong></li>
+<li><strong><em>generate</em></strong> argument will recursively download all the static files of a given url into <strong>static</strong> folder.</li>
+<li><strong><em>preview</em></strong> argument will start a simple python webserver and hosts the static files in your <strong>static</strong> folder on your localmachine port 9000, so that you can preview the static files genereated by your previous command.</li>
+<li><strong><em>deploy</em></strong> will push changes to your github repository</li>
+</ul>
+
+
+<h3>Gotchas</h3>
+
+<ul>
+<li><strong>wget</strong> has some problems downloading a webpage using <strong>generate</strong> command because of \\ slashes so remove those according to this <a href="https://github.com/syllogismos/buster/commit/ba2c8df24b78361699e767891f14ed63d775ec21#diff-a61cc6042865036a60870334dd92047cL39">commit.</a></li>
+<li>When previewing the static site generated, <strong>.css</strong> and <strong>.js</strong> using pythons SimpleHttpServer, the MIME type is changed to <strong>application/octet-stream</strong>. In order to fix this we have an additional class named <strong>ExtHandler</strong> that extends <em>SimpleHttpRequestHandler</em> to change the default <em>get_type()</em> behaviour.</li>
+<li>This <a href="https://github.com/syllogismos/buster/commit/ba2c8df24b78361699e767891f14ed63d775ec21#diff-a61cc6042865036a60870334dd92047cL39">commit</a> has both of the above changes.</li>
+<li>If you are on windows, I recommend cloning <a href="http://github.com/syllogismos/buster">this fork</a> of buster instead of the original, that has both of the above fixes.</li>
+<li>Some static files aren&rsquo;t downloaded using the <strong>generate</strong> command, my understanding is that the static files that are requested from javascript or fonts requested using css aren&rsquo;t generated. You are better of copying the static files and images that aren&rsquo;t in your static folder directly.</li>
+</ul>
+
+
+<h3>Summary</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>## download ghost
+</span><span class='line'>&gt; cd ghost
+</span><span class='line'>&gt; npm install
+</span><span class='line'>&gt; npm start
+</span><span class='line'>## ghost blog is in http://localhost:2368
+</span><span class='line'>## admin/settings in http://localhost:2368/ghost
+</span><span class='line'>
+</span><span class='line'>## change to another directory where you want your generated static website to reside
+</span><span class='line'>&gt; git clone https://github.com/syllogismos/buster
+</span><span class='line'>&gt; cd buster
+</span><span class='line'>
+</span><span class='line'>&gt; python buster/buster.py setup
+</span><span class='line'>## give your github page repository, it creates a static dir
+</span><span class='line'>
+</span><span class='line'>&gt; python buster/buster.py generate --domain=http://localhost:2368
+</span><span class='line'>## downloads all the static files into your static dir
+</span><span class='line'>
+</span><span class='line'>&gt; python buster/buster.py preview
+</span><span class='line'>## to see your downloaded static files are proper
+</span><span class='line'>## If you see any of the static files missing, say fonts or images, just copy them from your ghost directory
+</span><span class='line'>## make sure your generated static files look okay
+</span><span class='line'>
+</span><span class='line'>&gt; python buster/buster.py deploy # to commit your changes to the github repo</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thank you.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-09-15T19:54:00+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:54 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/13/stochastic-gradient-descent/" title="Previous Post: Stochastic Gradient Descent in AD.">&laquo; Stochastic Gradient Descent in AD.</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

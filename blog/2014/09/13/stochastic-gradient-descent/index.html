@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Stochastic Gradient Descent in AD. - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="In stochastic gradient descent, the true gradient is approximated by gradient at each single example. As the algorithm sweeps through the training &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2014/09/13/stochastic-gradient-descent/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Stochastic Gradient Descent in AD.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-09-13T19:17:43+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:17 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In <strong>stochastic gradient descent</strong>, the true gradient is approximated by gradient at each single example.</p>
+
+<p><img src="http://upload.wikimedia.org/math/7/d/9/7d9f6671a202d94d26730ef898d8d4f2.png" alt="update rule" /></p>
+
+<p>As the algorithm sweeps through the training set, it performs the above update for each training example. Several passes can be made over the training set until the algorithm converges, if this is done, the data can be shuffled for each pass to prevent cycles.</p>
+
+<p>Obviously it is faster than normal gradient descent, cause we don&rsquo;t have to compute  cost function over the entire data set in each iteration in case of stochastic gradinet descent.</p>
+
+<h2>stochasticGradientDescent in AD:</h2>
+
+<p>This is my implementation of Stochastic Gradient Descent in AD library, you can get it from <a href="http://github.com/syllogismos/ad">my fork</a> of AD.</p>
+
+<p>Its type signature is</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>stochasticGradientDescent :: (Traversable f, Fractional a, Ord a) 
+</span><span class='line'>  =&gt; (forall s. Reifies s Tape =&gt; f (Scalar a) -&gt; f (Reverse s a) -&gt; Reverse s a) 
+</span><span class='line'>  -&gt; [f (Scalar a)]
+</span><span class='line'>  -&gt; f a 
+</span><span class='line'>  -&gt; [f a]</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<h4>Its arguments are:</h4>
+
+<ul>
+<li><code>errorSingle :: (forall s. Reifies s Tape =&gt; f (Scalar a) -&gt; f (Reverse s a) -&gt; Reverse s a)</code> function, that computes error in a single training sample given <code>theta</code></li>
+<li>Entire training data, you should be able to map the above <code>errorSingle</code> function over the training data.</li>
+<li>and initial Theta</li>
+</ul>
+
+
+<h2>Example:</h2>
+
+<p><a href="https://raw.githubusercontent.com/syllogismos/machine-learning-haskell/master/exampledata.txt">Here</a> is the sample data I&rsquo;m running <code>stochasticGradientDescent</code> on.</p>
+
+<p>Its just 97 rows of samples with two columns, first column is <code>y</code> and the other is <code>x</code></p>
+
+<p>Below is our error function, a simple squared loss error function. You can introduce regularization here if you want.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>errorSingle :: 
+</span><span class='line'>  forall a. (Floating a, Mode a) 
+</span><span class='line'>  =&gt; [Scalar a] 
+</span><span class='line'>  -&gt; [a] 
+</span><span class='line'>  -&gt; a
+</span><span class='line'>errorSingle d0 theta = sqhalf $ costSingle (tail d0) theta - auto ( head d0)
+</span><span class='line'>  where
+</span><span class='line'>    sqhalf t = (t**2)/2
+</span><span class='line'>    
+</span><span class='line'>costSingle x' theta' = constant + sum (zipWith (*) coeff autox')
+</span><span class='line'>      where
+</span><span class='line'>        constant = head theta'
+</span><span class='line'>        autox' = map auto x'
+</span><span class='line'>        coeff = tail theta'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Running Stochastic Gradient Descent:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>lambda: a &lt;- readFile "exampledata.txt"
+</span><span class='line'>lambda: let d = lines a
+</span><span class='line'>lambda: let train = map ((read :: String -&gt; [Float]) . (\tmp -&gt; "[" ++ tmp ++ "]")) d
+</span><span class='line'>lambda: let sgdRegressor = stochasticGradientDescent errorSingle train
+</span><span class='line'>
+</span><span class='line'>lambda: sgdRegressor [0, 0] !! 96
+</span><span class='line'>[0.2981517,1.2027082]
+</span><span class='line'>(0.03 secs, 4228764 bytes)
+</span><span class='line'>
+</span><span class='line'>lambda: sgdRegressor [0, 0] !! (97*2 -1)
+</span><span class='line'>[0.49144596,1.1814859]
+</span><span class='line'>(0.03 secs, 2097796 bytes)
+</span><span class='line'>
+</span><span class='line'>lambda: sgdRegressor [0, 0] !! (97*3 -1)
+</span><span class='line'>[0.67614514,1.1605322]
+</span><span class='line'>(0.03 secs, 2647504 bytes)
+</span><span class='line'>
+</span><span class='line'>lambda: sgdRegressor [0, 0] !! (97*4 -1)
+</span><span class='line'>[0.8526818,1.1405041]
+</span><span class='line'>(0.03 secs, 3158452 bytes)
+</span><span class='line'>
+</span><span class='line'>lambda: sgdRegressor [0, 0] !! (97*5 -1)
+</span><span class='line'>[1.0214167,1.1213613]
+</span><span class='line'>(0.05 secs, 3707068 bytes)</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Cross checking with <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html">SGDRegressor</a> from scikit-learn</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; import csv
+</span><span class='line'>&gt; import numpy as np
+</span><span class='line'>&gt; from sklearn import linear_model
+</span><span class='line'>
+</span><span class='line'>&gt; f = open('exampledata.txt', 'r')
+</span><span class='line'>&gt; fcsv = csv.reader(f)
+</span><span class='line'>
+</span><span class='line'>&gt; d = []
+</span><span class='line'>&gt; try:
+</span><span class='line'>&gt;    while True:
+</span><span class='line'>&gt;        d.append(fcsv.next())
+</span><span class='line'>&gt; except:
+</span><span class='line'>&gt;     pass
+</span><span class='line'>&gt; f.close()
+</span><span class='line'>
+</span><span class='line'>&gt; for i in range(len(d)):
+</span><span class='line'>&gt;     for j in range(2):
+</span><span class='line'>&gt;         d[i][j] = float(d[i][j])
+</span><span class='line'>
+</span><span class='line'>&gt; x = []
+</span><span class='line'>&gt; y = []
+</span><span class='line'>&gt; for i in range(len(d)):
+</span><span class='line'>&gt;     x.append(d[i][1:])
+</span><span class='line'>&gt;     y.append(d[i][0])
+</span><span class='line'>
+</span><span class='line'># initial learning rate eta0 = 0.001
+</span><span class='line'># learning rate is constant
+</span><span class='line'># regularization parameter alpha = 0.0, as we ignored reqularization
+</span><span class='line'># loss function = squared_loss
+</span><span class='line'># n_iter or epoch, how many times does the algorithm pass our training data.
+</span><span class='line'>&gt; reg = linear_model.SGDRegressor(alpha=0.0, eta0=0.001, loss='squared_loss',n_iter=1, learning_rate='constant' )
+</span><span class='line'># start training with initial theta of 0, 0
+</span><span class='line'>&gt; sgd = reg.fit(x,y, coef_init=[0], intercept_init=[0])
+</span><span class='line'>&gt; print [sgd.intercept_, sgd.coef_]
+</span><span class='line'>[array([ 0.29815173]), array([ 1.20270826])]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The only restriction we have in our implementation of stochasticGradientDescent is that we set the learning rate a default value of 0.001 and is a constant through out the algorithm.</p>
+
+<p>The rest of the things like the sort of regulariztion, regularization parameter, loss function we are using, we can specify in <code>errorSingle</code>.</p>
+
+<h2>Results:</h2>
+
+<p>So when <code>n_iter = 1</code>, went through the entire data set once, so we must check <code>97th</code> theta from our regression result from <strong>AD</strong>.
+Similarly <code>n_iter = 2</code> implies <code>97*2</code> iteration in our implementation, and etc.,</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>n-iter = 1, i = 96
+</span><span class='line'>scikit-learn: [array([ 0.29815173]), array([ 1.20270826])]
+</span><span class='line'>AD: [0.2981517,1.2027082]
+</span><span class='line'>
+</span><span class='line'>n-iter = 2, i = 97x2 - 1
+</span><span class='line'>scikit-learn: [array([ 0.49144583]), array([ 1.18148583])]  
+</span><span class='line'>AD: [0.49144596,1.1814859]
+</span><span class='line'>
+</span><span class='line'>n-iter = 3, i = 97x3 - 1  
+</span><span class='line'>scikit-learn: [array([ 0.67614512]), array([ 1.16053217])]  
+</span><span class='line'>AD: [0.67614514,1.1605322]
+</span><span class='line'>
+</span><span class='line'>n-iter = 4, i = 97x4 - 1  
+</span><span class='line'>scikit-learn: [array([ 0.85268182]), array([ 1.14050415])]  
+</span><span class='line'>AD: [0.8526818,1.1405041]
+</span><span class='line'>
+</span><span class='line'>n-iter = 5, i = 97X5 -1  
+</span><span class='line'>scikit-learn: [array([ 1.02141669]), array([ 1.12136124])]  
+</span><span class='line'>AD: [1.0214167,1.1213613]</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://www.github.com/syllogismos/machine-learning-haskell">Here</a> in this repository, you can find the ipython notebook and haskell code so that you can test these yourself.</p>
+
+<h2>References:</h2>
+
+<ol>
+<li><a href="http://en.wikipedia.org/wiki/Stochastic_gradient_descent">Stochastic Gradient Descent on wikipedia</a></li>
+<li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html">SGDRegressor from scikit-learn</a></li>
+<li><a href="http://www.quora.com/Whats-the-difference-between-gradient-descent-and-stochastic-gradient-descent">Gradient Descent vs Stochastic Gradient Descent</a></li>
+<li><a href="http://metaoptimize.com/qa/questions/10046/batch-gradient-descent-vs-stochastic-gradient-descent">Batch Gradient Descent vs Stochastic Gradient Descent</a></li>
+<li><a href="http://stats.stackexchange.com/questions/49528/batch-gradient-descent-versus-stochastic-gradient-descent">Batch Gradient Descent vs Stochastic Gradient Descent</a></li>
+</ol>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-09-13T19:17:43+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:17 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2014/09/13/stochastic-gradient-descent/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2014/09/13/stochastic-gradient-descent/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/" title="Previous Post: Tinder like Android app that showcases Products from a Fashion Website">&laquo; Tinder like Android app that showcases Products from a Fashion Website</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/" title="Next Post: Ghost blog as your Github User Page">Ghost blog as your Github User Page &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

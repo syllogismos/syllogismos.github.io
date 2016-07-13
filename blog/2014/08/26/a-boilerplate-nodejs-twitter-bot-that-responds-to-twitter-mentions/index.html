@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions. - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="Start by forking this github repo Config: Make a copy of config.template.json named config.json, and fill your secret keys of your twitter bot that &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-26T23:20:56+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:20 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Start by forking this <a href="https://github.com/syllogismos/twitter-bot-template">github repo</a></p>
+
+<h2>Config:</h2>
+
+<p>Make a copy of config.template.json named config.json, and fill your secret keys of your twitter bot that you obtain from <a href="https://apps.twitter.com">here</a> and make sure your twitter app has both read and write access in the &ldquo;permissions&rdquo; tab.</p>
+
+<h2>Installation</h2>
+
+<p>Install all the node dependencies.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; npm install</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Your bot code.</h2>
+
+<p>The bot is written in coffeescript, and the compiled javascript is also provided in case if you prefer that.</p>
+
+<p>At the least you need to fill the function <strong>solve</strong> whose only argument is the tweet text, include all the mentions. Not the Tweet Object, its just the tweet text.</p>
+
+<p>You are also provided with a function <strong>isOfWrongFormat</strong> that defaults to <em>false</em> which checks the validity of the tweet text. And its only argument is the tweet text as well. Not the tweet object.</p>
+
+<h2>Running the bot.</h2>
+
+<p>If you wrote the bot in coffee-script do this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; coffee twitterBot.coffee</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Or if you wrote it in plain javascript do this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; node twitterBot.js</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to compile your coffee-script to plain javascript you can run the coffee command with a <em>-c</em> flag</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; coffee -c twitterBot.coffee</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Sample Bot</h2>
+
+<p>You can find a sample twitter bot that I wrote based on this, albeit slightly modified is <a href="https://github.com/syllogismos/countdownbot">countdownbot</a></p>
+
+<p>It responds with a solution of the <strong>numbers game</strong> from the game show <strong>Countdown</strong>, if someone mentions the bot along with the target number and the rest of the numbers..</p>
+
+<p>After you fill the config in the countdownbot as shown above, and ran it, Anyone mentioning your bot along with a set of numbers, with the first one being the target number</p>
+
+<p>@someRandomPerson: @countdownbot 347 2 3 10 75 23 12</p>
+
+<p>it responds like this.</p>
+
+<p>@countdownbot: @someRandomPerson One possible solution for 347 is: (10*(12+23))-3</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-26T23:20:56+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:20 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/" title="Previous Post: Octopress blog as User Page in Github, using Windows">&laquo; Octopress blog as User Page in Github, using Windows</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/" title="Next Post: Tinder like Android app that showcases Products from a Fashion Website">Tinder like Android app that showcases Products from a Fashion Website &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

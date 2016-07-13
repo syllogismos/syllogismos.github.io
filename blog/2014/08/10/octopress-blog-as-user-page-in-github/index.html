@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopress Blog as User Page in Github, Using Windows - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="Step by step instructions to install Octopress blog on Windows to setup your github use page. Download RubyInstaller and ruby dev kit from here and &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2014/08/10/octopress-blog-as-user-page-in-github/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress Blog as User Page in Github, Using Windows</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-08-10T16:15:42+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:15 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Step by step instructions to install Octopress blog on Windows to setup your github use page.</p>
+
+<ul>
+<li>Download RubyInstaller and ruby dev kit from <a href="http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-1.9.3-p545.exe?direct">here</a> and <a href="https://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe">here</a></li>
+<li>The above installer installs Ruby 1.9.3, eventhough the most recent stable version > 2.0.0</li>
+<li>Go to the directory where the dev-kit is installed and do the following</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; cd ruby-dev-kit
+</span><span class='line'>&gt; ruby dk.rb init
+</span><span class='line'>&gt; ruby dk.rb install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Setup Octopress, change to the directory where you want your blog to reside</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'>&gt; cd octopress</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Install dependencies</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; gem install bundler
+</span><span class='line'>&gt; bundle install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Install default Octopress theme.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; rake install</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Configure your blog by updating _config.yml, name of your blog, your name and things like that.</li>
+<li>Create a new repo of the form YOUR-GITHUB-USER-NAME.github.io in github</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; rake setup_github_pages
+</span><span class='line'># this command will ask your for your github pages url, so type 
+</span><span class='line'>https://github.com/YOUR-GITHUB-USER-NAME/YOUR-GITHUB-USER-NAME.github.io</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>and run the following commands to deploy your local blog to github</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; rake generate
+</span><span class='line'>&gt; rake deploy
+</span><span class='line'># what this does is basically makes the master branch of your github repo contain all the generated
+</span><span class='line'># files namely _deploy folder in your directory.</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>If everything worked fine, you will be able to see your blog with the defalt octopress template on YOUR-GITHUB-USER-NAME.github.io</li>
+<li>Every time you update your blog you need ro do <em>rake generate</em> and <em>rake deploy</em> these commands will push your changes to your master branch on the remote</li>
+<li>You can make a new post using <em>rake new_post</em> command</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; rake new_post["My first Blog Post"]</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>The above command creates a new markdown file in source/_posts folder, write your blog in markdown</li>
+<li>Commit the changes you made locally in your local branch <em>source</em></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; git status
+</span><span class='line'># this will show that there are changes in the folder source/_posts
+</span><span class='line'>&gt; git add .
+</span><span class='line'>&gt; git commit -m "my first blog post"</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>If you want can create a new branch called <em>source</em> in your remote repository for the source files</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; git push origin source</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>This is what you do everytime you create a new post</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; rake new_post["new blog post"]
+</span><span class='line'>&gt; rake generate
+</span><span class='line'>&gt; rake deploy # to deploy static files in the remote master branch.
+</span><span class='line'>&gt; git add . # or you can specify the markdown file
+</span><span class='line'>&gt; git commit -m "new blog post"
+</span><span class='line'>&gt; git push origin source # to push the source files to the source branch</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I only did this because my newly minted blog doesn&rsquo;t contain many entries :D</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-08-10T16:15:42+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:15 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2014/08/10/octopress-blog-as-user-page-in-github/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2014/08/10/octopress-blog-as-user-page-in-github/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/10/facebook-link-prediction/" title="Previous Post: Facebook Link Prediction">&laquo; Facebook Link Prediction</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/" title="Next Post: A boilerplate nodejs Twitter bot that responds to twitter mentions.">A boilerplate nodejs Twitter bot that responds to twitter mentions. &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2016 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

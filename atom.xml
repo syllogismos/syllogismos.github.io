@@ -1,93 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
 
-<!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <title>My Blog</title>
-  <meta name="author" content="syllogismos">
-
-  
-  <meta name="description" content="Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called buster My current &hellip;">
-  
-
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  
-  <link rel="canonical" href="http://syllogismos.github.io/">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-
-  
-
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">My Blog</a></h1>
-  
-    <h2>My learnings and etc.</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="https://www.google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
-      
-  <header>
+  <title><![CDATA[My Blog]]></title>
+  <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
+  <link href="http://syllogismos.github.io/"/>
+  <updated>2016-07-14T00:54:34+05:30</updated>
+  <id>http://syllogismos.github.io/</id>
+  <author>
+    <name><![CDATA[syllogismos]]></name>
     
-      <h1 class="entry-title"><a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a></h1>
-    
-    
-      <p class="meta">
-        
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
-
-
-
-<time class='entry-date' datetime='2014-09-15T19:54:00+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:54 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called <a href="https://github.com/axitkhurana/buster">buster</a></p>
+  
+  <entry>
+    <title type="html"><![CDATA[Ghost Blog as Your Github User Page]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page/"/>
+    <updated>2014-09-15T19:54:00+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page</id>
+    <content type="html"><![CDATA[<p>Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called <a href="https://github.com/axitkhurana/buster">buster</a></p>
 
 <p>My current github pages are setup using Octopress, both ghost and octopress has its advantages and disadvantages. Every time I&rsquo;m making a new post using octopress, I have to go to some online markdown editor to write my post. Where as Ghost has its inbuilt markdown editor where you can preview your changes as you type. That can be a little annoying. Even though my current setup still uses octopress, I am editing this markdown using Ghost. One disadvantage of ghost is that it stores all the my blog posts in a local sqlite db, where as in octopress, I can see my markdown files and edit and commit changes to the main repository.</p>
 
@@ -217,35 +148,15 @@
 
 
 <p>Thank you.</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-13T19:17:43+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:17 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>In <strong>stochastic gradient descent</strong>, the true gradient is approximated by gradient at each single example.</p>
+  <entry>
+    <title type="html"><![CDATA[Stochastic Gradient Descent in AD.]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/09/13/stochastic-gradient-descent/"/>
+    <updated>2014-09-13T19:17:43+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/09/13/stochastic-gradient-descent</id>
+    <content type="html"><![CDATA[<p>In <strong>stochastic gradient descent</strong>, the true gradient is approximated by gradient at each single example.</p>
 
 <p><img src="http://upload.wikimedia.org/math/7/d/9/7d9f6671a202d94d26730ef898d8d4f2.png" alt="update rule" /></p>
 
@@ -507,35 +418,15 @@ Similarly <code>n_iter = 2</code> implies <code>97*2</code> iteration in our imp
 <li><a href="http://stats.stackexchange.com/questions/49528/batch-gradient-descent-versus-stochastic-gradient-descent">Batch Gradient Descent vs Stochastic Gradient Descent</a></li>
 </ol>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-09-04T08:07:44+05:30'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:07 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><ul>
+  <entry>
+    <title type="html"><![CDATA[Tinder Like Android App That Showcases Products From a Fashion Website]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/"/>
+    <updated>2014-09-04T08:07:44+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website</id>
+    <content type="html"><![CDATA[<ul>
 <li>Github repo: <a href="https://github.com/syllogismos/MyntraTinder">https://github.com/syllogismos/MyntraTinder</a></li>
 <li>Android app that implements tinder ui, based on <a href="https://github.com/exctasy2/tinder-card-stack">https://github.com/exctasy2/tinder-card-stack</a></li>
 <li>Latest apk build file <a href="https://github.com/syllogismos/MyntraTinder/blob/master/app-debug.apk">here</a></li>
@@ -740,35 +631,15 @@ Below is the actual hierarchy of product groups.</p>
 </li>
 </ul>
 
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-26T23:20:56+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:20 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Start by forking this <a href="https://github.com/syllogismos/twitter-bot-template">github repo</a></p>
+  <entry>
+    <title type="html"><![CDATA[A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/"/>
+    <updated>2014-08-26T23:20:56+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions</id>
+    <content type="html"><![CDATA[<p>Start by forking this <a href="https://github.com/syllogismos/twitter-bot-template">github repo</a></p>
 
 <h2>Config:</h2>
 
@@ -823,35 +694,15 @@ Below is the actual hierarchy of product groups.</p>
 <p>it responds like this.</p>
 
 <p>@countdownbot: @someRandomPerson One possible solution for 347 is: (10*(12+23))-3</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-10T16:15:42+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>4:15 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Step by step instructions to install Octopress blog on Windows to setup your github use page.</p>
+  <entry>
+    <title type="html"><![CDATA[Octopress Blog as User Page in Github, Using Windows]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/08/10/octopress-blog-as-user-page-in-github/"/>
+    <updated>2014-08-10T16:15:42+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/08/10/octopress-blog-as-user-page-in-github</id>
+    <content type="html"><![CDATA[<p>Step by step instructions to install Octopress blog on Windows to setup your github use page.</p>
 
 <ul>
 <li>Download RubyInstaller and ruby dev kit from <a href="http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-1.9.3-p545.exe?direct">here</a> and <a href="https://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe">here</a></li>
@@ -981,35 +832,15 @@ Below is the actual hierarchy of product groups.</p>
 
 
 <p>I only did this because my newly minted blog doesn&rsquo;t contain many entries :D</p>
-</div>
+]]></content>
+  </entry>
   
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/10/facebook-link-prediction/">Facebook Link Prediction</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-10T08:11:37+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:11 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>note: I did this just as an exercise, you get much more from <a href="http://blog.echen.me/2012/07/31/edge-prediction-in-a-social-graph-my-solution-to-facebooks-user-recommendation-contest-on-kaggle/">this post</a>.</p>
+  <entry>
+    <title type="html"><![CDATA[Facebook Link Prediction]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/08/10/facebook-link-prediction/"/>
+    <updated>2014-08-10T08:11:37+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/08/10/facebook-link-prediction</id>
+    <content type="html"><![CDATA[<p>note: I did this just as an exercise, you get much more from <a href="http://blog.echen.me/2012/07/31/edge-prediction-in-a-social-graph-my-solution-to-facebooks-user-recommendation-contest-on-kaggle/">this post</a>.</p>
 
 <h2>Link Prediction:</h2>
 
@@ -1269,113 +1100,16 @@ Here we have <em>psi</em></p>
 </span><span class='line'>octave:10&gt; y = 10;
 </span><span class='line'>octave:11&gt; [nodes, P] = GetNodesFromParam(w, psi,d,alpha = 0.2,y);</span></code></pre></td></tr></table></div></figure>
 
-</div>
+]]></content>
+  </entry>
   
+  <entry>
+    <title type="html"><![CDATA[Welcome to My Blog]]></title>
+    <link href="http://syllogismos.github.io/blog/2014/08/10/welcome-to-my-website/"/>
+    <updated>2014-08-10T07:23:56+05:30</updated>
+    <id>http://syllogismos.github.io/blog/2014/08/10/welcome-to-my-website</id>
+    <content type="html"><![CDATA[<p><img src="http://i.minus.com/iR5NTkhHOUE41.gif" alt="Rachel Riley" /></p>
+]]></content>
+  </entry>
   
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/10/welcome-to-my-website/">Welcome to My Blog</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-10T07:23:56+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>7:23 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://i.minus.com/iR5NTkhHOUE41.gif" alt="Rachel Riley" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
-
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - syllogismos -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-</p>
-
-</footer>
-  
-
-
-
-
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
-</body>
-</html>
+</feed>
