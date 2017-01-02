@@ -5,7 +5,7 @@ date: 2017-01-02 22:45:43 +0530
 comments: true
 categories: 
 ---
-# [Santander Product Recommendation](https://www.kaggle.com/c/santander-product-recommendation)
+[Santander Product Recommendation](https://www.kaggle.com/c/santander-product-recommendation)
 
 Under their current system, a small number of Santander’s customers receive many
 recommendations while many others rarely see any resulting in an uneven customer
