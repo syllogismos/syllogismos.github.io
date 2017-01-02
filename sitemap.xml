@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://syllogismos.github.io/blog/2017/01/02/santander-product-recommendation-kaggle/</loc>
+<lastmod>2017-01-02T00:00:00+05:30</lastmod>
+</url>
+<url>
 <loc>http://syllogismos.github.io/blog/2014/09/15/ghost-blog-as-your-github-profile-page/</loc>
 <lastmod>2014-09-15T19:54:00+05:30</lastmod>
 </url>

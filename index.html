@@ -9,7 +9,8 @@
   <meta name="author" content="syllogismos">
 
   
-  <meta name="description" content="Ghost is a minimalistic blogging platform that is very easy to setup. You can use it as your github user page using a tool called buster My current &hellip;">
+  <meta name="description" content="Santander Product Recommendation Under their current system, a small number of Santander’s customers receive many
+recommendations while many others &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,1776 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/01/02/santander-product-recommendation-kaggle/">Santander Product Recommendation Kaggle</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-01-02T00:00:00+05:30'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2017</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1><a href="https://www.kaggle.com/c/santander-product-recommendation">Santander Product Recommendation</a></h1>
+
+<p>Under their current system, a small number of Santander’s customers receive many
+recommendations while many others rarely see any resulting in an uneven customer
+experience. In their second competition, Santander is challenging Kagglers to
+predict which products their existing customers will use in the next month based
+on their past behavior and that of similar customers.</p>
+
+<p>With a more effective recommendation system in place, Santander can better meet
+the individual needs of all customers and ensure their satisfaction no matter
+where they are in life.</p>
+
+<p>Based on Users history and previous products they subscribed to,
+predict what products he will be interested in future.</p>
+
+<h1>Data</h1>
+
+<p>In this competition, you are provided with 1.5 years of customers behavior data
+from Santander bank to predict what new products customers will purchase.
+The data starts at 2015-01-28 and has monthly records of products a customer has,
+such as &ldquo;credit card&rdquo;, &ldquo;savings account&rdquo;, etc. You will predict what additional
+products a customer will get in the last month, 2016-06-28, in addition to what
+they already have at 2016-05-28. These products are the columns named: ind<em>(xyz)</em>ult1,
+which are the columns #25 - #48 in the training data. You will predict what a
+customer will buy in addition to what they already had at 2016-05-28.</p>
+
+<p>The test and train sets are split by time, and public and private leaderboard
+sets are split randomly.</p>
+
+<table>
+<thead>
+<tr>
+<th>Id </th>
+<th> Column Name </th>
+<th>  Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 </td>
+<td> fecha_dato </td>
+<td>    The table is partitioned for this column</td>
+</tr>
+<tr>
+<td>2 </td>
+<td> ncodpers </td>
+<td>  Customer code</td>
+</tr>
+<tr>
+<td>3 </td>
+<td> ind_empleado </td>
+<td>  Employee index: A active, B ex employed, F filial, N not employee, P pasive</td>
+</tr>
+<tr>
+<td>4 </td>
+<td> pais_residencia </td>
+<td>   Customer&rsquo;s Country residence</td>
+</tr>
+<tr>
+<td>5 </td>
+<td> sexo </td>
+<td>  Customer&rsquo;s sex</td>
+</tr>
+<tr>
+<td>6 </td>
+<td> age </td>
+<td>   Age</td>
+</tr>
+<tr>
+<td>7 </td>
+<td> fecha_alta </td>
+<td>    The date in which the customer became as the first holder of a contract in the bank</td>
+</tr>
+<tr>
+<td>8 </td>
+<td> ind_nuevo </td>
+<td> New customer Index. 1 if the customer registered in the last 6 months.</td>
+</tr>
+<tr>
+<td>9 </td>
+<td> antiguedad </td>
+<td>    Customer seniority (in months)</td>
+</tr>
+<tr>
+<td>10 </td>
+<td> indrel </td>
+<td>   1 (First/Primary), 99 (Primary customer during the month but not at the end of the month)</td>
+</tr>
+<tr>
+<td>11 </td>
+<td> ult_fec_cli_1t </td>
+<td>   Last date as primary customer (if he isn&rsquo;t at the end of the month)</td>
+</tr>
+<tr>
+<td>12 </td>
+<td> indrel_1mes </td>
+<td>  Customer type at the beginning of the month ,1 (First/Primary customer), 2 (co-owner ),P (Potential),3 (former primary), 4(former co-owner)</td>
+</tr>
+<tr>
+<td>13 </td>
+<td> tiprel_1mes </td>
+<td>  Customer relation type at the beginning of the month, A (active), I (inactive), P (former customer),R (Potential)</td>
+</tr>
+<tr>
+<td>14 </td>
+<td> indresi </td>
+<td>  Residence index (S (Yes) or N (No) if the residence country is the same than the bank country)</td>
+</tr>
+<tr>
+<td>15 </td>
+<td> indext </td>
+<td>   Foreigner index (S (Yes) or N (No) if the customer&rsquo;s birth country is different than the bank country)</td>
+</tr>
+<tr>
+<td>16 </td>
+<td> conyuemp </td>
+<td> Spouse index. 1 if the customer is spouse of an employee</td>
+</tr>
+<tr>
+<td>17 </td>
+<td> canal_entrada </td>
+<td>    channel used by the customer to join</td>
+</tr>
+<tr>
+<td>18 </td>
+<td> indfall </td>
+<td>  Deceased index. N/S</td>
+</tr>
+<tr>
+<td>19 </td>
+<td> tipodom </td>
+<td>  Addres type. 1, primary address</td>
+</tr>
+<tr>
+<td>20 </td>
+<td> cod_prov </td>
+<td> Province code (customer&rsquo;s address)</td>
+</tr>
+<tr>
+<td>21 </td>
+<td> nomprov </td>
+<td>  Province name</td>
+</tr>
+<tr>
+<td>22 </td>
+<td> ind_actividad_cliente </td>
+<td>    Activity index (1, active customer; 0, inactive customer)</td>
+</tr>
+<tr>
+<td>23 </td>
+<td> renta </td>
+<td>    Gross income of the household</td>
+</tr>
+<tr>
+<td>24 </td>
+<td> segmento </td>
+<td> segmentation: 01 - VIP, 02 - Individuals 03 - college graduated</td>
+</tr>
+<tr>
+<td>25 </td>
+<td> ind_ahor_fin_ult1 </td>
+<td>    Saving Account</td>
+</tr>
+<tr>
+<td>26 </td>
+<td> ind_aval_fin_ult1 </td>
+<td>    Guarantees</td>
+</tr>
+<tr>
+<td>27 </td>
+<td> ind_cco_fin_ult1 </td>
+<td> Current Accounts</td>
+</tr>
+<tr>
+<td>28 </td>
+<td> ind_cder_fin_ult1 </td>
+<td>    Derivada Account</td>
+</tr>
+<tr>
+<td>29 </td>
+<td> ind_cno_fin_ult1 </td>
+<td> Payroll Account</td>
+</tr>
+<tr>
+<td>30 </td>
+<td> ind_ctju_fin_ult1 </td>
+<td>    Junior Account</td>
+</tr>
+<tr>
+<td>31 </td>
+<td> ind_ctma_fin_ult1 </td>
+<td>    Más particular Account</td>
+</tr>
+<tr>
+<td>32 </td>
+<td> ind_ctop_fin_ult1 </td>
+<td>    particular Account</td>
+</tr>
+<tr>
+<td>33 </td>
+<td> ind_ctpp_fin_ult1 </td>
+<td>    particular Plus Account</td>
+</tr>
+<tr>
+<td>34 </td>
+<td> ind_deco_fin_ult1 </td>
+<td>    Short-term deposits</td>
+</tr>
+<tr>
+<td>35 </td>
+<td> ind_deme_fin_ult1 </td>
+<td>    Medium-term deposits</td>
+</tr>
+<tr>
+<td>36 </td>
+<td> ind_dela_fin_ult1 </td>
+<td>    Long-term deposits</td>
+</tr>
+<tr>
+<td>37 </td>
+<td> ind_ecue_fin_ult1 </td>
+<td>    e-account</td>
+</tr>
+<tr>
+<td>38 </td>
+<td> ind_fond_fin_ult1 </td>
+<td>    Funds</td>
+</tr>
+<tr>
+<td>39 </td>
+<td> ind_hip_fin_ult1  </td>
+<td>    Mortgage</td>
+</tr>
+<tr>
+<td>40 </td>
+<td> ind_plan_fin_ult1 </td>
+<td>    Pensions</td>
+</tr>
+<tr>
+<td>41 </td>
+<td> ind_pres_fin_ult1 </td>
+<td>    Loans</td>
+</tr>
+<tr>
+<td>42 </td>
+<td> ind_reca_fin_ult1 </td>
+<td>    Taxes</td>
+</tr>
+<tr>
+<td>43 </td>
+<td> ind_tjcr_fin_ult1 </td>
+<td>    Credit Card</td>
+</tr>
+<tr>
+<td>44 </td>
+<td> ind_valo_fin_ult1 </td>
+<td>    Securities</td>
+</tr>
+<tr>
+<td>45 </td>
+<td> ind_viv_fin_ult1 </td>
+<td> Home Account</td>
+</tr>
+<tr>
+<td>46 </td>
+<td> ind_nomina_ult1 </td>
+<td>  Payroll</td>
+</tr>
+<tr>
+<td>47 </td>
+<td> ind_nom_pens_ult1 </td>
+<td>    Pensions</td>
+</tr>
+<tr>
+<td>48 </td>
+<td> ind_recibo_ult1 </td>
+<td>  Direct Debit</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1>My approach</h1>
+
+<p>Best Private score: 0.030378(Rank 120/1785) {Notebook 11. and 12.}</p>
+
+<p>Divided data month wise for so that it will be easier for my local computer to handle.
+So a simple month based grep will create files <code>train_2015_01_28.csv</code> that contain data
+from Jan 2015 and so on.</p>
+
+<p>And for each month, computed what users added in then next month, say for example for
+the month June 2015, there are total 631957 train data rows, but the number of products
+added in that month were 41746 by all the users combined. This data will be in files
+<code>added_product_2015_06_28.csv</code>. I precomputed all these so that I don&rsquo;t have to do it again
+and again for each model. For each month we will be training on the users that added a
+new product the next month. That makes the data even more maneagable in terms of size.
+Foreach month there are on an average of 35-40k users who added a new product.
+We are interested how likely a user is interested in a new product.
+Thanks to <code>BreakfastPirate</code> for making the train data an order of magnitude lesser by
+showing in the forums this approach gives us meaningful results. The computation of
+<code>added_product_*</code> files can be found in <code>999. Less is more.ipynb</code> notebook.</p>
+
+<h2>Feature Engineering.</h2>
+
+<p>So just to reiterate, the final training will be done on, for each month, we get all the users
+who added a product in the next month, which reduces the train size by 10x, and combine this data
+for all the months.</p>
+
+<p>And data clean up and imputation is done by assuming for categorical variables the median values,
+and for varibles like rent, mean based on the city of the user. This job was made a lot easier
+because of <code>Alan (AJ) Pryor, Jr.</code>&rsquo;s script that cleans up the data and does imputation.</p>
+
+<p>Lag features from the last 4 months. Along with the raw lags of the product subscription
+history of a user, I computed 6 more features based on the past 4 month history of
+product subscription that goes as below.</p>
+
+<ul>
+<li>product exists atleast once in the past</li>
+<li>product exists all the months(last 4 months)</li>
+<li>product doesn&rsquo;t exist at all</li>
+<li>product removed in the past(removed before this current month)</li>
+<li>product added in the past(added before this current month)</li>
+<li>product removed recently(removed this current month)</li>
+<li>product added recently(added this current month)</li>
+</ul>
+
+
+<p>These are the features that gave me the best results. Trained using xgboost.
+and you can find them in notebook <code>11.</code> and best hyperparameters through
+grid search in notebook <code>12.</code></p>
+
+<p><strong>Best Hyperparameters through grid search</strong>:<br/>
+<code>num_class</code>: 24,<br/>
+<code>silent</code>: 0, <br/>
+<code>eval_metric</code>: &lsquo;mlogloss&rsquo;, <br/>
+<code>colsample_bylevel</code>: 0.95, <br/>
+<code>max_delta_step</code>: 7,<br/>
+<code>min_child_weight</code>: 1,<br/>
+<code>subsample</code>: 0.9,<br/>
+<code>eta</code>: 0.05,<br/>
+<code>objective</code>: &lsquo;multi:softprob&rsquo;,<br/>
+<code>colsample_bytree</code>: 0.9,<br/>
+<code>seed</code>: 1428,<br/>
+<code>max_depth</code>: 6</p>
+
+<h2>Results:</h2>
+
+<p>Notebooks convention is that the number of notebook will correspond to the notebook
+that start with that file, and the decimal number will also be an extra submission in
+the same notebook. So, you can find all 18, 18.4, 18.2 in the notebook that starts
+with 18. in my notebooks. And all the notebooks contain the results, graphs and etc.</p>
+
+<p>And notebooks that start with 999. are helper scripts and etc.</p>
+
+<h3>Leaderboard scores of my various approaches:</h3>
+
+<p>Just included the submission that scored more than 0.03 in private leaderboard</p>
+
+<table>
+<thead>
+<tr>
+<th>Notebook </th>
+<th> Public Score </th>
+<th> Private Score </th>
+<th> Private Rank/1785</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12.</td>
+<td>0.0300179</td>
+<td>0.030378</td>
+<td>120</td>
+</tr>
+<tr>
+<td>11</td>
+<td>0.0300507</td>
+<td>0.0303626</td>
+<td>129</td>
+</tr>
+<tr>
+<td>14.2</td>
+<td>0.0300296</td>
+<td>0.0303479</td>
+<td> -</td>
+</tr>
+<tr>
+<td>11.1</td>
+<td>0.0300342</td>
+<td>0.0303458</td>
+<td> -</td>
+</tr>
+<tr>
+<td>18.4</td>
+<td>0.030012</td>
+<td>0.0303328</td>
+<td>-</td>
+</tr>
+<tr>
+<td>18.3</td>
+<td>0.0299928</td>
+<td>0.0303158</td>
+<td>-</td>
+</tr>
+<tr>
+<td>14.3</td>
+<td>0.0299976</td>
+<td>0.0303028</td>
+<td>-</td>
+</tr>
+<tr>
+<td>18.2</td>
+<td>0.0300021</td>
+<td>0.0302888</td>
+<td>-</td>
+</tr>
+<tr>
+<td>9.2</td>
+<td>0.0299777</td>
+<td>0.0302416</td>
+<td>-</td>
+</tr>
+<tr>
+<td>17</td>
+<td>0.0299372</td>
+<td>0.0302239</td>
+<td>-</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0.0299042</td>
+<td>0.0301812</td>
+<td>-</td>
+</tr>
+<tr>
+<td>16</td>
+<td>0.029886</td>
+<td>0.0301792</td>
+<td>-</td>
+</tr>
+<tr>
+<td>18.1</td>
+<td>0.0298155</td>
+<td>0.0301786</td>
+<td>-</td>
+</tr>
+<tr>
+<td>16.3</td>
+<td>0.0297175</td>
+<td>0.030066</td>
+<td>-</td>
+</tr>
+<tr>
+<td>17.1</td>
+<td>0.0297196</td>
+<td>0.0300583</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+
+<h3>Map 7 score for each iteration of xgboost of my best submission:</h3>
+
+<p><img src="http://i.imgur.com/FkB1alH.png" alt="Imgur" /></p>
+
+<h3>Feature importance in my best submission:</h3>
+
+<p><img src="http://i.imgur.com/6FpOBkG.png" alt="Imgur" /></p>
+
+<h2>Additional appraoches that I tried.</h2>
+
+<p>I looked at product histories of several users over months, to understand when,
+a product is more likely to be added, to help me with my intuitions, and add more features.
+Below are product histories of few users.</p>
+
+<p><img src="http://i.imgur.com/HkqgN5b.png" alt="Imgur" />
+<img src="http://i.imgur.com/DQXJYlq.png" alt="Imgur" />
+<img src="http://i.imgur.com/KWhauNs.png" alt="Imgur" />
+<img src="http://i.imgur.com/Cwlwzi6.png" alt="Imgur" />
+<img src="http://i.imgur.com/KRZvLhS.png" alt="Imgur" /></p>
+
+<p>Below is a representation of how similar each product is to other products if
+each product is defined as a set of users who subscribed to that particular product.</p>
+
+<p><strong>Cosine Similarities of products</strong>
+<img src="http://i.imgur.com/hBDBkn6.png" alt="Imgur" /></p>
+
+<p><strong>Jacobian Similarities of products</strong>
+<img src="http://i.imgur.com/LVXPVhL.png" alt="Imgur" /></p>
+
+<p>There are two important things from the above graphs, that I wanted to capture in terms
+of features.</p>
+
+<ul>
+<li>From the product history vizs, if a particular product is being added and removed
+consitently and if it doesn&rsquo;t exist it is more likely to be added.. So features like,
+is_recently_added, is_recently_removed, exists_in_the_past, no_of_times_product_flanked
+no_positive_flanks, no_negative_flanks and etc.. In my training set, I only considered
+the past 4 months product subscription history, but from one of the top solution
+sharing posts I noticed that people used entire product history to generate these features.
+That might have increased my score just considering the entire history for each month
+to generate these features.</li>
+<li>Another thing I wanted to capture is how likely is a product to be subscribed based
+on other products that were recently added. Say from the similarity vizs you can see that
+how closely <code>cno_fin</code> is correlated to <code>nomina</code> or <code>nom_pens</code> and from some product history
+vizs I observed that if <code>cno_fin</code> was added recently even though <code>nomina</code> never had a history
+for a given user, he is likely to add it next month. So additional features I generated
+are based on current months subscription data, from jacobian similarity weights and cosine
+similarity weights I simply summed the weights of unsubscribed products of the respective
+subscirbed products. These ended up being valuable features, with hight feature importance
+scores but I didn&rsquo;t find them add more to my lb score.
+<img src="http://i.imgur.com/cQGfa0p.png" alt="Imgur" /></li>
+<li>Additional features I tried are lag features related to user attributes, but I didn&rsquo;t find these
+added much to my lb scores. Say a user changed from non primary subscriber to a primary
+subscriber, and he might be intersted in or be eligible for more products..</li>
+<li>I wanted to caputure the trends and seasonality of product subscriptions, so along with raw month
+features, as jan is closer to december then what 1, 12 represents so instead use <code>np.cos</code>, <code>np.sin</code>
+of the month numbers. We can also use a period of 3 months by just using features
+<code>np.cos(month/4)</code> and <code>np.sin(month/4)</code></li>
+</ul>
+
+
+<h2>Things learned from post competition solution sharing.</h2>
+
+<ul>
+<li>Entire product history is much more use ful than limiting myself to just 4 past months</li>
+<li>Likilyhood of a product getting subscribed is also dependent on the month. I was not able to
+successfully exploit this.</li>
+</ul>
+
+
+<p>Still reading various solutions, will update them once I get done with them.. Here are the direct links<br/>
+* <a href="https://www.kaggle.com/c/santander-product-recommendation/forums/t/26835/1-solution">1st place solution</a>
+* <a href="https://www.kaggle.com/c/santander-product-recommendation/forums/t/26824/2nd-place-solution">2nd place solution</a>
+* <a href="https://www.kaggle.com/c/santander-product-recommendation/forums/t/26899/3rd-place-solution-with-code">3rd place solution</a></p>
+
+<hr />
+
+<h1>Premilinary data analysis</h1>
+
+<h2>2. ncodpers</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 2 | sort -d | uniq -c | wc -l
+</span><span class='line'>  956646</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>3. ind_empleado</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 3 | sort -d | uniq -c   
+</span><span class='line'>27734
+</span><span class='line'>2492 A
+</span><span class='line'>3566 B
+</span><span class='line'>2523 F
+</span><span class='line'>13610977 N
+</span><span class='line'>  17 S
+</span><span class='line'>   1 "ind_empleado"  </span></code></pre></td></tr></table></div></figure>
+
+
+<h2>4. pais_residencia</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 4 | sort -d | uniq -c
+</span><span class='line'>27734  
+</span><span class='line'> 111 AD  
+</span><span class='line'> 221 AE  
+</span><span class='line'>  17 AL  
+</span><span class='line'>  68 AO  
+</span><span class='line'>4835 AR  
+</span><span class='line'> 476 AT  
+</span><span class='line'> 424 AU  
+</span><span class='line'>  34 BA  
+</span><span class='line'>1526 BE  
+</span><span class='line'> 476 BG  
+</span><span class='line'>   6 BM  
+</span><span class='line'>1514 BO  
+</span><span class='line'>2351 BR  
+</span><span class='line'> 102 BY  
+</span><span class='line'>  17 BZ  
+</span><span class='line'> 446 CA  
+</span><span class='line'>  17 CD  
+</span><span class='line'>  17 CF  
+</span><span class='line'>  34 CG  
+</span><span class='line'>1995 CH  
+</span><span class='line'>  51 CI  
+</span><span class='line'> 989 CL  
+</span><span class='line'>  85 CM  
+</span><span class='line'> 563 CN  
+</span><span class='line'>3526 CO  
+</span><span class='line'> 147 CR  
+</span><span class='line'> 758 CU  
+</span><span class='line'> 102 CZ  
+</span><span class='line'>4625 DE  
+</span><span class='line'>  11 DJ  
+</span><span class='line'> 226 DK  
+</span><span class='line'> 424 DO  
+</span><span class='line'>  86 DZ  
+</span><span class='line'>2169 EC  
+</span><span class='line'>  45 EE  
+</span><span class='line'>  68 EG  
+</span><span class='line'>13553710 ES  
+</span><span class='line'>  34 ET  
+</span><span class='line'> 345 FI  
+</span><span class='line'>5161 FR  
+</span><span class='line'>  51 GA  
+</span><span class='line'>4605 GB  
+</span><span class='line'>  17 GE  
+</span><span class='line'>  17 GH  
+</span><span class='line'>  17 GI  
+</span><span class='line'>  17 GM  
+</span><span class='line'>  51 GN  
+</span><span class='line'> 119 GQ  
+</span><span class='line'> 243 GR  
+</span><span class='line'> 130 GT  
+</span><span class='line'>  34 GW  
+</span><span class='line'>  51 HK  
+</span><span class='line'> 282 HN  
+</span><span class='line'>  68 HR  
+</span><span class='line'>  37 HU  
+</span><span class='line'> 409 IE  
+</span><span class='line'> 413 IL  
+</span><span class='line'> 187 IN  
+</span><span class='line'>  17 IS  
+</span><span class='line'>2947 IT  
+</span><span class='line'>  11 JM  
+</span><span class='line'> 239 JP  
+</span><span class='line'>  72 KE  
+</span><span class='line'>  17 KH  
+</span><span class='line'>  96 KR  
+</span><span class='line'>  17 KW  
+</span><span class='line'>  17 KZ  
+</span><span class='line'>  17 LB  
+</span><span class='line'>  45 LT  
+</span><span class='line'> 124 LU  
+</span><span class='line'>  17 LV  
+</span><span class='line'>  17 LY  
+</span><span class='line'> 396 MA  
+</span><span class='line'>  96 MD  
+</span><span class='line'>  51 MK  
+</span><span class='line'>  17 ML  
+</span><span class='line'>  17 MM  
+</span><span class='line'>  51 MR  
+</span><span class='line'>   2 MT  
+</span><span class='line'>2573 MX  
+</span><span class='line'>  34 MZ  
+</span><span class='line'> 214 NG  
+</span><span class='line'>  62 NI  
+</span><span class='line'> 757 NL  
+</span><span class='line'> 136 NO  
+</span><span class='line'>  51 NZ  
+</span><span class='line'>  22 OM  
+</span><span class='line'>  77 PA  
+</span><span class='line'> 900 PE  
+</span><span class='line'>  34 PH  
+</span><span class='line'>  85 PK  
+</span><span class='line'> 599 PL  
+</span><span class='line'> 101 PR  
+</span><span class='line'>1419 PT  
+</span><span class='line'>1430 PY  
+</span><span class='line'>  52 QA  
+</span><span class='line'>2931 RO  
+</span><span class='line'>  34 RS  
+</span><span class='line'> 769 RU  
+</span><span class='line'>  79 SA  
+</span><span class='line'> 603 SE  
+</span><span class='line'> 117 SG  
+</span><span class='line'>  85 SK  
+</span><span class='line'>  17 SL  
+</span><span class='line'>  68 SN  
+</span><span class='line'> 102 SV  
+</span><span class='line'>  17 TG  
+</span><span class='line'> 102 TH  
+</span><span class='line'>  17 TN  
+</span><span class='line'>  62 TR  
+</span><span class='line'>  34 TW  
+</span><span class='line'> 493 UA  
+</span><span class='line'>3651 US  
+</span><span class='line'> 510 UY  
+</span><span class='line'>2331 VE  
+</span><span class='line'>  34 VN  
+</span><span class='line'> 119 ZA  
+</span><span class='line'>  11 ZW  
+</span><span class='line'>   1 "pais_residencia"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>5. sexo</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 5 | sort -d | uniq -c
+</span><span class='line'>27804
+</span><span class='line'>6195253 H
+</span><span class='line'>7424252 V
+</span><span class='line'>   1 "sexo"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>6. age</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 6 | sort -d | uniq -c
+</span><span class='line'> 733   2
+</span><span class='line'>1534   3
+</span><span class='line'>2210   4
+</span><span class='line'>3004   5
+</span><span class='line'>3673   6
+</span><span class='line'>3792   7
+</span><span class='line'>4744   8
+</span><span class='line'>5887   9
+</span><span class='line'>7950  10
+</span><span class='line'>10481  11
+</span><span class='line'>12546  12
+</span><span class='line'>12745  13
+</span><span class='line'>12667  14
+</span><span class='line'>13118  15
+</span><span class='line'>11759  16
+</span><span class='line'>11953  17
+</span><span class='line'>10989  18
+</span><span class='line'>21597  19
+</span><span class='line'>422867  20
+</span><span class='line'>675988  21
+</span><span class='line'>736314  22
+</span><span class='line'>779884  23
+</span><span class='line'>734785  24
+</span><span class='line'>472016  25
+</span><span class='line'>347778  26
+</span><span class='line'>281981  27
+</span><span class='line'>240192  28
+</span><span class='line'>205709  29
+</span><span class='line'>186040  30
+</span><span class='line'>167985  31
+</span><span class='line'>169537  32
+</span><span class='line'>170477  33
+</span><span class='line'>174574  34
+</span><span class='line'>183577  35
+</span><span class='line'>198422  36
+</span><span class='line'>212420  37
+</span><span class='line'>231963  38
+</span><span class='line'>260548  39
+</span><span class='line'>287754  40
+</span><span class='line'>309051  41
+</span><span class='line'>319713  42
+</span><span class='line'>324303  43
+</span><span class='line'>322955  44
+</span><span class='line'>314771  45
+</span><span class='line'>299365  46
+</span><span class='line'>286505  47
+</span><span class='line'>271576  48
+</span><span class='line'>250484  49
+</span><span class='line'>236383  50
+</span><span class='line'>223297  51
+</span><span class='line'>211611  52
+</span><span class='line'>202527  53
+</span><span class='line'>181511  54
+</span><span class='line'>165355  55
+</span><span class='line'>151340  56
+</span><span class='line'>144645  57
+</span><span class='line'>134739  58
+</span><span class='line'>124177  59
+</span><span class='line'>117834  60
+</span><span class='line'>108356  61
+</span><span class='line'>101186  62
+</span><span class='line'>91521  63
+</span><span class='line'>87398  64
+</span><span class='line'>84750  65
+</span><span class='line'>81343  66
+</span><span class='line'>77693  67
+</span><span class='line'>78361  68
+</span><span class='line'>77745  69
+</span><span class='line'>70192  70
+</span><span class='line'>66825  71
+</span><span class='line'>67664  72
+</span><span class='line'>64431  73
+</span><span class='line'>59086  74
+</span><span class='line'>50597  75
+</span><span class='line'>48997  76
+</span><span class='line'>49218  77
+</span><span class='line'>34358  78
+</span><span class='line'>35065  79
+</span><span class='line'>35773  80
+</span><span class='line'>38217  81
+</span><span class='line'>33938  82
+</span><span class='line'>31860  83
+</span><span class='line'>30124  84
+</span><span class='line'>27754  85
+</span><span class='line'>24956  86
+</span><span class='line'>23648  87
+</span><span class='line'>21718  88
+</span><span class='line'>19175  89
+</span><span class='line'>16863  90
+</span><span class='line'>15098  91
+</span><span class='line'>13492  92
+</span><span class='line'>11642  93
+</span><span class='line'>10085  94
+</span><span class='line'>8511  95
+</span><span class='line'>7480  96
+</span><span class='line'>5962  97
+</span><span class='line'>4622  98
+</span><span class='line'>3617  99
+</span><span class='line'>27734  NA
+</span><span class='line'>3050 100
+</span><span class='line'>2666 101
+</span><span class='line'>2335 102
+</span><span class='line'>2003 103
+</span><span class='line'>1350 104
+</span><span class='line'>1280 105
+</span><span class='line'> 899 106
+</span><span class='line'> 594 107
+</span><span class='line'> 456 108
+</span><span class='line'> 265 109
+</span><span class='line'> 261 110
+</span><span class='line'> 252 111
+</span><span class='line'> 188 112
+</span><span class='line'> 117 113
+</span><span class='line'>  22 114
+</span><span class='line'>  82 115
+</span><span class='line'>  63 116
+</span><span class='line'>  14 117
+</span><span class='line'>   3 126
+</span><span class='line'>   8 127
+</span><span class='line'>   8 163
+</span><span class='line'>   3 164
+</span><span class='line'>   1 "age"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>8. ind_nuevo</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 8 | sort -d | uniq -c
+</span><span class='line'>12808368  0
+</span><span class='line'>811207  1
+</span><span class='line'>27734 NA
+</span><span class='line'>   1 "ind_nuevo"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>10. indrel</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 10 | sort -d | uniq -c
+</span><span class='line'>13594782  1
+</span><span class='line'>24793 99
+</span><span class='line'>27734 NA
+</span><span class='line'>   1 "indrel"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>12. indrel_1mes</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 12 | sort -d | uniq -c
+</span><span class='line'>149781
+</span><span class='line'>4357298 1
+</span><span class='line'>9133383 1.0
+</span><span class='line'> 577 2
+</span><span class='line'> 740 2.0
+</span><span class='line'>1570 3
+</span><span class='line'>2780 3.0
+</span><span class='line'>  83 4
+</span><span class='line'> 223 4.0
+</span><span class='line'> 874 P
+</span><span class='line'>   1 "indrel_1mes"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>13. tiprel_1mes</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 13 | sort -d | uniq -c
+</span><span class='line'>149781
+</span><span class='line'>6187123 A
+</span><span class='line'>7304875 I
+</span><span class='line'>   4 N
+</span><span class='line'>4656 P
+</span><span class='line'> 870 R
+</span><span class='line'>   1 "tiprel_1mes"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>14. indresi</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 14 | sort -d | uniq -c
+</span><span class='line'>27734
+</span><span class='line'>65864 N
+</span><span class='line'>13553711 S
+</span><span class='line'>   1 "indresi"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>15. indext</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 15 | sort -d | uniq -c
+</span><span class='line'>27734
+</span><span class='line'>12974839 N
+</span><span class='line'>644736 S
+</span><span class='line'>   1 "indext"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>16. conyuemp</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 16 | sort -d | uniq -c
+</span><span class='line'>13645501
+</span><span class='line'>1791 N
+</span><span class='line'>  17 S
+</span><span class='line'>   1 "conyuemp"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>17. canal_entrada</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 17 | sort -d | uniq -c
+</span><span class='line'>186126
+</span><span class='line'> 210 004
+</span><span class='line'>29063 007
+</span><span class='line'>27139 013
+</span><span class='line'>  11 025
+</span><span class='line'> 152 K00
+</span><span class='line'>66656 KAA
+</span><span class='line'>62381 KAB
+</span><span class='line'>7697 KAC
+</span><span class='line'>10680 KAD
+</span><span class='line'>50764 KAE
+</span><span class='line'>30559 KAF
+</span><span class='line'>74295 KAG
+</span><span class='line'>24875 KAH
+</span><span class='line'>37699 KAI
+</span><span class='line'>24280 KAJ
+</span><span class='line'> 838 KAK
+</span><span class='line'>7573 KAL
+</span><span class='line'>11285 KAM
+</span><span class='line'>1370 KAN
+</span><span class='line'>6676 KAO
+</span><span class='line'>14928 KAP
+</span><span class='line'>18017 KAQ
+</span><span class='line'>32686 KAR
+</span><span class='line'>86221 KAS
+</span><span class='line'>3268209 KAT
+</span><span class='line'> 249 KAU
+</span><span class='line'> 107 KAV
+</span><span class='line'>34275 KAW
+</span><span class='line'>67350 KAY
+</span><span class='line'>32186 KAZ
+</span><span class='line'>1298 KBB
+</span><span class='line'> 241 KBD
+</span><span class='line'> 147 KBE
+</span><span class='line'>3760 KBF
+</span><span class='line'>1725 KBG
+</span><span class='line'>7197 KBH
+</span><span class='line'> 519 KBJ
+</span><span class='line'> 575 KBL
+</span><span class='line'> 555 KBM
+</span><span class='line'>  61 KBN
+</span><span class='line'>7380 KBO
+</span><span class='line'>  85 KBP
+</span><span class='line'>4179 KBQ
+</span><span class='line'>1875 KBR
+</span><span class='line'> 714 KBS
+</span><span class='line'>3127 KBU
+</span><span class='line'> 896 KBV
+</span><span class='line'>1130 KBW
+</span><span class='line'> 102 KBX
+</span><span class='line'> 642 KBY
+</span><span class='line'>46446 KBZ
+</span><span class='line'>1530 KCA
+</span><span class='line'>5187 KCB
+</span><span class='line'>49308 KCC
+</span><span class='line'>3276 KCD
+</span><span class='line'> 309 KCE
+</span><span class='line'> 420 KCF
+</span><span class='line'>5399 KCG
+</span><span class='line'>24098 KCH
+</span><span class='line'>26546 KCI
+</span><span class='line'> 215 KCJ
+</span><span class='line'> 957 KCK
+</span><span class='line'>4187 KCL
+</span><span class='line'>3251 KCM
+</span><span class='line'>1117 KCN
+</span><span class='line'> 179 KCO
+</span><span class='line'> 158 KCP
+</span><span class='line'> 198 KCQ
+</span><span class='line'> 196 KCR
+</span><span class='line'> 236 KCS
+</span><span class='line'> 105 KCT
+</span><span class='line'>1081 KCU
+</span><span class='line'> 229 KCV
+</span><span class='line'>  67 KCX
+</span><span class='line'> 379 KDA
+</span><span class='line'>  17 KDB
+</span><span class='line'>1531 KDC
+</span><span class='line'> 534 KDD
+</span><span class='line'> 828 KDE
+</span><span class='line'> 726 KDF
+</span><span class='line'> 469 KDG
+</span><span class='line'> 191 KDH
+</span><span class='line'>  17 KDI
+</span><span class='line'>  11 KDL
+</span><span class='line'>2468 KDM
+</span><span class='line'> 197 KDN
+</span><span class='line'>1763 KDO
+</span><span class='line'>1001 KDP
+</span><span class='line'>1112 KDQ
+</span><span class='line'>8050 KDR
+</span><span class='line'>1924 KDS
+</span><span class='line'>1299 KDT
+</span><span class='line'>2588 KDU
+</span><span class='line'> 427 KDV
+</span><span class='line'> 772 KDW
+</span><span class='line'>1728 KDX
+</span><span class='line'>1960 KDY
+</span><span class='line'> 531 KDZ
+</span><span class='line'> 851 KEA
+</span><span class='line'> 370 KEB
+</span><span class='line'> 231 KEC
+</span><span class='line'>3011 KED
+</span><span class='line'> 175 KEE
+</span><span class='line'> 329 KEF
+</span><span class='line'>1895 KEG
+</span><span class='line'>1546 KEH
+</span><span class='line'> 944 KEI
+</span><span class='line'>9247 KEJ
+</span><span class='line'> 542 KEK
+</span><span class='line'>2483 KEL
+</span><span class='line'>  68 KEM
+</span><span class='line'>4917 KEN
+</span><span class='line'> 850 KEO
+</span><span class='line'> 146 KEQ
+</span><span class='line'>5904 KES
+</span><span class='line'> 265 KEU
+</span><span class='line'> 844 KEV
+</span><span class='line'>5687 KEW
+</span><span class='line'>35146 KEY
+</span><span class='line'>2433 KEZ
+</span><span class='line'>409669 KFA
+</span><span class='line'> 107 KFB
+</span><span class='line'>3098360 KFC
+</span><span class='line'>44461 KFD
+</span><span class='line'> 250 KFE
+</span><span class='line'>5529 KFF
+</span><span class='line'>6800 KFG
+</span><span class='line'>2579 KFH
+</span><span class='line'> 881 KFI
+</span><span class='line'>6620 KFJ
+</span><span class='line'>3913 KFK
+</span><span class='line'>3806 KFL
+</span><span class='line'> 371 KFM
+</span><span class='line'>4520 KFN
+</span><span class='line'>9487 KFP
+</span><span class='line'> 371 KFR
+</span><span class='line'>6694 KFS
+</span><span class='line'>8036 KFT
+</span><span class='line'>4914 KFU
+</span><span class='line'>  67 KFV
+</span><span class='line'>  28 KGC
+</span><span class='line'>  17 KGN
+</span><span class='line'>  28 KGU
+</span><span class='line'>8950 KGV
+</span><span class='line'> 989 KGW
+</span><span class='line'>9474 KGX
+</span><span class='line'>4138 KGY
+</span><span class='line'>  51 KHA
+</span><span class='line'>16418 KHC
+</span><span class='line'>116891 KHD
+</span><span class='line'>4055270 KHE
+</span><span class='line'>20674 KHF
+</span><span class='line'>241084 KHK
+</span><span class='line'>45128 KHL
+</span><span class='line'>183924 KHM
+</span><span class='line'>116608 KHN
+</span><span class='line'>8992 KHO
+</span><span class='line'> 691 KHP
+</span><span class='line'>591039 KHQ
+</span><span class='line'>   1 KHR
+</span><span class='line'>   5 KHS
+</span><span class='line'>75607 RED
+</span><span class='line'>   1 "canal_entrada"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>18. indfall</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 18 | sort -d | uniq -c
+</span><span class='line'>27734
+</span><span class='line'>13584813 N
+</span><span class='line'>34762 S
+</span><span class='line'>   1 "indfall"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>22. ind_actividad_cliente</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 22 | sort -d | uniq -c
+</span><span class='line'>6903158  0
+</span><span class='line'>5841260  1
+</span><span class='line'>429322  A"
+</span><span class='line'>124933  ILLES"
+</span><span class='line'>85202  LA"
+</span><span class='line'>235700  LAS"
+</span><span class='line'>27734 NA
+</span><span class='line'>   1 "ind_actividad_cliente"</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>24. segmento</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat train_ver2.csv | cut -d , -f 24 | sort -d | uniq -c | head -100
+</span><span class='line'>418613
+</span><span class='line'>545352 01 - TOP
+</span><span class='line'>7542889 02 - PARTICULARES
+</span><span class='line'>4506805 03 - UNIVERSITARIO
+</span><span class='line'>  17 100000.44
+</span><span class='line'>  17 100001.85
+</span><span class='line'>  11 100007.28
+</span><span class='line'>  17 100010.67
+</span><span class='line'>  17 100013.34
+</span><span class='line'>  17 100013.7
+</span><span class='line'>  17 100014.21</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Product stats</h1>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>0    13645913
+</span><span class='line'>1        1396
+</span><span class='line'>Name: ind_ahor_fin_ult1, dtype: int64
+</span><span class='line'>0    13646993
+</span><span class='line'>1         316
+</span><span class='line'>Name: ind_aval_fin_ult1, dtype: int64
+</span><span class='line'>1    8945588
+</span><span class='line'>0    4701721
+</span><span class='line'>Name: ind_cco_fin_ult1, dtype: int64
+</span><span class='line'>0    13641933
+</span><span class='line'>1        5376
+</span><span class='line'>Name: ind_cder_fin_ult1, dtype: int64
+</span><span class='line'>0    12543689
+</span><span class='line'>1     1103620
+</span><span class='line'>Name: ind_cno_fin_ult1, dtype: int64
+</span><span class='line'>0    13518012
+</span><span class='line'>1      129297
+</span><span class='line'>Name: ind_ctju_fin_ult1, dtype: int64
+</span><span class='line'>0    13514567
+</span><span class='line'>1      132742
+</span><span class='line'>Name: ind_ctma_fin_ult1, dtype: int64
+</span><span class='line'>0    11886693
+</span><span class='line'>1     1760616
+</span><span class='line'>Name: ind_ctop_fin_ult1, dtype: int64
+</span><span class='line'>0    13056301
+</span><span class='line'>1      591008
+</span><span class='line'>Name: ind_ctpp_fin_ult1, dtype: int64
+</span><span class='line'>0    13623034
+</span><span class='line'>1       24275
+</span><span class='line'>Name: ind_deco_fin_ult1, dtype: int64
+</span><span class='line'>0    13624641
+</span><span class='line'>1       22668
+</span><span class='line'>Name: ind_deme_fin_ult1, dtype: int64
+</span><span class='line'>0    13060928
+</span><span class='line'>1      586381
+</span><span class='line'>Name: ind_dela_fin_ult1, dtype: int64
+</span><span class='line'>0    12518082
+</span><span class='line'>1     1129227
+</span><span class='line'>Name: ind_ecue_fin_ult1, dtype: int64
+</span><span class='line'>0    13395025
+</span><span class='line'>1      252284
+</span><span class='line'>Name: ind_fond_fin_ult1, dtype: int64
+</span><span class='line'>0    13566973
+</span><span class='line'>1       80336
+</span><span class='line'>Name: ind_hip_fin_ult1, dtype: int64
+</span><span class='line'>0    13522150
+</span><span class='line'>1      125159
+</span><span class='line'>Name: ind_plan_fin_ult1, dtype: int64
+</span><span class='line'>0    13611452
+</span><span class='line'>1       35857
+</span><span class='line'>Name: ind_pres_fin_ult1, dtype: int64
+</span><span class='line'>0    12930329
+</span><span class='line'>1      716980
+</span><span class='line'>Name: ind_reca_fin_ult1, dtype: int64
+</span><span class='line'>0    13041523
+</span><span class='line'>1      605786
+</span><span class='line'>Name: ind_tjcr_fin_ult1, dtype: int64
+</span><span class='line'>0    13297834
+</span><span class='line'>1      349475
+</span><span class='line'>Name: ind_valo_fin_ult1, dtype: int64
+</span><span class='line'>0    13594798
+</span><span class='line'>1       52511
+</span><span class='line'>Name: ind_viv_fin_ult1, dtype: int64
+</span><span class='line'>0.0    12885285
+</span><span class='line'>1.0      745961
+</span><span class='line'>Name: ind_nomina_ult1, dtype: int64
+</span><span class='line'>0.0    12821161
+</span><span class='line'>1.0      810085
+</span><span class='line'>Name: ind_nom_pens_ult1, dtype: int64
+</span><span class='line'>0    11901597
+</span><span class='line'>1     1745712
+</span><span class='line'>Name: ind_recibo_ult1, dtype: int64</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1318,6 +3089,10 @@ Here we have <em>psi</em></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/01/02/santander-product-recommendation-kaggle/">Santander Product Recommendation Kaggle</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
       </li>
     
@@ -1331,10 +3106,6 @@ Here we have <em>psi</em></p>
     
       <li class="post">
         <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/10/octopress-blog-as-user-page-in-github/">Octopress Blog as User Page in Github, Using Windows</a>
       </li>
     
   </ul>
@@ -1379,7 +3150,7 @@ Here we have <em>psi</em></p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2016 - syllogismos -
+  Copyright &copy; 2017 - syllogismos -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
