@@ -1,6 +1,6 @@
 ---
 layout: post
-title: ""Santander Product Recommendation Kaggle""
+title: "Santander Product Recommendation Kaggle"
 date: 2017-01-02 22:45:43 +0530
 comments: true
 categories: 
@@ -87,6 +87,8 @@ Id | Column Name |	Description
 47 | ind_nom_pens_ult1 |	Pensions
 48 | ind_recibo_ult1 |	Direct Debit
 
+
+- - -
 # My approach
 Best Private score: 0.030378(Rank 120/1785) {Notebook 11. and 12.}
 
@@ -188,19 +190,19 @@ I looked at product histories of several users over months, to understand when,
 a product is more likely to be added, to help me with my intuitions, and add more features.
 Below are product histories of few users.
 
-![Imgur](http://i.imgur.com/HkqgN5b.png)
-![Imgur](http://i.imgur.com/DQXJYlq.png)
-![Imgur](http://i.imgur.com/KWhauNs.png)
-![Imgur](http://i.imgur.com/Cwlwzi6.png)
-![Imgur](http://i.imgur.com/KRZvLhS.png)
+![Imgur](http://i.imgur.com/HkqgN5b.png)  
+![Imgur](http://i.imgur.com/DQXJYlq.png)  
+![Imgur](http://i.imgur.com/KWhauNs.png)  
+![Imgur](http://i.imgur.com/Cwlwzi6.png)  
+![Imgur](http://i.imgur.com/KRZvLhS.png)  
 
 Below is a representation of how similar each product is to other products if
 each product is defined as a set of users who subscribed to that particular product.
 
-__Cosine Similarities of products__
+__Cosine Similarities of products__  
 ![Imgur](http://i.imgur.com/hBDBkn6.png)
 
-__Jacobian Similarities of products__
+__Jacobian Similarities of products__  
 ![Imgur](http://i.imgur.com/LVXPVhL.png)
 
 There are two important things from the above graphs, that I wanted to capture in terms
