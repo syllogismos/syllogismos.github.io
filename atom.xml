@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2017-01-02T22:50:49+05:30</updated>
+  <updated>2017-01-02T22:53:10+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -18,7 +18,7 @@
     <link href="http://syllogismos.github.io/blog/2017/01/02/santander-product-recommendation-kaggle/"/>
     <updated>2017-01-02T00:00:00+05:30</updated>
     <id>http://syllogismos.github.io/blog/2017/01/02/santander-product-recommendation-kaggle</id>
-    <content type="html"><![CDATA[<h1><a href="https://www.kaggle.com/c/santander-product-recommendation">Santander Product Recommendation</a></h1>
+    <content type="html"><![CDATA[<p><a href="https://www.kaggle.com/c/santander-product-recommendation">Santander Product Recommendation</a></p>
 
 <p>Under their current system, a small number of Santander’s customers receive many
 recommendations while many others rarely see any resulting in an uneven customer
