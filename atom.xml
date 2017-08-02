@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2017-08-02T19:49:36+05:30</updated>
+  <updated>2017-08-02T19:50:57+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -115,22 +115,26 @@
 <h3>Community Plugins:</h3>
 
 <ul>
-<li><a href="https://github.com/matryer/bitbar-plugins/blob/master/Time/worldclock.1s.sh">Timezone plugin</a>, shows time in 4-5 major timezones.
-<img src="http://i.imgur.com/OoCfxTn.png" alt="Timezone plugin" /></li>
-<li><p><a href="">Clipboard plugin</a>, clipboard of the last 10 items copied, click on an item to copy it back to clipboard.</p>
+<li><p><a href="https://github.com/matryer/bitbar-plugins/blob/master/Time/worldclock.1s.sh">Timezone plugin</a>, shows time in 4-5 major timezones.
+<img src="http://i.imgur.com/OoCfxTn.png" alt="Timezone plugin" /></p></li>
+<li><p><a href="">Clipboard plugin</a>, clipboard of the last 10 items copied, click on an item to copy it back to clipboard.</p></li>
+</ul>
+
 
 <h3>My Plugin:</h3>
 
-<p>EC2 Plugin. my own ec2 bitbar plugin, that makes all my common tasks one click, and so much easier to do.
+<p> EC2 Plugin. my own ec2 bitbar plugin, that makes all my common tasks one click, and so much easier to do.
 <img src="http://i.imgur.com/xG7rtCt.png" alt="Imgur" />
-<img src="http://i.imgur.com/S3YOsfG.png" alt="Imgur" /></p></li>
-<li><p>I can start, stop, restart, teminate my running machines from the menu bar</p></li>
+<img src="http://i.imgur.com/S3YOsfG.png" alt="Imgur" /></p>
+
+<ol>
+<li>I can start, stop, restart, teminate my running machines from the menu bar</li>
 <li>Create a low cpu alarm, that sends me an alert email when the cpu is lower than 20%. This is what I use mostly cause I want to get an alert when my machine learning scripts are die/finish.</li>
 <li>Delete the above created alarm.</li>
 <li>Copy ssh command to the clipboard with the right private key file just by a single click. It so annoying everytime I start a machine in ec2, I have to copy the public ip/dns and type where the private key is and type <code>ubuntu@</code>. All of this is just single click away now.</li>
 <li>Displays various machine types, their cores, memory, normal prices, current spot prices in all the regions I&rsquo;m interested in.</li>
 <li>Lists all the available AMIs, and launch a spot instance from that AMI</li>
-</ul>
+</ol>
 
 
 <h2>git</h2>
