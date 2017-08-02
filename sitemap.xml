@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://syllogismos.github.io/blog/2017/08/02/miscellanious-notes/</loc>
+<lastmod>2017-08-02T13:55:59+05:30</lastmod>
+</url>
+<url>
+<loc>http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage/</loc>
+<lastmod>2017-07-30T12:11:45+05:30</lastmod>
+</url>
+<url>
 <loc>http://syllogismos.github.io/blog/2017/01/02/santander-product-recommendation-kaggle/</loc>
 <lastmod>2017-01-02T22:45:43+05:30</lastmod>
 </url>

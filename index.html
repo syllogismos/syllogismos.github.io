@@ -9,8 +9,7 @@
   <meta name="author" content="syllogismos">
 
   
-  <meta name="description" content="Santander Product Recommendation Under their current system, a small number of Santander’s customers receive many
-recommendations while many others &hellip;">
+  <meta name="description" content="Miscellanious notes, tips and tricks SSH Quit an ssh session using CR~. and get to your local terminal. ~ is the escape character for ssh and dot to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +65,340 @@ recommendations while many others &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/08/02/miscellanious-notes/">Miscellanious Notes</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-08-02T13:55:59+05:30'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2017</span></span> <span class='time'>1:55 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Miscellanious notes, tips and tricks</h1>
+
+<h2>SSH</h2>
+
+<ul>
+<li>Quit an ssh session using <code>CR~.</code> and get to your local terminal. <code>~</code> is the escape character for ssh and dot to quit ssh. But note that tilda has to follow new line. When ever your ssh connection gets disconnected for one reason or the other, say you lost internet connection or some other reason, sometimes the screen wont repsond to any keystroke and it seems like its struck in the ssh session. Its very annoying. Instead of closing the terminal, you can do this instead <code>CR~.</code></li>
+<li>Add <code>ServerAliveInterval 60</code> to your ssh config file, most probably in <code>~/.ssh/config</code>. Usually by default your ssh connection closes if it is idle for a long time, by doing this you are pinging every 60 seconds to keep the connection alive. Very helpful as you don&rsquo;t have to connect to your remote machine again and again.</li>
+</ul>
+
+
+<h2>Useful command line tools</h2>
+
+<ul>
+<li>s3cmd, interact with your s3 buckets
+
+<ol>
+<li><code>pip install s3cmd</code></li>
+<li><code>s3cmd --configure</code> # configure your keys</li>
+<li><code>s3cmd ls</code> # list buckets, contents of a dir</li>
+<li><code>s3cmd mb s3://new_bucket/</code> # make new bucket</li>
+<li><code>s3cmd put --recursive localfiles s3://uri/</code> # copy local files to s3</li>
+<li><code>s3cmd get --recursive s3://uri/</code> # get s3 files to local machine</li>
+</ol>
+</li>
+<li>jq, parse json files and pretty print on terminal
+
+<ol>
+<li><code>brew install jq</code></li>
+</ol>
+</li>
+<li>grep, unix search tool
+
+<ol>
+<li><code>grep -A2 query file.txt</code> # prints 2 lines <code>After</code> the queried term</li>
+<li><code>grep -B2 query file.txt</code> # prints 2 lines <code>Before</code> the queried term</li>
+<li><code>grep -C2 query file.txt</code> # prints 2 lines of <code>Context</code> on both sides</li>
+<li><code>grep -e regex file.txt</code> # searches for the regexp</li>
+</ol>
+</li>
+<li>sort, sorting text
+
+<ol>
+<li><code>sort -nr</code> # sorts numbers in descending order</li>
+</ol>
+</li>
+<li>awk, command line programming language?
+
+<ol>
+<li><code>cat file.txt | awk '{print $2}'</code> # prints the second column</li>
+<li>it does a lot more things, but this is what i end up using the most for</li>
+</ol>
+</li>
+<li>head tail, head and tail of the files
+
+<ol>
+<li><code>tail -1000f file.txt</code> # last 1000 lines and waits for more lines that are being added to the file</li>
+<li><code>head -n 25 file.txt</code> # first 25 lines</li>
+</ol>
+</li>
+<li>gist, command line gist utility
+
+<ol>
+<li><code>brew install gist</code></li>
+<li><code>gist --login</code> # loging to your github</li>
+<li><code>gist -p file.txt</code> # upload private gist</li>
+</ol>
+</li>
+<li>screen, window manager that multiplexs multiple terminal sessions
+
+<ol>
+<li><code>screen -rd</code> reattach to an existing secreen session even if its open somewhere else</li>
+<li><code>Ctrl-a d</code> detach from an existing screen session</li>
+<li><code>Ctrl-a ?</code> help menu in screen</li>
+<li><code>Ctrl-a n</code> next terminal</li>
+<li><code>Ctrl-a p</code> previous terminal</li>
+<li><code>Ctrl-a k</code> kill the curernt temrinal in screen</li>
+</ol>
+</li>
+</ul>
+
+
+<h2>python</h2>
+
+<ul>
+<li><code>python -u python_script.py &gt; python_logs.txt</code> Usually I want to capture all the print statement logs in some text file, so that I can save them for further reference, instead of throwing them off in stdout. So above all my print logs will be in <code>python_logs.txt</code>, and I follow along the logs using <code>tail -100f python_logs.txt</code>. And the <code>-u</code> flag forces the print statements to be not bufferred while writing them to <code>python_logs.txt</code>. Other wise even if your program is running you wont find the logs in the log file as soon as they get executed.</li>
+</ul>
+
+
+<h2><a href="https://github.com/matryer/bitbar">Bitbar</a></h2>
+
+<p>A utility that helps you write osx menu bar applications, and also use lots of community built plugins/menu bar applications.</p>
+
+<p><code>brew install bitbar</code></p>
+
+<h3>Community Plugins:</h3>
+
+<ul>
+<li><a href="https://github.com/matryer/bitbar-plugins/blob/master/Time/worldclock.1s.sh">Timezone plugin</a>, shows time in 4-5 major timezones.</li>
+</ul>
+
+
+<p><img src="http://i.imgur.com/OoCfxTn.png" alt="Timezone plugin" />
+* <a href="">Clipboard plugin</a>, clipboard of the last 10 items copied, click on an item to copy it back to clipboard.</p>
+
+<h3>My Plugins:</h3>
+
+<ul>
+<li>EC2 Plugin. my own ec2 bitbar plugin, that makes all my common tasks one click, and so much easier to do.</li>
+</ul>
+
+
+<p><img src="http://i.imgur.com/xG7rtCt.png" alt="Imgur" />
+<img src="http://i.imgur.com/S3YOsfG.png" alt="Imgur" /></p>
+
+<ol>
+<li>I can start, stop, restart, teminate my running machines from the menu bar</li>
+<li>Create a low cpu alarm, that sends me an alert email when the cpu is lower than 20%. This is what I use mostly cause I want to get an alert when my machine learning scripts are die/finish.</li>
+<li>Delete the above created alarm.</li>
+<li>Copy ssh command to the clipboard with the right private key file just by a single click. It so annoying everytime I start a machine in ec2, I have to copy the public ip/dns and type where the private key is and type <code>ubuntu@</code>. All of this is just single click away now.</li>
+<li>Displays various machine types, their cores, memory, normal prices, current spot prices in all the regions I&rsquo;m interested in.</li>
+<li>Lists all the available AMIs, and launch a spot instance from that AMI</li>
+</ol>
+
+
+<h2>git</h2>
+
+<ul>
+<li>add this alias in your <code>~/.gitconfig</code> under <code>[alias]</code>, so that you can do <code>git hist</code> that shows pretty tree version of git commit history.
+  <code>
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+ </code>
+<img src="http://i.imgur.com/iktQDA1.png" alt="" />
+<img src="http://i.imgur.com/JBTqcyN.png" alt="" /></li>
+</ul>
+
+
+<h2>vim</h2>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2017/07/30/elasticsearch-segmentation-moengage/">Elasticsearch, Segmentation, MoEngage</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-07-30T12:11:45+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>12:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Introduction.</h1>
+
+<p>For almost two years I worked at a companay called <a href="https://moengage.com/">MoEngage</a>, which is a marketing automation b2b company for app developers. We handle push messages, inapp messages for both mobile phone apps and web apps, email campaigns etc,. I was one of the early employees and I worked on <strong>Segmentation</strong> and built it from ground up. The early days were probably my favourite days, everyone worked with so much intensity at a very fast pace with no scope for any distractions. Very productive and rewarding work. My work touched almost all aspects of the buisness and the entire tech stack we were using. I mainly want this to be a tech blog post but also share some learning experiences being part of a budding young startup with no prior experience of building an engineering team., and I regret so much not writing this earlier, now that it&rsquo;s been a while me quitting that job, I definitely wont be able to be as comprehensive as I would like it to be. I was very comfortable with the elasticsearch, celery workers, redis, s3, sqs, aws, python debugging, release process, testing at scale etc., and I faced and solved very intersting and unique challenges specific to our use case. Please forgive me for any grammatical or spelling mistakes. I postponed this post for the single reason of wanting to do it perfectly, but the exact opposite is happening. Now I just can&rsquo;t wait anymore to get this out.</p>
+
+<h1>Problem statement and context.</h1>
+
+<p>As I said, briefly Moengage is a marketing automation solution for apps, using moengage, apps can send push messages to users of an app and target a very specific  segment of users and reduce churn. At that point of time the mvp of moengage is that we can target users very specifically based on their behaviour inside the app or their own characteristics like their age/sex/location and other attributes. But none of that is built yet. And the few clients that were using us were just bulk messaging(<em>spamming</em>) all the users with the same push message. Just get a cursor on the user database, iterate through them all and send each user to the push worker and finally send the push messages. Turns out even this is hard for apps to do, they would rather use some 3rd party to do handle the push infrastructure and they just have a nice dashboard where their marking folk can put in what push message to send, like offers, deals and other stuff.</p>
+
+<p>We provide sdk to the app developers where we give them two main end points. The sdk does a lot more than this, but for this blog post the only endpoints that we are concerend with are the below two</p>
+
+<ul>
+<li><p>One is to track <strong>Users</strong>. This endpoint can send stuff like name, location, city, sex, age, email. Everything that can be considered as a feature of the user. We call these features <strong><em>User attributes</em></strong></p></li>
+<li><p>And another is to track what the user is doing inside the app we call these <strong>Events</strong>. And all the features these events might have are called <strong><em>Event attributes</em></strong>. Say for example an app developer might want to track everytime a user adds something in the cart. So the event will be something like <strong>Product added to Cart</strong> with event attributes such as <em>name</em>, <em>price</em>, <em>discount</em>, <em>product_category</em> and etc.</p></li>
+</ul>
+
+
+<p>So now we have all the the available data that we track we can use to target users.</p>
+
+<p>And I was tasked to create a service that basically returns a list of users based on a <strong>segment</strong> that is defined by a marketer or anyone else that has access to the moenagege dashboard. This particular service can be used by lot of other services to do other things, like push message workers will consume the users returned by this <strong>segmentation</strong> service to send push messages, or an email worker to send emails, or this same serivce can be used to create analytic dashboards to show how a given segment is varying with time, Or a smart trigger worker(smart triggers are basically some sort of interactive push message, as in there will be some trigger defined and if a user triggers it he will get a push message. Say a user adding some product to cart but not purchasing in the next 10 mins might trigger a push message, that guy probably deserved a push message XD). All these different services uses the segmentation service one way or the other. Some sample <em>segments</em> might look like as follows. A <em>segment</em> can just be all the users of the app, or all the users except the users from another segment.</p>
+
+<p><img src="http://i.imgur.com/K6NyFX4.png" alt="Segment 1" />
+<img src="http://i.imgur.com/KqoKfgZ.png" alt="Segment 2" />
+<img src="http://i.imgur.com/NNf0upN.png" alt="Segmentation Dashboard" /></p>
+
+<h1>Segmentation</h1>
+
+<h2>Definitions</h2>
+
+<p>Just remember this blindly, the output of any <strong>segmentation</strong> is always a set of unique userids/users.</p>
+
+<p>As shown in the above picture. A <strong>segment</strong> consists one or more <strong>filters</strong>. And there are three kinds of filters.
+* User segmentation filter(get all users whose <em>city</em> attribute is <em>London</em>)
+* Event/datapoint segmentation filter(get all users who did <em>product purchased</em>)
+* All Users(just all the users)</p>
+
+<p>Sometimes a filter can be of type <strong>has not executed</strong> where you get a compute a filter and then subtract from <strong>all users</strong>
+And the segment can be <strong>OR</strong> of all these filters or an <strong>AND</strong> of all these filters.</p>
+
+<p>In one of the hackathons I built a nested <strong>AND</strong> or <strong>OR</strong> combinations of filters. To enable much more complex segments.</p>
+
+<p>Its so surprising what sorts of use cases the customer success team used to bring to my attention, and ask me how to do this that. Every time they   have some edge case I had to fit that request with the existing dashboard and some basic set theory. Given all that, the dashboard shown above used to cover most cases. There are some cases where a single sigment contained more than 30 filters. The main challenge comes because of the disconnect where the guy who tracks the types of events(mobile app developer using sdk from app) and the person who ends up creating push campaigns (marketer who uses moengage dashboard) are from completely two different departments. And the sdk guy tracks all sorts of trivial nonsense and try to be comprehensive and the marketer has to somehow make use of the data that was being tracked and create meaningful push campaigns. I had to simultaneously handle both of their use cases and this created some unique challenges.</p>
+
+<p><img src="http://i.imgur.com/DA6xihK.png" alt="Imgur" /></p>
+
+<h2>Initail state when I joined</h2>
+
+<p>When I first joined the most of the working segmentation part is just the <strong>All Users</strong> segment and a little bit of <strong>User segmentation</strong>. The first part is basically get a cursor on the User db and iterate till we get all the user ids and return it. In the initial days, the biggest user db is less than 10million. And it takes some 3-4 mins to return all the users. And second part is a little bit of user segmentation. Where its a straight forward query, but the main problem here is all user attributes need to be indexed, which is not reasonable to expect a mongo database to do. Not just that, the user attributes are not fixed, our clients are free to introduce what ever they want. Then again you can put all the attributes in a single dict object and index that one particular field. This is actually possible in mongo. But the performance is not really that great. And datapoints/event segmentation is basically going to be an aggregation query on the &lsquo;userid&rsquo; field with the given parameters. This is also implemented on mongo, but it wont work for any big aggregation queries on mongo. The schema of a user object and a data point object will give you some clarity of the ideas I just described and what I&rsquo;m going to do in the rest of the article.</p>
+
+<p>Sample User Object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{ 
+</span><span class='line'>    id: userId,
+</span><span class='line'>    name: John Wick,
+</span><span class='line'>    city: London,
+</span><span class='line'>    phone: 911,
+</span><span class='line'>    last_seen: "2017-08-02 11:48:38.509285",
+</span><span class='line'>    location: "40.748059, -33.312945",
+</span><span class='line'>    age: 31,
+</span><span class='line'>    sex: male,
+</span><span class='line'>    sessions: 32,
+</span><span class='line'>    status: active,
+</span><span class='line'>    pushToken: "asdfasAs98787Dfasd",
+</span><span class='line'>    os: ANDROID
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sample Datapoint Object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    id: ObjectId,
+</span><span class='line'>    userId: userId,
+</span><span class='line'>    event: "Added To Cart",
+</span><span class='line'>    product_name: "iPhone 64GB",
+</span><span class='line'>    price: 500,
+</span><span class='line'>    color: "Red",
+</span><span class='line'>    platform: "ANDROID"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output of a <strong>segmentation</strong> query is always a list of userIds, so from the above sample objects its clear that, if its a user filter, the query on database is straight forward query, and if its a datapoing filter, the query on the database is an aggregation query.</p>
+
+<p>So the initial implementation of datapoint filters is also on mongo, where the event attributes are also not fixed. So the query on mongo is a normal filter and then a aggregation on userIds. Just the normal filter query will kill mongo servers if the datapoints are too many. And that will be the case normally.</p>
+
+<p>All these filters will be queried seperately and the resultant of user ids are unioned or intersected using python set operations. This is basically limited by the memory of the segmentation worker.</p>
+
+<p>Clearly all these are major scaling problems and the inital clients we had are very few in the early days of the company, and even then datapoint filters are not working.</p>
+
+<h2>Initial Research</h2>
+
+<p>I cant find all the references right now, but my intial research was pointing towards some sort of search engine database. I knew by then we need to look into Elasticsearch and Apache Solr. And I came across an opensource project called <a href="https://github.com/snowplow/snowplow">Snowplow</a> which is basically Enterprise-strength web, mobile and event analytics, powered by Hadoop, Kafka, Kinesis, Redshift and Elasticsearch. Sounded almost like what we wanted. Although we are not an analytics company. This played a major role in going ahead with Elasticsearch. I also had to decide between Apache Solr and Elasticsearch, but went ahead with ES given its slightly new and most of the comparision articles had lots of nice things to say about how its easier to manage the distributed aspects of ES than it is with Apache Solr.</p>
+
+<h1><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a></h1>
+
+<h2>What is elasticsearch</h2>
+
+<p>From the elasticsearch website, &ldquo;Elasticsearch is a distributed, JSON-based search and analytics engine designed for horizontal scalability, maximum reliability, and easy management.&rdquo;</p>
+
+<h2>Challenges, elasticsearch quirks</h2>
+
+<h2>datapoint segmentation, some aggregation queries</h2>
+
+<h2>user segmenatation to elasticsearch, rivers bullshit and mongo connector.</h2>
+
+<h2>backup,</h2>
+
+<h2>challenges while testing, smaller apps are different than bigger apps</h2>
+
+<h2>all users cache implementation</h2>
+
+<h2>custom segments</h2>
+
+<h2>overall diagram</h2>
+
+<h2>Challenges with current state, types of problems faced app-action indexes, case insensitive, suggestions, os specific..</h2>
+
+<h2>reimplementation of segmentation.</h2>
+
+<h2>event management dashboard, disconnect between app developers and marketers.</h2>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -3091,6 +3424,14 @@ Here we have <em>psi</em></p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2017/08/02/miscellanious-notes/">Miscellanious Notes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/30/elasticsearch-segmentation-moengage/">Elasticsearch, Segmentation, MoEngage</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2017/01/02/santander-product-recommendation-kaggle/">Santander Product Recommendation Kaggle</a>
       </li>
     
@@ -3100,14 +3441,6 @@ Here we have <em>psi</em></p>
     
       <li class="post">
         <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/">Tinder Like Android App That Showcases Products From a Fashion Website</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/08/26/a-boilerplate-nodejs-twitter-bot-that-responds-to-twitter-mentions/">A Boilerplate Nodejs Twitter Bot That Responds to Twitter Mentions.</a>
       </li>
     
   </ul>

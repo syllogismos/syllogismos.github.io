@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Elasticsearch, Segmentation, MoEngage - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="Introduction. For almost two years I worked at a companay called MoEngage, which is a marketing automation b2b company for app developers. We handle &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Elasticsearch, Segmentation, MoEngage</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-07-30T12:11:45+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>12:11 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Introduction.</h1>
+
+<p>For almost two years I worked at a companay called <a href="https://moengage.com/">MoEngage</a>, which is a marketing automation b2b company for app developers. We handle push messages, inapp messages for both mobile phone apps and web apps, email campaigns etc,. I was one of the early employees and I worked on <strong>Segmentation</strong> and built it from ground up. The early days were probably my favourite days, everyone worked with so much intensity at a very fast pace with no scope for any distractions. Very productive and rewarding work. My work touched almost all aspects of the buisness and the entire tech stack we were using. I mainly want this to be a tech blog post but also share some learning experiences being part of a budding young startup with no prior experience of building an engineering team., and I regret so much not writing this earlier, now that it&rsquo;s been a while me quitting that job, I definitely wont be able to be as comprehensive as I would like it to be. I was very comfortable with the elasticsearch, celery workers, redis, s3, sqs, aws, python debugging, release process, testing at scale etc., and I faced and solved very intersting and unique challenges specific to our use case. Please forgive me for any grammatical or spelling mistakes. I postponed this post for the single reason of wanting to do it perfectly, but the exact opposite is happening. Now I just can&rsquo;t wait anymore to get this out.</p>
+
+<h1>Problem statement and context.</h1>
+
+<p>As I said, briefly Moengage is a marketing automation solution for apps, using moengage, apps can send push messages to users of an app and target a very specific  segment of users and reduce churn. At that point of time the mvp of moengage is that we can target users very specifically based on their behaviour inside the app or their own characteristics like their age/sex/location and other attributes. But none of that is built yet. And the few clients that were using us were just bulk messaging(<em>spamming</em>) all the users with the same push message. Just get a cursor on the user database, iterate through them all and send each user to the push worker and finally send the push messages. Turns out even this is hard for apps to do, they would rather use some 3rd party to do handle the push infrastructure and they just have a nice dashboard where their marking folk can put in what push message to send, like offers, deals and other stuff.</p>
+
+<p>We provide sdk to the app developers where we give them two main end points. The sdk does a lot more than this, but for this blog post the only endpoints that we are concerend with are the below two</p>
+
+<ul>
+<li><p>One is to track <strong>Users</strong>. This endpoint can send stuff like name, location, city, sex, age, email. Everything that can be considered as a feature of the user. We call these features <strong><em>User attributes</em></strong></p></li>
+<li><p>And another is to track what the user is doing inside the app we call these <strong>Events</strong>. And all the features these events might have are called <strong><em>Event attributes</em></strong>. Say for example an app developer might want to track everytime a user adds something in the cart. So the event will be something like <strong>Product added to Cart</strong> with event attributes such as <em>name</em>, <em>price</em>, <em>discount</em>, <em>product_category</em> and etc.</p></li>
+</ul>
+
+
+<p>So now we have all the the available data that we track we can use to target users.</p>
+
+<p>And I was tasked to create a service that basically returns a list of users based on a <strong>segment</strong> that is defined by a marketer or anyone else that has access to the moenagege dashboard. This particular service can be used by lot of other services to do other things, like push message workers will consume the users returned by this <strong>segmentation</strong> service to send push messages, or an email worker to send emails, or this same serivce can be used to create analytic dashboards to show how a given segment is varying with time, Or a smart trigger worker(smart triggers are basically some sort of interactive push message, as in there will be some trigger defined and if a user triggers it he will get a push message. Say a user adding some product to cart but not purchasing in the next 10 mins might trigger a push message, that guy probably deserved a push message XD). All these different services uses the segmentation service one way or the other. Some sample <em>segments</em> might look like as follows. A <em>segment</em> can just be all the users of the app, or all the users except the users from another segment.</p>
+
+<p><img src="http://i.imgur.com/K6NyFX4.png" alt="Segment 1" />
+<img src="http://i.imgur.com/KqoKfgZ.png" alt="Segment 2" />
+<img src="http://i.imgur.com/NNf0upN.png" alt="Segmentation Dashboard" /></p>
+
+<h1>Segmentation</h1>
+
+<h2>Definitions</h2>
+
+<p>Just remember this blindly, the output of any <strong>segmentation</strong> is always a set of unique userids/users.</p>
+
+<p>As shown in the above picture. A <strong>segment</strong> consists one or more <strong>filters</strong>. And there are three kinds of filters.
+* User segmentation filter(get all users whose <em>city</em> attribute is <em>London</em>)
+* Event/datapoint segmentation filter(get all users who did <em>product purchased</em>)
+* All Users(just all the users)</p>
+
+<p>Sometimes a filter can be of type <strong>has not executed</strong> where you get a compute a filter and then subtract from <strong>all users</strong>
+And the segment can be <strong>OR</strong> of all these filters or an <strong>AND</strong> of all these filters.</p>
+
+<p>In one of the hackathons I built a nested <strong>AND</strong> or <strong>OR</strong> combinations of filters. To enable much more complex segments.</p>
+
+<p>Its so surprising what sorts of use cases the customer success team used to bring to my attention, and ask me how to do this that. Every time they   have some edge case I had to fit that request with the existing dashboard and some basic set theory. Given all that, the dashboard shown above used to cover most cases. There are some cases where a single sigment contained more than 30 filters. The main challenge comes because of the disconnect where the guy who tracks the types of events(mobile app developer using sdk from app) and the person who ends up creating push campaigns (marketer who uses moengage dashboard) are from completely two different departments. And the sdk guy tracks all sorts of trivial nonsense and try to be comprehensive and the marketer has to somehow make use of the data that was being tracked and create meaningful push campaigns. I had to simultaneously handle both of their use cases and this created some unique challenges.</p>
+
+<p><img src="http://i.imgur.com/DA6xihK.png" alt="Imgur" /></p>
+
+<h2>Initail state when I joined</h2>
+
+<p>When I first joined the most of the working segmentation part is just the <strong>All Users</strong> segment and a little bit of <strong>User segmentation</strong>. The first part is basically get a cursor on the User db and iterate till we get all the user ids and return it. In the initial days, the biggest user db is less than 10million. And it takes some 3-4 mins to return all the users. And second part is a little bit of user segmentation. Where its a straight forward query, but the main problem here is all user attributes need to be indexed, which is not reasonable to expect a mongo database to do. Not just that, the user attributes are not fixed, our clients are free to introduce what ever they want. Then again you can put all the attributes in a single dict object and index that one particular field. This is actually possible in mongo. But the performance is not really that great. And datapoints/event segmentation is basically going to be an aggregation query on the &lsquo;userid&rsquo; field with the given parameters. This is also implemented on mongo, but it wont work for any big aggregation queries on mongo. The schema of a user object and a data point object will give you some clarity of the ideas I just described and what I&rsquo;m going to do in the rest of the article.</p>
+
+<p>Sample User Object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{ 
+</span><span class='line'>    id: userId,
+</span><span class='line'>    name: John Wick,
+</span><span class='line'>    city: London,
+</span><span class='line'>    phone: 911,
+</span><span class='line'>    last_seen: "2017-08-02 11:48:38.509285",
+</span><span class='line'>    location: "40.748059, -33.312945",
+</span><span class='line'>    age: 31,
+</span><span class='line'>    sex: male,
+</span><span class='line'>    sessions: 32,
+</span><span class='line'>    status: active,
+</span><span class='line'>    pushToken: "asdfasAs98787Dfasd",
+</span><span class='line'>    os: ANDROID
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Sample Datapoint Object:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    id: ObjectId,
+</span><span class='line'>    userId: userId,
+</span><span class='line'>    event: "Added To Cart",
+</span><span class='line'>    product_name: "iPhone 64GB",
+</span><span class='line'>    price: 500,
+</span><span class='line'>    color: "Red",
+</span><span class='line'>    platform: "ANDROID"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output of a <strong>segmentation</strong> query is always a list of userIds, so from the above sample objects its clear that, if its a user filter, the query on database is straight forward query, and if its a datapoing filter, the query on the database is an aggregation query.</p>
+
+<p>So the initial implementation of datapoint filters is also on mongo, where the event attributes are also not fixed. So the query on mongo is a normal filter and then a aggregation on userIds. Just the normal filter query will kill mongo servers if the datapoints are too many. And that will be the case normally.</p>
+
+<p>All these filters will be queried seperately and the resultant of user ids are unioned or intersected using python set operations. This is basically limited by the memory of the segmentation worker.</p>
+
+<p>Clearly all these are major scaling problems and the inital clients we had are very few in the early days of the company, and even then datapoint filters are not working.</p>
+
+<h2>Initial Research</h2>
+
+<p>I cant find all the references right now, but my intial research was pointing towards some sort of search engine database. I knew by then we need to look into Elasticsearch and Apache Solr. And I came across an opensource project called <a href="https://github.com/snowplow/snowplow">Snowplow</a> which is basically Enterprise-strength web, mobile and event analytics, powered by Hadoop, Kafka, Kinesis, Redshift and Elasticsearch. Sounded almost like what we wanted. Although we are not an analytics company. This played a major role in going ahead with Elasticsearch. I also had to decide between Apache Solr and Elasticsearch, but went ahead with ES given its slightly new and most of the comparision articles had lots of nice things to say about how its easier to manage the distributed aspects of ES than it is with Apache Solr.</p>
+
+<h1><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a></h1>
+
+<h2>What is elasticsearch</h2>
+
+<p>From the elasticsearch website, &ldquo;Elasticsearch is a distributed, JSON-based search and analytics engine designed for horizontal scalability, maximum reliability, and easy management.&rdquo;</p>
+
+<h2>Challenges, elasticsearch quirks</h2>
+
+<h2>datapoint segmentation, some aggregation queries</h2>
+
+<h2>user segmenatation to elasticsearch, rivers bullshit and mongo connector.</h2>
+
+<h2>backup,</h2>
+
+<h2>challenges while testing, smaller apps are different than bigger apps</h2>
+
+<h2>all users cache implementation</h2>
+
+<h2>custom segments</h2>
+
+<h2>overall diagram</h2>
+
+<h2>Challenges with current state, types of problems faced app-action indexes, case insensitive, suggestions, os specific..</h2>
+
+<h2>reimplementation of segmentation.</h2>
+
+<h2>event management dashboard, disconnect between app developers and marketers.</h2>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-07-30T12:11:45+05:30'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>12:11 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/01/02/santander-product-recommendation-kaggle/" title="Previous Post: Santander Product Recommendation Kaggle">&laquo; Santander Product Recommendation Kaggle</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2017/08/02/miscellanious-notes/" title="Next Post: Miscellanious Notes">Miscellanious Notes &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/08/02/miscellanious-notes/">Miscellanious Notes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/30/elasticsearch-segmentation-moengage/">Elasticsearch, Segmentation, MoEngage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/01/02/santander-product-recommendation-kaggle/">Santander Product Recommendation Kaggle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/13/stochastic-gradient-descent/">Stochastic Gradient Descent in AD.</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/syllogismos">@syllogismos</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'syllogismos',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
