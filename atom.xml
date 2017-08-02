@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2017-08-02T19:02:04+05:30</updated>
+  <updated>2017-08-02T19:07:38+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -18,7 +18,7 @@
     <link href="http://syllogismos.github.io/blog/2017/08/02/miscellanious-notes/"/>
     <updated>2017-08-02T13:55:59+05:30</updated>
     <id>http://syllogismos.github.io/blog/2017/08/02/miscellanious-notes</id>
-    <content type="html"><![CDATA[<h1>Miscellanious notes, tips and tricks</h1>
+    <content type="html"><![CDATA[<p>Just a collection of some notes and tips that helps me in my development workflow.</p>
 
 <h2>SSH</h2>
 
