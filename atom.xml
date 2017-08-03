@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2017-08-03T15:32:54+05:30</updated>
+  <updated>2017-08-03T21:34:15+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -192,7 +192,7 @@
     <link href="http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage/"/>
     <updated>2017-07-30T12:11:45+05:30</updated>
     <id>http://syllogismos.github.io/blog/2017/07/30/elasticsearch-segmentation-moengage</id>
-    <content type="html"><![CDATA[<p>For almost two years I worked at a companay called <a href="https://moengage.com/">MoEngage</a>, which is a marketing automation b2b company for app developers. We handle push messages, inapp messages for both mobile phone apps and web apps, email campaigns etc,. I was one of the early employees and I worked on <strong>Segmentation</strong> and built it from ground up. The early days were probably my favourite days, everyone worked with so much intensity at a very fast pace with no scope for any distractions. Very productive and rewarding work. My work touched almost all aspects of the buisness and the entire tech stack we were using. I mainly want this to be a tech blog post but also share some learning experiences being part of a budding young startup with no prior experience of building an engineering team., and I regret so much not writing this earlier, now that it&rsquo;s been a while me quitting that job, I definitely wont be able to be as comprehensive as I would like it to be. I was very comfortable with the elasticsearch, celery workers, redis, s3, sqs, aws, python debugging, release process, testing at scale etc., and I faced and solved very intersting and unique challenges specific to our use case. Please forgive me for any grammatical or spelling mistakes. I postponed this post for the single reason of wanting to do it perfectly, but the exact opposite is happening. Now I just can&rsquo;t wait anymore to get this out.</p>
+    <content type="html"><![CDATA[<p>For almost two years I worked at a companay called <a href="https://moengage.com/">MoEngage</a>, which is a marketing automation b2b company for app developers. We handle push messages, inapp messages for both mobile phone apps and web apps, email campaigns etc,. I was one of the early employees and I worked on <strong>Segmentation</strong> and built it from ground up. The early days were probably my favourite days, everyone worked with so much intensity at a very fast pace with no scope for any distractions. Very productive and rewarding work. My work touched almost all aspects of the buisness and the entire tech stack we were using. I mainly want this to be a tech blog post about the implementation of <strong>segmentation</strong> using <strong>elasticsearch</strong> but also share some learning experiences being part of a budding young startup with no prior experience of building an engineering team., and I regret so much not writing this earlier, now that it&rsquo;s been a while me quitting that job, I definitely wont be able to be as comprehensive as I would like it to be. I was very comfortable with the elasticsearch, celery workers, redis, s3, sqs, aws, python debugging, release process, testing at scale etc., I faced and solved very intersting and unique challenges specific to our use case. Please forgive me for any grammatical or spelling mistakes. I postponed this post for the single reason of wanting to do it perfectly, but the exact opposite is happening. Now I just can&rsquo;t wait anymore to get this out.</p>
 
 <h1>Problem statement and context.</h1>
 
@@ -349,22 +349,78 @@ And the segment can be <strong>OR</strong> of all these filters or an <strong>AN
 
 <p>For example in the picture below, <strong>books</strong> is the name of the <strong>index</strong>. And while creating this <strong>index</strong> we defined it to have to have 3 shards and replicated twice. So there are a total of 6 shards, 3 primary(whiter green) shards and 3(dark green) secondary shards. Our datapoint object can be in any of those shards. All these shards are distributed over three elasticsearch <strong>nodes</strong>. And all these three nodes make up the <strong>cluster</strong>. The node with bolded star is the master node. It coordinates all the nodes to be in sync, When you do a search query, it decides based on the metadata it has which shards in what nodes to be queried.</p>
 
+<p>I&rsquo;m writing this blogpost to explain how I made use of elasticsearch and fit it to our needs of segmenation. In further parts of the blog, I will be going in detail about es specific things as we go come across them.</p>
+
 <p><img src="http://i.imgur.com/cYJqT4j.png" alt="Imgur" /></p>
+
+<h2>Installation:</h2>
+
+<p>Elasticsearch needs java to be installed. In the below gist you can see how to install elasticsearch. And start it as service so that it starts as soon as the machine starts. It also shows you how to install various elasticsearch plugins like <strong>kopf</strong>, <strong>bigdesk</strong>, <strong>ec2 discover</strong> plugin.</p>
+
+<ul>
+<li><strong>kopf</strong> that gives us a glimpse of the elasticsearch cluster, above screenshots</li>
+<li><strong>bigdesk</strong> similar cluster state plugin</li>
+<li><strong>ec2</strong> plugin that helps the discovery of the nodes in a cluster in a ec2, you can set discovery based on tags, security groups and other ec2 parameters. In the config file you can see the node discovery settings.</li>
+</ul>
+
+
+<p>After installation of elasticsearch as a linux service, you can find the config file at <code>/etc/elasticsearch/elasticsearch.yml</code> where you define the name of the node, cluster, ec2 discovery settings. And restart the service as shown. Ideally for a elasticsearch node that is in production you should reserve half of the available memory for jvm heap. You can find the settings for this <code>/etc/default/elasticsearch</code>. And you can find the log files in <code>/var/log/elasticsearch/</code>. You will find slowlogs, cluster/node startup logs and etc here.</p>
 
 <script src="https://gist.github.com/syllogismos/6ca5c5ac3e89bfd314f0.js"></script>
 
 
+<p>Okay this is a brief explanation of what ES is, and how to install. Lets dive into more details about how ES fits into the problem we were trying to solve in the first place. I haven&rsquo;t given more details of Elasticsearch, I will explain new concepts related to ES as we come across by implementing <strong>segmentation</strong>.</p>
+
+<h1>Segmentation.</h1>
+
+<p>The immediate major challenge we had was, the data point segmentation. In the initial days the biggest datapoint db has around 60 million objects. On mongo the datapoint queries/aggregations are just not working. And our first clients were just using basic user segmentation and <strong>All users</strong> segmentation.</p>
+
+<p>Even with just 60 million objects the data point segmentation looked like a very hard problem then. After switching to elasticsearch and after a year I was able to support segmentation on 10 billion datapoint objects. We ended up having two elasticsearch clusters with ~20 nodes(32GB memory) in each just for datapoints. Things that weren&rsquo;t working started working, and at a scale of 166x after one year. The ride wasn&rsquo;t smooth, many sleepless nights, stress, hence many lessons learned along the way.</p>
+
+<p>After <strong>datapoint segmentation</strong> was live for few days we moved the <strong>user segmentation</strong> also to elasticsearch. As having indexes on all the fields a user object on mongo is starting to stress our db servers.</p>
+
+<p>And as we got more clients, we were tracking almost 1/5th of Indian mobile users. And getting <strong>All users</strong> directly from cursor and iterating all the users everytime there is an all users request is not feasible anymore. As a db with 30 Million user objects is taking some 10 mins just to get the user ids present in the database. I also had to come up with reliable fast solution for this.</p>
+
+<p>In further segments, we will discuss, each of the above three segmentations.</p>
+
 <ul>
-<li>Index</li>
-<li>Type</li>
-<li>Shards</li>
-<li>Replication</li>
-<li>Node</li>
-<li>Cluster</li>
-<li>Query language</li>
-<li></li>
+<li>Datapoint segmentation</li>
+<li>User segmentation</li>
+<li>All Users.</li>
 </ul>
 
+
+<h2>Datapoint Segmentation:</h2>
+
+<p>Once again, the schema of the datapoint looks like this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    id: ObjectId,
+</span><span class='line'>    userId: userId,
+</span><span class='line'>    event: "Added To Cart",
+</span><span class='line'>    product_name: "iPhone 64GB",
+</span><span class='line'>    price: 500,
+</span><span class='line'>    color: "Red",
+</span><span class='line'>    platform: "ANDROID"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So</p>
+
+<h2>User Segmentation:</h2>
+
+<h2>All Users:</h2>
+
+<p>In the end after moving to Elasticsearch</p>
 
 <h2>Challenges, elasticsearch quirks</h2>
 
