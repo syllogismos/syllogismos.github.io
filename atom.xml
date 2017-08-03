@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2017-08-03T15:22:25+05:30</updated>
+  <updated>2017-08-03T15:25:59+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -350,6 +350,9 @@ And the segment can be <strong>OR</strong> of all these filters or an <strong>AN
 <p>For example in the picture below, <strong>books</strong> is the name of the <strong>index</strong>. And while creating this <strong>index</strong> we defined it to have to have 3 shards and replicated twice. So there are a total of 6 shards, 3 primary(whiter green) shards and 3(dark green) secondary shards. Our datapoint object can be in any of those shards. All these shards are distributed over three elasticsearch <strong>nodes</strong>. And all these three nodes make up the <strong>cluster</strong>. The node with bolded star is the master node. It coordinates all the nodes to be in sync, When you do a search query, it decides based on the metadata it has which shards in what nodes to be queried.</p>
 
 <p><img src="http://i.imgur.com/cYJqT4j.png" alt="Imgur" /></p>
+
+<script src="https://gist.github.com/syllogismos/6ca5c5ac3e89bfd314f0.js"></script>
+
 
 <ul>
 <li>Index</li>
