@@ -194,13 +194,66 @@ And the segment can be <strong>OR</strong> of all these filters or an <strong>AN
 
 <h2>Initial Research</h2>
 
-<p>I cant find all the references right now, but my intial research was pointing towards some sort of search engine database. I knew by then we need to look into Elasticsearch and Apache Solr. And I came across an opensource project called <a href="https://github.com/snowplow/snowplow">Snowplow</a> which is basically Enterprise-strength web, mobile and event analytics, powered by Hadoop, Kafka, Kinesis, Redshift and Elasticsearch. Sounded almost like what we wanted. Although we are not an analytics company. This played a major role in going ahead with Elasticsearch. I also had to decide between Apache Solr and Elasticsearch, but went ahead with ES given its slightly new and most of the comparision articles had lots of nice things to say about how its easier to manage the distributed aspects of ES than it is with Apache Solr.</p>
+<p>I cant find all the references right now, but my intial research(which was some 2 years back) was pointing towards some sort of search engine database. I knew by then we need to look into Elasticsearch and Apache Solr. And I came across an opensource project called <a href="https://github.com/snowplow/snowplow">Snowplow</a> which is basically &ldquo;Enterprise-strength web, mobile and event analytics, powered by Hadoop, Kafka, Kinesis, Redshift and Elasticsearch&rdquo;. Sounded almost like what we wanted. Although we are not an analytics company. This played a major role in going ahead with Elasticsearch. I also had to decide between Apache Solr and Elasticsearch, but went ahead with ES given its slightly new, active and most of the comparision articles had lots of nice things to say about how its easier to manage the distributed aspects of ES than it is with Apache Solr.</p>
 
 <h1><a href="https://www.elastic.co/products/elasticsearch">Elasticsearch</a></h1>
 
 <h2>What is elasticsearch</h2>
 
 <p>From the elasticsearch website, &ldquo;Elasticsearch is a distributed, JSON-based search and analytics engine designed for horizontal scalability, maximum reliability, and easy management.&rdquo;</p>
+
+<p>Elasticsearch is built upon apache Lucene, just like Apache Solr, and added a nice layer that takes care of the distributed aspect of the horizontal scalability. Also provides a nice REST api to handle all sorts of operations like cluster management, node/cluster monitoring, CRUD operations etc.</p>
+
+<p>In elasticsearch, by default every field(column) in the json object is indexed and can be searched, unlike usual databases like mongo, mysql and etc, you explicitly specify what fields to not be indexed. In traditional databases you specify what fields to be indexed. And it is horizontally scalable, you can add machines dynamically to the cluster as your data gets larger and when the master node discovers the newly added node, the master node will distribute all the data shards taking into consideration the newly added node.</p>
+
+<p>It can be started on your local machine as a single node cluster or can be on hundreds of nodes.</p>
+
+<h2>Basics of Elasticsearch.</h2>
+
+<p>Lets start with a basic search object and go all the way up to the elasticsearch cluster and make ourself comfortable with all the ES specific terms that come up on our way.</p>
+
+<p>An elasticseach cluster can be visualized in the image below.
+<img src="http://i.imgur.com/VAAVpeH.png" alt="Imgur" /></p>
+
+<p>Say for example in our case, take the event/datapoint json object that has to be searched for <strong>segmentation</strong> is</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    id: ObjectId,
+</span><span class='line'>    userId: userId,
+</span><span class='line'>    event: "Added To Cart",
+</span><span class='line'>    product_name: "iPhone 64GB",
+</span><span class='line'>    price: 500,
+</span><span class='line'>    color: "Red",
+</span><span class='line'>    platform: "ANDROID"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The above datapoint belongs to a given <strong>type</strong> of an <strong>index</strong>. For all practical purposes you can ignore <strong>type</strong>, I never really made use of it, I did define that a datapoint object is of <strong>type</strong> datapoint and that&rsquo;s it. And a datapoint resides in one of the <strong>shards</strong>. It can be either a primary shard or a replication/secondary shard. All these primary and secondary <strong>shards</strong> combine to make up one <strong>index</strong>. All these shards are distributed over the <strong>cluster</strong>. A <strong>cluster</strong> can be a single machine or a bunch of <strong>nodes</strong>.</p>
+
+<p>For example in the picture below, <strong>books</strong> is the name of the <strong>index</strong>. And while creating this <strong>index</strong> we defined it to have to have 3 shards and replicated twice. So there are a total of 6 shards, 3 primary(whiter green) shards and 3(dark green) secondary shards. Our datapoint object can be in any of those shards. All these shards are distributed over three elasticsearch <strong>nodes</strong>. And all these three nodes make up the <strong>cluster</strong>. The node with bolded star is the master node. It coordinates all the nodes to be in sync, When you do a search query, it decides based on the metadata it has which shards in what nodes to be queried.</p>
+
+<p><img src="http://i.imgur.com/cYJqT4j.png" alt="Imgur" /></p>
+
+<ul>
+<li>Index</li>
+<li>Type</li>
+<li>Shards</li>
+<li>Replication</li>
+<li>Node</li>
+<li>Cluster</li>
+<li>Query language</li>
+<li></li>
+</ul>
+
 
 <h2>Challenges, elasticsearch quirks</h2>
 
@@ -220,7 +273,7 @@ And the segment can be <strong>OR</strong> of all these filters or an <strong>AN
 
 <h2>Challenges with current state, types of problems faced app-action indexes, case insensitive, suggestions, os specific..</h2>
 
-<h2>reimplementation of segmentation.</h2>
+<h2>Rearchitecture</h2>
 
 <h2>event management dashboard, disconnect between app developers and marketers.</h2>
 </div>
