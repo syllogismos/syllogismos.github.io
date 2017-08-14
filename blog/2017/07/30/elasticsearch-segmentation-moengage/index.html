@@ -389,7 +389,31 @@ A single app can track any number of such events, and each event will have any n
 </ul>
 
 
-<h2>User Segmentation:</h2>
+<h2>User Segmentation filter:</h2>
+
+<p>Eventually as we were getting more clients, doing the user segmentation filter queries on mongo db was also proving to be challenging. As we are querying on user db, the queries that hit the db are just normal filter queries. Apply all the filters and get a cursor, iterate through the cursor and return the list of users of a given segment. As with data point segmentation, we support all types to filter on the user db, <code>int</code>, <code>string</code>, <code>date</code>, <code>location</code>.</p>
+
+<p>For mongo queries to work for user segmentation on all the user attributes that the app is tracking, we have a nested object that holds all the user attributes, and a single index on the the nested field. And as the user attributes are not fixed, and our clients can introduce anything they want to track. Having index such that queries work efficiently on all these fields is becoming challenging as the user dbs are getting bigger.</p>
+
+<p>So eventually we wanted to move user segmentation also to elasticsearch. But the tricky part here is, that user objects recieve updates on it, unlike datapoints. Such as, last seen of the user keeps updating everytime the user uses it. Location of the user updates. This is fundamentally different from datapoints db. And the challenge now is if we should completely move away from mongo and switch to elasticsearch. But mongo infrastructure was heavily used by the push team to send push notifications once they are given the user ids. And we had to have mongo as the primary data source. And have elasticsearch that mirrors the data on mongo. We can&rsquo;t just write once and keep quite about it, we have to constantly update the elasticsearch data with new updates on user objects.</p>
+
+<h3>River Hell:</h3>
+
+<p>Above challenge brings us to a concept called <code>Rivers</code>, which exists to solve exactly this problem. The basic concept of rivers is that you have a primary db, some where like a mongodb/couchdb and etc. And you keep tailing all the CRUD operations that happen on the db and replay all those operations on elasticsearch. The river backend was provided by the elasticsearch backend in those days. And there exist several third party drivers that latch on to the CRUD operations that happen on the primary sources, like mongo/couchdb and etc.</p>
+
+<p>Conceptually <code>Rivers</code> are what we needed. And I started the user elasticsearch cluster with some 6 nodes that serve user segmentation queries and started the rivers on all the bigger production clients. Things seemed to work well. Except RIVERS ARE UTTER CRAP AND VERY UNRELIABLE, and no wonder they were deprecated by elasticsearch guys as well.</p>
+
+<p>They used to run fine, but after few days, the nodes used to max out on the jvm or memory and the entire user segmentation elasticsearch cluster used to not respond. I have to restart the questionable nodes, and after restarting the nodes, because of the replication shards, the user db indexes were back, but the individual river stopped and CRUD updates on the primary db stopped reflecting on the elasticsearch. So basically the user data on elasticsearch was stale. So I have to delete the index, restart the river from the beginning, and while this restarting is happening, I had to redirect the segmentatino queries on to mongo db for backup. It was a mess. Rivers turned out to be such a pain to work with, it almost became a running joke in the entire office. I built a crude river dashboard that shows the status of the rivers and the difference in the number of users in elasticsearch index and the mongo db, this difference usually was a good indicator of the rivers status. And alerts that alert me when a river stops updating new users. Rivers are the most unreliable thing I had to use, and there is a good reason why it got deprecated.</p>
+
+<h3>River Alternative:</h3>
+
+<p>I was already looking at alternatives for rivers, and I know that things like <a href="https://github.com/mongodb-labs/mongo-connector">mongo connector</a> exist. But the question is how reliable that thing will be. But we got to know it was working well for similar use case from a asking around. Mongo already has a way of latching onto and tailing all the crud operations(oplog) and replaying all that. That is how the secondary dbs also replicate their data from the primary mongo nodes. And it is fairly robust. And the mongo connector provides us a way to make use of this replication and index into elasticsearch. Basically we are indexing stuff to elasticsearch(which it is supposed to be good at) and that stuff is basically obtained from oplog of the mongodb which is also fairly robustly implemented. So using mongo connector we are making use of things in which both mongo and elasticsearch are good at in their respective tasks.</p>
+
+<p>By now I had a proper team mate and I made him fork mongo connector and replicate all the river functionality that we were using earlier and made the switch from rivers to mongo-connector.</p>
+
+<h3>Stats:</h3>
+
+<p>I think by then we were supporting user segmentation on around 80-100Million users.</p>
 
 <h2>All Users:</h2>
 
