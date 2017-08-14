@@ -743,9 +743,15 @@ At elasticsearch stage, we had two mechanisms, where we make use of snapshots, b
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>Hi Guys
 </span><span class='line'> 
-</span><span class='line'>I have been trying for a very long time and no matter what combination of filters are tried the server response is error. We are unable to make very basic segment of customers. Frankly on New Years Eve we are not able to reach the right customer, this is disappointing . Attaching screen shot here.</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>I have been trying for a very long time and no matter what combination of filters
+</span><span class='line'>are tried the server response is error. We are unable to make very basic segment
+</span><span class='line'>of customers. Frankly on New Years Eve we are not able to reach the right customer,
+</span><span class='line'>this is disappointing . Attaching screen shot here.</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This is when we moved the segmentation architecture from mongo to elasticsearch. Everything was ready, only the data porting from mongo to es was left and releasing the new segmentation code. So in 24 hours we released the new segmentation logic and ported the data. The only reason I didn&rsquo;t release was because of me being relatively new in the company and me having to check everything twice or thrice. This email is the push we needed to jump head first. And it worked for a long time. Fun times.</p>
