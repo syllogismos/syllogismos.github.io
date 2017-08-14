@@ -321,8 +321,6 @@ And the segment can be <strong>OR</strong> of all these filters or an <strong>AN
 
 <p>Its so surprising what sorts of use cases the customer success team used to bring to my attention, and ask me how to do this that. Every time they   have some edge case I had to fit that request with the existing dashboard and some basic set theory. Given all that, the dashboard shown above used to cover most cases. There are some cases where a single sigment contained more than 30 filters. The main challenge comes because of the disconnect where the guy who tracks the types of events(mobile app developer using sdk from app) and the person who ends up creating push campaigns (marketer who uses moengage dashboard) are from completely two different departments. And the sdk guy tracks all sorts of trivial nonsense and try to be comprehensive and the marketer has to somehow make use of the data that was being tracked and create meaningful push campaigns. I had to simultaneously handle both of their use cases and this created some unique challenges.</p>
 
-<p><img src="http://i.imgur.com/DA6xihK.png" alt="Imgur" /></p>
-
 <h2>Initail state when I joined</h2>
 
 <p>When I first joined the most of the working segmentation part is just the <strong>All Users</strong> segment and a little bit of <strong>User segmentation</strong>. The first part is basically get a cursor on the User db and iterate till we get all the user ids and return it. In the initial days, the biggest user db is less than 10million. And it takes some 3-4 mins to return all the users. And second part is a little bit of user segmentation. Where its a straight forward query, but the main problem here is all user attributes need to be indexed, which is not reasonable to expect a mongo database to do. Not just that, the user attributes are not fixed, our clients are free to introduce what ever they want. Then again you can put all the attributes in a single dict object and index that one particular field. This is actually possible in mongo. But the performance is not really that great. And datapoints/event segmentation is basically going to be an aggregation query on the &lsquo;userid&rsquo; field with the given parameters. This is also implemented on mongo, but it wont work for any big aggregation queries on mongo. The schema of a user object and a data point object will give you some clarity of the ideas I just described and what I&rsquo;m going to do in the rest of the article.</p>
@@ -610,31 +608,159 @@ A single app can track any number of such events, and each event will have any n
 
 <h3>Stats:</h3>
 
-<p>I think by then we were supporting user segmentation on around 80-100Million users.</p>
+<p>I think by then we were supporting user segmentation on around 80-100Million users. And after moving away from rivers and started using mongo connector, we were very comfortable with user segmentation. 100Million objects in user cluster seemed like nothing when compared to the datapoint cluster with almost 100x volume and aggregation queries. The only tricky part is not letting the data become too stale, and keep it upto date with mongo.</p>
 
 <h2>All Users:</h2>
 
-<p>In the end after moving to Elasticsearch</p>
+<p>All users filter is basically returning userids of a given app. The niave implementation is that getting a cursor with empty filter and then iterating it through each and every userid and returning them. But as the user db&rsquo;s got bigger and bigger this process took more and more time. <code>All users</code> query is fired not just when sending push campaign to all users. We also need it when we want a datapoint segment that goes like <code>All users who did not do this action in the last n days</code>. We do the normal datapoint segmentation and set differnece it from <code>all users</code>.</p>
 
-<h2>Challenges, elasticsearch quirks</h2>
+<p>Instead of querying all the user ids from the database all the time, you can store all the userids that were created till a particular time in  cache and query the rest from database, or update the cache to add newly added users hourly. But then for this to work we need an index on the <code>created_time</code> field of the user object. But we can make use of objectid property of mongo objects. It also contains the information related to when the object is created. Instead of creating an index on <code>created_time</code> field of the object we can filter directly on the object id to query on creation time of the object.</p>
 
-<h2>datapoint segmentation, some aggregation queries</h2>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>from bson.objectid import ObjectId
+</span><span class='line'>object_id_from_time_stamp = ObjectId.from_datetime(time_stamp)
+</span><span class='line'>cursor = db.Users.find({'_id': {'$gt': object_id_from_time_stamp}})</span></code></pre></td></tr></table></div></figure>
 
-<h2>user segmenatation to elasticsearch, rivers bullshit and mongo connector.</h2>
 
-<h2>backup,</h2>
+<p>So I have a worker that updates the all users cache hourly to include the newly created users from that app. The cache key mechanism I used is such that I store 50k user ids in a single redis key and store the next 50k users in the next redis key. Also for smaller dbs I used to get all the users directly from db as often they are test apps, and it will be confusing for them to miss some users when they test using all users campaign.
+I also store the last cache update time in redis, so that I can query all the new users created after that timestamp directly from db. I update the whole user cache weekly, just in case I miss some users some how.</p>
+
+<p>This part of the code has to be implemented very carefully with lots of fall back mechanism. In further iterations I started getting user ids from the elasticsearch cluster. If Es fails for some reason, I get it from mongodb. And not all clients have ES river. And we a back up of querying es/mongo directly if the cache fails. The major reason I didn&rsquo;t store all the users in a single key is that If a single get request fails, the entire query returns zero users. Instead if I store only 50k users per key, even if single key might fail, the output wont be that unreasonable.</p>
+
+<p>The sheer amount of edge cases that can screw up this result are so many I had to be very careful with this part.</p>
+
+<p>But this improved the <code>All Users</code> query time from 10 minutes to in some cases less than 10 secs.</p>
+
+<h2>Combining above filters.</h2>
+
+<p>Now that we discussed all the three types of major filters,
+* datapoint segmentation filter(D)
+* user segmentation filter(U)
+* all users query(A)</p>
+
+<p>Each of them get the userids from three different sources. And a single segment is a combination of one or more of any of the above three filters. And the combination can either be <code>intersection</code> or <code>union</code>.</p>
+
+<p>We compute all the filters seperately and combine them using basic python operations.</p>
+
+<p><code>Has not executed</code> is basically <code>All Users</code> - <code>has executed</code></p>
+
+<p>There are lot of iterative improvements that can be made on this naive implementation. Each filter is computed synchronously.  This can be done asynchronously. Asynchronously computing more than one datapoint filter might not be a great idea, as it might stress the datapoint cluster even more. And if you observe carefully, if there are more than one user filter, they can all be made into a single query on the user db. All sorts of combinations can be tried.</p>
+
+<p>And if you study more carefully you can actually make use of set theory to reduce the computation complexity and speed up segmentation even more.</p>
+
+<p>Below <code>A</code>, <code>B</code>, <code>C</code>, <code>D</code> are some combination of filters, and <code>S</code> is all users. So <code>S-C</code> is basically <code>has not executed</code> version of <code>C</code>.</p>
+
+<p>Below is just one example of how to reduce the computation complexity of segmentation queries.</p>
+
+<p><img src="http://i.imgur.com/DA6xihK.png" alt="Imgur" /></p>
+
+<h2>Cluster config</h2>
+
+<h2>backup</h2>
+
+<p>We had backups in several stages, as soon as we get a http request, we back up that raw http request in s3, and then let webworkers handle the request to be processed further.
+At elasticsearch stage, we had two mechanisms, where we make use of snapshots, but this seemed to be unreliable. Everytime a snapshot request is filed, it might or might not have worked. Given the sheer volume of the data we were dealing with, and our current index design, cluster operations like <code>index creation</code>, <code>index deleting</code>, <code>snapshot</code> these used to take some time. But major operations like search and indexing used to be very fast once an index got created. Anyway, snapshot is not really trustworthy in our case. So we just queried based on time stamp and had a worker back up the data from es to s3 in json format. I also had scripts ready so that I can recreate indexes from s3. But I always prayed we never had to use it.</p>
 
 <h2>challenges while testing, smaller apps are different than bigger apps</h2>
 
-<h2>all users cache implementation</h2>
+<p>Testing used to be a little challening, cause, in more than one case, smaller apps are treated slightly different than bigger apps that are at more than order or two orders of volume.</p>
 
-<h2>custom segments</h2>
+<p>Say for example, <code>All Users</code> is implemented differently for smaller and bigger apps.</p>
 
-<h2>overall diagram</h2>
+<h2>Custom segments</h2>
 
-<h2>Challenges with current state, types of problems faced app-action indexes, case insensitive, suggestions, os specific..</h2>
+<p>Instead of creating segments all the time, we also provide a way to store segmentation queries. So that they can create once and use them later.</p>
+
+<p>Or a use case of where you are sending two push campaigns, and you dont want the users who were targeted in the first push campain to get another push message, custom segments were very useful to exclude.</p>
+
+<p>There are some custom segments that has more than 30 filters, its crazy.</p>
+
+<h2>Overall diagrams/schemas</h2>
+
+<ul>
+<li><p>Overall schema of datapoints and user cluster write operations.
+<img src="http://i.imgur.com/QWBjdt7.jpg" alt="Imgur" /></p>
+
+<ol>
+<li>raw http requests are handled by api/machines and backed up in s3 and sent to reports workers</li>
+<li>report workers insert event data using bulk indexing into datapoint cluster</li>
+<li>report workers also does some updates on mongo user objects</li>
+<li>the datapoint indexing operations might fail, the failed docs will be going to a seperate index on es and if that fails as well it goes to mongo.</li>
+<li>datapoint cluster also gets event data from push workers, that captures campaign related information.</li>
+<li>the mongo connector infra takes care of replicating user data from mongo to user elasticsearch.</li>
+</ol>
+</li>
+<li><p>Overal schema of datapoints and user cluster search/read/segmentation operations.
+<img src="http://i.imgur.com/kkLwq5b.jpg" alt="Imgur" /></p>
+
+<ol>
+<li>datapoint segmentation happens on datapoint cluster</li>
+<li>user segmentation happens on user cluster, if river exists</li>
+<li>if river doesn&rsquo;t exist it happens on mongo</li>
+<li>there are some events like app_opened and other important events whose histograms based on time, might reveal important usage statistics and key metrics, like MAU, DAU and other such data. These histograms are obtained form datapoint cluster</li>
+<li>campaign histograms, neat graphs based on campaign related events that shows how a campaign was delivered with time. you can get this data from datapoint cluster</li>
+<li>acquition stats from user cluster</li>
+<li>key metrics such as uninstalled and etc can be obtained from user cluster</li>
+<li>auto trigger campaingns need a simple search based on user id and event, and this is done on datapoint cluster.</li>
+</ol>
+</li>
+</ul>
+
+
+<h2>Challenges, elasticsearch quirks</h2>
+
+<p>Once we replaced rivers with mongo-connector, user segmentation is smooth sailing when compared to datapoint segmentation. So most of the challenges I will be discussing in this section are datapoint cluster related and its design.</p>
+
+<p>The single biggest challenge with datapoint cluster is how diverse the types of actions people are tracking, when it comes to volume. As I described earlier, we had one shard per index, as we are technically sharding on the name of the action. But we can&rsquo;t know what volume a given action will be before its created. The <code>read alias</code> and <code>write alias</code> of the created index sure does gives us some relief, but we are not exploiting it to the max. And some things are done manually which shold have been automated. Like sometimes the size of an index gets soo big, that I used to manually change the write alias to a new index, while searching on both the indexes.</p>
+
+<p>Another challenge is that once a filed&rsquo;s type is induced by elasticsearch. And when you are trying to insert a doc with a differnt type, especially a filed that was induced to be <code>int</code> is getting documents with <code>string</code> it will throw up an error. 90% of the time, the mistyped data and the fields are not really of that much importance to marketers. But the rest of the 10% used to cause so many problems. I had a temporary fix to this, but we need to come up with a permenant solution to this.</p>
+
+<p>The other request is to make the search queries case insensitive. Often the marketing people who are creating the segments dont know what exactly should be the search term. So they would prefer a case insensitive thing going. This request seems so innocent, but for me to implement this I have to rebuild all the indexes again with a different analyzer. Given the sheer size of the data we are indexing dialy, this  just seems like too much work for too little reward. I kept post poning this forever.</p>
+
+<p>One more important thing is elasticsearch recommends a max heapsize of only 32GB, and not more than that.</p>
+
+<p>Given our index design, we are creating a new index everytime they track a new event. There are no limitations on how many events an app might track. This resulted in having close to 10k shards per cluster. Which caused us so many problems. I don&rsquo;t even know if its normal, but somehow we made it work. Because of the sheer number of indexes/shards in the datapoint cluster, the meta data that the master nodes stores is so much, and most of the cluster operations used to take so much to succeed. And most of them fail. During really stressful periods of times, when big segmentation queries are running, and some new app is trying to start tracking new events. Most of them timedout cuz the index is not present. And the timed out documents are stored in a different mongo db, temporarily. When this happend, I got all the events they are tracking and keep on hitting the cluster with index creation requests till they succeed. I&rsquo;m slightly embarassed we had to do this. It always caused us problems. And this is the main reason for us to rearchitect. And we are well prepared to do this as I was much more comfortable with es after this adventure, which lasted for almost 1.5 years. Now I had a proper team and I headed the rearchitecture project before moving on from Moengage.</p>
+
+<p>There are lot more stuff I&rsquo;m not able to recall right now, I might add more stuff later. probably not.</p>
 
 <h2>Rearchitecture</h2>
+
+<h3>Index aliasing</h3>
+
+<p>As described in earlier sections, the biggest challenge with the design is the sheer number of shards that exist in the cluster, no matter if a given index and its respective event gets queried a lot. A given app might be tracking a really high volume action, and at the same time several number of low volume actions that need their own events based on the above design. Somehow if we make use of index aliasing to be clever with how we dicrect what event data is written in what indexes, and what indexes will be searched given a segmentation query on the action. More or less the goal of the rearchitecture is to reduce the number of shards in the cluster and more or less have all the shards of similar size.</p>
+
+<p>For this we will have have one master index that contains all the smaller event data, basically when a new event gets tracked it is directed into the master index, by adding a new alias. As the days go along and that event starts getting more and more data, based on the volume of the event, we start writing the data into seperate index. Based on the volume of the data, we decide if that new index gets rotated daily/weekly/monthly.</p>
+
+<p>We will be having a external worker that constantly monitors what the volume of each event is and decides its <code>read alias</code> and <code>write alias</code>. And all the search queries will be on the event&rsquo;s <code>read alias</code> and all the insert operations will be on the event&rsquo;s <code>write alias</code>.</p>
+
+<p>This will bring down the number of indexes that exist on the cluster a lot. and put us more in control.</p>
+
+<p>This might reduce the number of indices by lot, but the master index we were talking about will have thousands of aliases.</p>
+
+<h3>Case Insensitivity.</h3>
+
+<p>This request I&rsquo;m dodging for a long time is now feasible as we were building the cluster again from the ground up and moving from the old cluster.</p>
+
+<p>Basically we just have to change the analyzer we were using to analyze our string fields.</p>
+
+<p>The case insensitive analyzer basically while indexes with lower case of all the string fields. If we index with lower case no matter what, and search with lower case, its just equivalent to case insensitivity.</p>
+
+<p>We introduce this case insensitivity analyzer using the index templates. For backward compatibility we store the unanalyzed field as well as case insensitive analyer filed by having the template like below.</p>
+
+<p>We access the old field while searching by querying on <code>field</code> name, and new case insensitive field with <code>field.case_insensitive</code></p>
+
+<script src="https://gist.github.com/syllogismos/d7e63fd683484ab2d635b4c735bb7bfb.js"></script>
+
+
+<h3>Type errors/mismatch</h3>
+
+<p>Another major problem is that once you create an index, elasticsearch will induce the type of the fields as they come along. But once a document with a wront datatype that can&rsquo;t be type casted is being inserted it will throw up an error. One elegant solution is that have your own type inference engine, and insert a field of type <code>int</code> and keyword <code>age</code> into <code>age_int</code> field, and when <code>age</code> of type <code>string</code> comes along, you can insert into <code>age_string</code>. If you infer the type of the field before you can handle this elegantly. But then inferece of type is in your hands now.. And you have to modify the queires on the application side to take this into consideration. This way we wont face this problem anymore.</p>
+
+<h3>Suggestions:</h3>
+
+<p>When people are creating segments on the dashboard, often people wont know what goes into it unless they go into another dashbord with all types of values a given key will be taking, So having a top 5 or top 10 values a particular string field takes will help a lot from user interface pov. Elasticsearch does have suggestions api, but I cant remember correctly, how we making use of it is non trivial or downright impossible with current index template settings and analyzer. But in one of the hackathons I implemented this with some caching mechanism, from a simple aggregation query I can get the top 10 values a given field takes. And I maintain a cache that gets updated weekly or daily that gives the top 10 values.</p>
 
 <h2>event management dashboard, disconnect between app developers and marketers.</h2>
 </div>
