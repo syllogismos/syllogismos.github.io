@@ -762,7 +762,190 @@ At elasticsearch stage, we had two mechanisms, where we make use of snapshots, b
 
 <p>When people are creating segments on the dashboard, often people wont know what goes into it unless they go into another dashbord with all types of values a given key will be taking, So having a top 5 or top 10 values a particular string field takes will help a lot from user interface pov. Elasticsearch does have suggestions api, but I cant remember correctly, how we making use of it is non trivial or downright impossible with current index template settings and analyzer. But in one of the hackathons I implemented this with some caching mechanism, from a simple aggregation query I can get the top 10 values a given field takes. And I maintain a cache that gets updated weekly or daily that gives the top 10 values.</p>
 
-<h2>event management dashboard, disconnect between app developers and marketers.</h2>
+<h3>event management dashboard</h3>
+
+<p>As we discussed earlier, there is a huge disconnect between the developers who decide what to track, and the markerters who end up creating push campaigns and knows what events are relevant. As the size and the user base of the client integrating increases, the disconnect increases. As both are from two different departments.</p>
+
+<p>Usually what developers do is track comprehensively and let marketers create campaigns on what ever they are interested in. Funnily because of this some clients happen to track more than 1000 events, with a dropdown of more than 1000 items in the dashboard. Which is almost nonsensical, especially when they are interested in at max 15 events.</p>
+
+<p>If there are only 15 events marketers are interested in and we are indexing 1000s of useless indices, there is no point indexing everything in elasticsearch which is not cheap to have.</p>
+
+<p>So to solve this if we proved a dashboard where they can decide what action they are segmentable. And we will only be indexing what ever they are interested in and chuck the rest in S3, and if they decide they want it back, start indexing it again and load the last 90days data from s3.</p>
+
+<h1>Miscellanious notes and scripts.</h1>
+
+<p>Be comfortable with the rest apis, I found it much more helpful than any elasticsearch plugin. Cat apis and the rest apis using <code>curl</code> and <code>jq</code> made my life so simple.</p>
+
+<p>Learn the query language, once you are comfortable with it, it wont be as scary as it looks the first time you go see the documentation. <code>must</code>, <code>must_not</code>, <code>bool</code>, nested aggretations, histograms and etc.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>1. Routing settings
+</span><span class='line'>
+</span><span class='line'>curl -XPUT 172.31.46.49:9200/_cluster/settings -d '{
+</span><span class='line'>"persistent" : {
+</span><span class='line'>"cluster.routing.allocation.node_initial_primaries_recoveries": 4,
+</span><span class='line'>"cluster.routing.allocation.node_concurrent_recoveries": 15,
+</span><span class='line'>"indices.recovery.max_bytes_per_sec": "120mb",
+</span><span class='line'>"indices.recovery.concurrent_streams": 6
+</span><span class='line'>}
+</span><span class='line'>}'
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>'{
+</span><span class='line'>"persistent": {
+</span><span class='line'>"cluster.routing.allocation.node_concurrent_rebalance": 2}}'
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>"cluster.routing.allocation.node_initial_primaries_recoveries": 4
+</span><span class='line'>"cluster.routing.allocation.node_concurrent_recoveries": 15
+</span><span class='line'>"indices.recovery.max_bytes_per_sec": 100mb
+</span><span class='line'>"indices.recovery.concurrent_streams": 5
+</span><span class='line'>
+</span><span class='line'>curl -XPOST 172.31.46.49:9200/_cluster/reroute -d '{"commands":[{"move":{"index":"wynkmusic-click", "shard":0, "from_node":"30GB_1TB_ComputeNode9", "to_node":"30GB_1TB_ComputeNode8"}}]}'
+</span><span class='line'>
+</span><span class='line'>###################################################################
+</span><span class='line'>
+</span><span class='line'>curl -XPOST 172.31.46.49:9200/_cluster/reroute -d '{
+</span><span class='line'>  "commands": [
+</span><span class='line'>    {
+</span><span class='line'>      "move": {
+</span><span class='line'>        "index": "wynkmusic-songplayedlong-feb0105",
+</span><span class='line'>        "shard": 0,
+</span><span class='line'>        "from_node": "30GB_1TB_ComputeNode7",
+</span><span class='line'>        "to_node": "30GB_1TB_ComputeNode9"
+</span><span class='line'>      }
+</span><span class='line'>    },
+</span><span class='line'>    {
+</span><span class='line'>      "move": {
+</span><span class='line'>        "index": "wynkmusic-songplayedlong-jan2531",
+</span><span class='line'>        "shard": 0,
+</span><span class='line'>        "from_node": "30GB_1TB_ComputeNode7",
+</span><span class='line'>        "to_node": "30GB_1TB_ComputeNode8"
+</span><span class='line'>      }
+</span><span class='line'>    }
+</span><span class='line'>  ]
+</span><span class='line'>}'
+</span><span class='line'>##################################################################
+</span><span class='line'>
+</span><span class='line'>2. Rerouting a shard manually
+</span><span class='line'>
+</span><span class='line'>curl -XPOST 172.31.46.49:9200/_cluster/reroute -d '{
+</span><span class='line'>        "commands" : [ {
+</span><span class='line'>              "allocate" : {
+</span><span class='line'>                  "index" : "shopotest-acceptonlinedisclaimer",
+</span><span class='line'>                  "shard" : 0, 
+</span><span class='line'>                  "node" : "30GB_1TB_ComputeNode5"
+</span><span class='line'>              }
+</span><span class='line'>            }
+</span><span class='line'>        ]
+</span><span class='line'>    }' | jq '.' &gt; reroute_gos.json
+</span><span class='line'>
+</span><span class='line'>###################################################################
+</span><span class='line'>
+</span><span class='line'>3. Emptying a node completely, you can do this before decommissioning a node.
+</span><span class='line'>
+</span><span class='line'>curl -XPUT 172.31.33.23:9200/_cluster/settings -d '{
+</span><span class='line'>"transient": {
+</span><span class='line'>"cluster.routing.allocation.exclude._ip": "172.31.33.23"
+</span><span class='line'>}}' | jq '.'
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>curl -XPUT 172.31.46.49:9200/_cluster/settings -d '{
+</span><span class='line'>"transient": {
+</span><span class='line'>"cluster.routing.allocation.exclude._ip": "172.31.41.73"
+</span><span class='line'>}}' | jq '.'
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>Conclusion</h1>
+
+<p>Here is a brief explanation of how I made segmenation work for moengage using elasticsearch. I had a lot of fun with this challenge with no experience in distributed computing, I had to ramp up very fast and learned a lot. Being part of a startup forced me to do lot of learning in a very short period of time not just tech related, learned about building an engineering team, release process, workers, distributed computing, and what not to do. When I first joined I didn&rsquo;t think I get to play a major role on the moengage tech stack. For a long time till I left I took care of the elasticsearch infrastructure, application side logic, architecture design and etc all by myself with a engineering bandwidth. I&rsquo;m very grateful for having this opportunity. I already postponed this blog post for a long time. I would have liked it to be much more comprehensive with code examples and so on. After a long of break from elasticsearch, I had to write this from memory. And lastly I&rsquo;m forever grateful for moengage for pushing me so much and making me deliver.</p>
+
+<p>Fun email we got on new years eve from arguibly the biggest client we had in the initial stages.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Hi Guys
+</span><span class='line'> 
+</span><span class='line'>I have been trying for a very long time and no matter what combination of filters are tried the server response is error. We are unable to make very basic segment of customers. Frankly on New Years Eve we are not able to reach the right cusotmer, this is disappointing . Attaching screen shot here.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is when we moved the segmentation architecture from mongo to elasticsearch. Everything was ready, only the data porting from mongo to es was left and releasing the new segmentation code. So in 24 hours we released the new segmentation logic and ported the data. The only reason I didn&rsquo;t release was because of me being relatively new in the company and me having to check everything twice or thrice. This email is the push we needed to jump head first. And it worked for a long time. Fun times.</p>
 </div>
   
   
