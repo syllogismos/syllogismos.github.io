@@ -6,5 +6,5 @@ comments: true
 categories: 
 ---
 
-![Rachel Riley](http://i.minus.com/iR5NTkhHOUE41.gif)
+Welcome!
 
