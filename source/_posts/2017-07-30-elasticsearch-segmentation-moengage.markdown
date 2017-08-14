@@ -486,6 +486,9 @@ Fun email we got on new years eve from arguably the biggest client we had in the
 ```
 Hi Guys
  
-I have been trying for a very long time and no matter what combination of filters are tried the server response is error. We are unable to make very basic segment of customers. Frankly on New Years Eve we are not able to reach the right customer, this is disappointing . Attaching screen shot here.
+I have been trying for a very long time and no matter what combination of filters
+are tried the server response is error. We are unable to make very basic segment
+of customers. Frankly on New Years Eve we are not able to reach the right customer,
+this is disappointing . Attaching screen shot here.
 ```
 This is when we moved the segmentation architecture from mongo to elasticsearch. Everything was ready, only the data porting from mongo to es was left and releasing the new segmentation code. So in 24 hours we released the new segmentation logic and ported the data. The only reason I didn't release was because of me being relatively new in the company and me having to check everything twice or thrice. This email is the push we needed to jump head first. And it worked for a long time. Fun times.
