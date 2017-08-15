@@ -116,3 +116,6 @@ Most used `vimrc` settings.
 * `inoremap ,,  <C-p>` intellisense of sorts by doing `,,` quick completions but only works for the words that already came earlier.
 * `noremap <Space> :w<Esc>` space bar to save the file in normal mode
 * `noremap  <buffer> <silent> k gk` and `noremap  <buffer> <silent> j gj` when lines are wrapped around the width and a single line takes up more than one line, normally you have to type `gk` to go down but its annoying so binding `k` to `gk` makes things easier.
+
+Sample video with various vim commands that I use often. like macros, visual block and etc.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/ZZEcg4pNF-I" frameborder="0" allowfullscreen></iframe>
