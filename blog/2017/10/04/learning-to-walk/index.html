@@ -1,0 +1,686 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Learning to Walk - My Blog</title>
+  <meta name="author" content="syllogismos">
+
+  
+  <meta name="description" content="Learning how to Walk Challenge Notes This blog post describes my winning solution for the Learning how to walk challenge conducted by crowdai
+This &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://syllogismos.github.io/blog/2017/10/04/learning-to-walk/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="My Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">My Blog</a></h1>
+  
+    <h2>My learnings and etc.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="syllogismos.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Learning to Walk</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-04T02:48:02+05:30'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>2:48 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Learning how to Walk Challenge Notes</p>
+
+<p>This blog post describes my winning solution for the <a href="https://www.crowdai.org/challenges/learning-how-to-walk">Learning how to walk</a> challenge conducted by <a href="crowdai.org">crowdai</a>
+This post consists notes and observations from the competition discussion forum, some communication with organisers, other participants and my own results and observations.</p>
+
+<hr />
+
+<h1>Introduction</h1>
+
+<p>The challenge is to design a motor control unit in a virtual environment. We are given a muscloskeletal model with 18 muscles to control. At every 10ms we have to send signals to these muscles to activate of deactivate them. The objective is to walk as far as possible in 5 seconds.</p>
+
+<h2>Skeletal Model as RL problem.</h2>
+
+<p>The environment is defined as a continuous MDP problem. Where each state is a <code>31 dimensional</code> vector that represents the muscle activations, and takes a <code>18 dimensional</code> vector that represents torques/forces that are to be applied on the muscles. So the goal is to build a function that takes a 31D vector and throw up a 18D vector which are fed to the opensim model that gives us the next state. The goal is to walk for 5 seconds/500 steps without falling down, where falling down is defined as the pelvis going down below <code>0.7m</code>. This physics engine behind this is implementation is <a href="http://opensim.stanford.edu/">OpenSim</a></p>
+
+<h2>Prior Research</h2>
+
+<p>This musclo skeletal env is very much similar to the Humanoid env from openai&rsquo;s gym which is based on MuJoCo. As a side note always wanted to play with MuJoCo environments in gym, but it has a paid license that prevented me from playing with it. As far as I know gym recently annouced more mujoco like envs that are based on opensource physics engine. I&rsquo;m very much looking forward to playing with those envs.</p>
+
+<p>The best submission for <a href="https://gym.openai.com/envs/Humanoid-v1">Humanoid</a> env is based on an algorithm called <a href="https://arxiv.org/abs/1502.05477">Trust Region Policy Optimization</a> by <a href="https://gist.github.com/joschu/e42a050b1eb5cfbb1fdc667c3450467a">John Schulman</a></p>
+
+<p>There are other approaches that I&rsquo;m familiar with for optimal control(Continous MDP) in RL setting called <a href="">DDPG</a> and <a href="https://blog.openai.com/evolution-strategies/">Evolution Strategies</a>.</p>
+
+<h2>Environment Installation</h2>
+
+<p>You can find the installation instructions of the env <a href="https://github.com/stanfordnmbl/osim-rl/">here</a>.</p>
+
+<p>After setting this up you shold be able to do this, just like in any openai gym environments.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>from osim.env import RunEnv
+</span><span class='line'>
+</span><span class='line'>env = RunEnv(visualize=True)
+</span><span class='line'>observation = env.reset()
+</span><span class='line'>for i in range(200):
+</span><span class='line'>    observation, reward, done, info = env.step(env.action_space.sample())</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Note:  Write more details about the env, describe the observation vector and action vector.</p>
+
+<hr />
+
+<h1>Implementation</h1>
+
+<p>The getting started guide provided by crowdai contains a sample keras implementation of DDPG. And the RL libraries I&rsquo;m familiar with after some research are <a href="https://github.com/openai/rllab">rllab</a> and <a href="https://github.com/joschu/modular_rl">modular rl</a>.</p>
+
+<p>As a side note, personally I found converging policy gradient algorithms by implementing them on my own very hard, even on discrete enviroments. It can be good learning exercise but, Its sooooooo0o0o0o0o0o0o hard for me. I wish I could get everything working with my own code, but for this competition, I wanted to go ahead and make osim-rl work with <code>modular-rl</code> and <code>rllab</code>.</p>
+
+<h2>Getting started.</h2>
+
+<h3>Modular rl</h3>
+
+<p>Given the best submission for Humanoid env in openai gym, I wanted to start hacking my model with modular-rl.</p>
+
+<p>With slight modification to modular rl I was able to get it running on my local computer, 8GB macbook pro. I hardcoded the osim-rl env to not worry about it.</p>
+
+<p>I used the below config for the first run.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{'lam': 0.97, 'cg_damping': 0.1, 'env': 'MountainCar-v0', 'plot': True, 'activation': 'tanh', 'agent': 'modular_rl.agentzoo.TrpoAgent', 'outfile': '/Users/anil/Code/crowdai/modular_rl/snapshots/osim_gait_final_5000.h5', 'max_kl': 0.01, 'timestep_limit': 500, 'video': 1, 'snapshot_every': 50, 'parallel': 0, 'n_iter': 250, 'load_snapshot': '', 'filter': 1, 'use_hdf': 1, 'seed': 0, 'hid_sizes': [64, 64], 'timesteps_per_batch': 5000, 'gamma': 0.995, 'metadata': ''}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Initial observations</h3>
+
+<p>After the first run, I first found out a memory leak on osimrl side, so as more and more episodic runs are getting collected, the memory usage kept increasing. And eventually my script crashed without the full 250 iterations.</p>
+
+<p>This ended up becoming a huge problem, So I had to implement a bootstrapping code where an existing trained model is loaded and improved. And based on the <code>time_steps_per_batch</code> variable I used to decide <code>n_iter</code>, so that the total number of runs in a given run wont crash on my computer, and the next run I used to load the previously trained model and train on it. with a new flag <code>load_snapshot</code>.</p>
+
+<p>I kept running these scripts on local computer and bootstrapping with previously trained model, and on the other hand I wanted to make <code>rllab</code> work with this problem.</p>
+
+<h3>rllab:</h3>
+
+<p>The problem with rllab is that its in python3, even thought there is an older python2 branch available I wanted to make the new bits work with osimrl. Any given rl env is basically at a point a state, and takes a set of actions, and gives new state. I thought all I have to do is some interface that can talk between python2/python3.</p>
+
+<p>The other issue is the memory leak in osim_rl, which blows up the memory usage as I take more and more episodic runs.</p>
+
+<p>From initial runs of the modular_rl on my local computer, its obvious that most of the time spent in a single iteration is spent on getting episodes from a given model based on the batch_size of the experiment. So given a model if I&rsquo;m able to parallelize the way I get the episodic runs it would speed up my experiments.</p>
+
+<p>Below are the three tasks I need to do to run rllab experiments.
+* rllab is in python3 and osim_rl in python2
+* memory leak in osim_rl
+* parallalizing getting the episodic runs every iteration</p>
+
+<h4>Interaction between python3 and python2</h4>
+
+<p>Given the interaction between the rl env and rllab is very basic, as in take state, apply new actions and get the next state, I was looking at implementing this interface  between python3 and python2 using protocol buffers or something. After realizing how the crowdai grader interactes with my trained model, its soo obvious to use http_gym_api, have a osim_rl server in python2 and have a python3 client that interacts with rllab code.</p>
+
+<h4>Memory leak</h4>
+
+<p>Till now in modular rl, I run the experiment for few iterations and then continue the training process with by starting a new experiment by bootstrapping the previous training model. I wanted to automate this process. As I was already using http_gym_api to start a server and client mechanism, all I have to do is after every few iterations of the experiment, I kill the server and restart it to reset the memory and continue with my training.</p>
+
+<p>This ended up being tricky, After killing the gym server I was try to start a gym server programmatically, it keeps failing because osim_rl libraries are from python2, and a script running in python3 cant load python2 libraries. I was initially trying to change the conda env from python3 to python2 and back just to start a gym server using <code>subprocess.call['source', 'activate', 'python2']</code> and then back. But this felt odd. So instead in the gym server code before loading all the relevant python2 libraries I changed the <code>sys.path</code> variable to point to python2 libraries and change it back to <code>old_sys_path</code> after loading all the relevant libraries. This amazingly worked.. and did what I wanted. I would never do this sort of thing in any production environment. But had to hack my way to get rllab work with osim_rl.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># http_gym_server.py code
+</span><span class='line'>import sys
+</span><span class='line'>from osim_helpers import python2_path
+</span><span class='line'>old_sys_path = sys.path
+</span><span class='line'>sys.path = python2_path + sys.path # modify path to include python2 libs
+</span><span class='line'>
+</span><span class='line'>from flask import Flask, request, jsonify
+</span><span class='line'>from functools import wraps
+</span><span class='line'>import uuid
+</span><span class='line'>import gym
+</span><span class='line'>from gym import wrappers
+</span><span class='line'>import numpy as np
+</span><span class='line'>import six
+</span><span class='line'>import argparse
+</span><span class='line'>
+</span><span class='line'>from osim.env import GaitEnv
+</span><span class='line'>
+</span><span class='line'>import logging
+</span><span class='line'>logger = logging.getLogger('werkzeug')
+</span><span class='line'>logger.setLevel(logging.ERROR)
+</span><span class='line'>
+</span><span class='line'>sys.path = old_sys_path # change it back to original sys.path</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then start the server using</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>process = subprocess.Popen('http_server.py -p 5000')
+</span><span class='line'>pid = process.pid</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+and kill it using</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>process = psutil.Process(pid)
+</span><span class='line'>for child in process.children():
+</span><span class='line'>    child.terminate()
+</span><span class='line'>    child.wait()
+</span><span class='line'>process.terminate()
+</span><span class='line'>process.wait()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Very hacky way but it worked. And there are some other subtle ways how <code>subprocess</code>, <code>psutil</code> modules worked differently in osx and linux. But more or less I made it work for me both in ec2 and local machine.</p>
+
+<p>So the idea is that you start a server at some port <code>5000</code> and interact from rllab using a client. And after few iterations you kill this server based on the process id, and restart another server at the same port. And continuing getting more episodes. Using this I had basis for automating the previous method of manually discontuning the training and bootstrapping every few iterations.</p>
+
+<h4>Parallelising episodic runs:</h4>
+
+<p>Even though rllab comes with the parallelisation of this task, I was not able to guarantee(logically) if it works with osim_rl, and my server client mechanism described above, and reading the code it just confused me, and the existing implementation is basically over engineered for my particular task and lots of dependencies all over the place. Instead of reading and understanding how the parallelisation code worked I decided to implement my own parallel code.</p>
+
+<p>I basically start several gym servers based on the number of threads and then each thread will load its current iteration&rsquo;s model and generates episodes based on the batch size of the experiment. And I introduced another experiment variable <code>destroy_env_every</code> that defines after how many interation it restarts all the gym servers.</p>
+
+<p>The parallelization code looks like this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Initialize parallel gym servers and clients
+</span><span class='line'>print("Creating multiple env threads")
+</span><span class='line'>self.env_servers = [first_env_server] + list(map(lambda x: start_env_server(x, self.ec2), range(1, threads)))
+</span><span class='line'>time.sleep(10)
+</span><span class='line'>
+</span><span class='line'>self.parallel_envs = [self.env] #+ list(map(lambda x: normalize(Client(x)), range(1, threads)))
+</span><span class='line'>for i in range(1, threads):
+</span><span class='line'>    while True:
+</span><span class='line'>        try:
+</span><span class='line'>            temp_env = normalize(Client(i))
+</span><span class='line'>            self.parallel_envs.append(temp_env)
+</span><span class='line'>            break
+</span><span class='line'>        except Exception:
+</span><span class='line'>            print("Exception while creating env of port ", i)
+</span><span class='line'>            print("Trying to create env again")
+</span><span class='line'>
+</span><span class='line'># get episodes parallely using multiprocessing library
+</span><span class='line'>def get_paths(self, itr):
+</span><span class='line'>    p = Pool(self.threads)
+</span><span class='line'>    parallel_paths = p.map(self.get_paths_from_env, enumerate(self.parallel_envs))
+</span><span class='line'>    for job in parallel_paths:
+</span><span class='line'>        print(list(map(lambda x: tot_reward(x), job)))
+</span><span class='line'>        print(list(map(lambda x: len_path(x), job)))
+</span><span class='line'>    print(len(parallel_paths), 'no of parallel jobs')
+</span><span class='line'>    print(len(parallel_paths[0]), 'no of paths in first job')
+</span><span class='line'>    print(len(parallel_paths[0][0]['rewards']), 'no of rewards in first path of first job')
+</span><span class='line'>    print(np.sum(parallel_paths[0][0]['rewards']), 'total reward')
+</span><span class='line'>    p.close()
+</span><span class='line'>    p.join()
+</span><span class='line'>    all_paths = list(chain(*parallel_paths)) 
+</span><span class='line'>    print(len(all_paths), 'total no of paths in this itr')
+</span><span class='line'>    return all_paths
+</span><span class='line'>
+</span><span class='line'># destroy servers
+</span><span class='line'>def destroy_envs(self):
+</span><span class='line'>    print("Destroying env servers")
+</span><span class='line'>    print(self.env_servers)
+</span><span class='line'>    for pid in self.env_servers:
+</span><span class='line'>        try:
+</span><span class='line'>            process = psutil.Process(pid)
+</span><span class='line'>            for child in process.children():
+</span><span class='line'>                child.terminate()
+</span><span class='line'>                child.wait()
+</span><span class='line'>            process.terminate()
+</span><span class='line'>            process.wait()
+</span><span class='line'>        except:
+</span><span class='line'>            print("process doesnt exist", pid)
+</span><span class='line'>            pass
+</span><span class='line'>    pass
+</span><span class='line'># create new servers and envs
+</span><span class='line'>def create_envs(self):
+</span><span class='line'>    print("Creating new env servers")
+</span><span class='line'>    self.env_servers = list(map(lambda x: start_env_server(x, self.ec2), range(0, self.threads)))
+</span><span class='line'>    time.sleep(10)
+</span><span class='line'>    print("Created servers")
+</span><span class='line'>    print(self.env_servers)
+</span><span class='line'>    print("Creating new envs")
+</span><span class='line'>    self.parallel_envs = []
+</span><span class='line'>    for i in range(0, self.threads):
+</span><span class='line'>        while True:
+</span><span class='line'>            try:
+</span><span class='line'>                temp_env = normalize(Client(i))
+</span><span class='line'>                self.parallel_envs.append(temp_env)
+</span><span class='line'>                break
+</span><span class='line'>            except Exception:
+</span><span class='line'>                print("Exception while creating env of port ", i)
+</span><span class='line'>                print("Trying to create env again")
+</span><span class='line'>    pass</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After making these changes I was able to get rllab work with osim_rl much more efficiently than modular_rl as I have yet to implement paralleliztion and automate the memory leak solution there as well.</p>
+
+<p>I got to run some runs in rllab. Using the starting script that looks something like this</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>python run_osim_exp.py --exp_name='osim_parallel_destruction_final' --n_parallel=2 --batch_size=5000 --n_itr=6 --max_path_length=150 --ec2=False --destroy_env_every=2`</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I had fun hacking rllab, as it felt like I learned a lot about how rllab library is built. this will definitely help me in further hacking of rllab where I want to implement new rl algorithms with the current apis.</p>
+
+<p>I started running rllab experiments on ec2 on spot instances, I think I was using 32 core machines to run the experiments with 32 threads on the machine.
+After running few experiments with rllab and TRPO alogrithm, with my current hyper parameter selection, my trained model is not faring much better than the modular_rl model that is training on my local computer that is 10x slower. So I decided to take these improvements to modular_rl.</p>
+
+<h4>Hacking modular_rl</h4>
+
+<p>I wanted to bring the above memory_leak and parallelization hacks to modular_rl, to make things faster in modular rl. One advantage I had with modular rl is that I don&rsquo;t have to worry about differnet python versions. And my previous hacking of rllab made things lot easier. And I implemented these improvements relatively faster and got them working. And moved from local machine to ec2 spot instances. And used 32 core machines. Which sped up the training by ~8x. Technically I can speed it by putting more cores in the machine. And Im making considerable progress with this setup. I did face problems with spot instances going down, but I started snapshotting every iteration.</p>
+
+<p>After serveral iterations my ec2 bill is blowing up. Even though I was using spot instances. It reached $150. And I can&rsquo;t afford to spend more than that. So I decided to move to Google cloud and use $300 free credits I saved to attempt the youtube-8m kaggle challenge.</p>
+
+<h4>Moving to google cloud.</h4>
+
+<p>Now there are only few more days for the challenge to end. And I&rsquo;m new to google cloud. Getting everything started, AMIs, subnets, harddrives, etc took me sometime.But after getting used to things I found google cloud more intuitive than EC2, sshing into instnces after starting them and their command line tool, logging in using google account and etc.. Its very well engineered and etc.. But it seems when it comes to features AWS simply has lot of stuff to offer, I don&rsquo;t know but thats what people told me. In google cloud I can even start machines with custom memory and cpu sizes, which is very new to me given the &ldquo;limited&rdquo; options on EC2. And one more thing about spot instances in google cloud is that instead of a dynamic price like in EC2, its a constant 0.8 times the actual price. And restarts every 24 hours no matter what and might go out based on the demand. Anyway these are somethings I learned from playing with google cloud.</p>
+
+<p>But there is one limitation when it comes to google cloud and free credit accounts. I can only launch 24 cores per compute region with a non paying free credit account. With my current modular_rl implementation this is sort of a bottleneck. If this limit was 32 cores, I would have been happy. But given its 24 cores, it seemed to be slower than what I would be getting on EC2. So I wanted to implement a master slave configuration where, I start a 24 core machine in different regions and have master start gym servers in all these slaves and collect episodes. So if I start 3 machines I will have 72 cores available. So I started running previous experiment on a single 24 core machine while I implement the master slave configuration.</p>
+
+<p>I wanted a simple webserver(<code>osim_multiple_http_server.py</code>) with endpoints <code>/start_servers</code> and <code>/destroy_servers</code> in each slave node. <code>start_servers</code> take the number of gym servers I wanted and <code>destroy_servers</code> take the pids of the gym servers to be killed so that I can kill them every few iterations. And have a config where I define the master node and slave nodes and the number of gym servers that each node can start. Because of my unfamiliarity with google cloud I struggled to talk from one machine to another machine because of subnet/ip address settings or in ec2 lingo &lsquo;security groups&rsquo;. I spent almost a day fiddling with google cloud to <code>ping</code> from one server to another in different regions. But in the end I got it working.</p>
+
+<p>So finally I have a master/slave configuration of machines that collect runs and can scale linearly as I add more machines. Which I&rsquo;m very happy with.</p>
+
+<p>A sample master/slave config looks like this..</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ip_config = [
+</span><span class='line'>    {
+</span><span class='line'>        'ip': '192.168.2.2',
+</span><span class='line'>        'cores': 21
+</span><span class='line'>    },
+</span><span class='line'>    {
+</span><span class='line'>        'ip': '192.168.2.3',
+</span><span class='line'>        'cores': 24
+</span><span class='line'>    },
+</span><span class='line'>    {
+</span><span class='line'>        'ip': '192.168.2.4',
+</span><span class='line'>        'cores': 24
+</span><span class='line'>    }
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In the end I ran out of all the $300 free credits. I found myself hacking till the last minute of the competition. I spend a total of $450. But had lot of fun participating in this challenge.</p>
+
+<h1>Results</h1>
+
+<p><a href="http://imgur.com/a/Dd6G2">http://imgur.com/a/Dd6G2</a> Graphs related to modular rl runs</p>
+
+<p>Below is the winning model that walked a total of 2865cms in 5 seconds In total
+<img src="https://giant.gfycat.com/AppropriateHairyConure.gif" alt="gfycat gif" /></p>
+
+<p>Training is done for a total of  1169 Iterations starting with few runs on local computer and then on ec2 on 32 core spot instances and then moved on to google cloud with a master/slave node config with a total of ~70 cores()3 24 core machines) which can be increased furhter to save time. Below you can see the batch size I used every iteration and the improvements I was getting as I went along with training.</p>
+
+<p>And below are the trends of what happened during the training phase.</p>
+
+<hr />
+
+<p><img src="http://i.imgur.com/gJ9nCBC.png" alt="Batch size per timestep" />
+<img src="http://imgur.com/nZ3UtgH.png" alt="Time elapsed" />
+<img src="http://imgur.com/fHaQ83K.png" alt="TimePerIteration" />
+<img src="http://imgur.com/dbidfyS.png" alt="NumEpBatch" /></p>
+
+<hr />
+
+<p><img src="http://imgur.com/cRO86Zz.png" alt="EpLenMean" />
+<img src="http://imgur.com/jwJ2qyC.png" alt="EpLenMax" /></p>
+
+<hr />
+
+<p><img src="http://imgur.com/cTQfpy9.png" alt="EpRewMean" />
+<img src="http://imgur.com/IXl8fq0.png" alt="EpRewMax" />
+<img src="http://imgur.com/dHIIyMg.png" alt="RewPerStep" />
+<img src="http://imgur.com/XeGlFI5.png" alt="EpRewSEM" /></p>
+
+<hr />
+
+<p><img src="http://imgur.com/Vocp9s8.png" alt="vf_mse_before" />
+<img src="http://imgur.com/gv39OG5.png" alt="vf_mse_after" />
+<img src="http://imgur.com/XRkJugn.png" alt="vf_PredStdevBefore" />
+<img src="http://imgur.com/CMN3KFe.png" alt="vf_PredStdevAfter" />
+<img src="http://imgur.com/l7vqA3Y.png" alt="vf_loss_before" />
+<img src="http://imgur.com/UiTCAcy.png" alt="vf_loss_after" />
+<img src="http://imgur.com/tyIjg7c.png" alt="vf_TargStdev" />
+<img src="http://imgur.com/kaqiUM4.png" alt="vf_EV_before" />
+<img src="http://imgur.com/HDR7W4A.png" alt="vf_EV_after" />
+<img src="http://imgur.com/tC7Zyvt.png" alt="vf_l2_before" />
+<img src="http://imgur.com/PHkL1JJ.png" alt="vf_l2_after" /></p>
+
+<hr />
+
+<p><img src="http://imgur.com/BXybhVb.png" alt="pol_kl_before" />
+<img src="http://imgur.com/w1CxRhv.png" alt="pol_kl_after" />
+<img src="http://imgur.com/4U9sYWD.png" alt="pol_surr_before" />
+<img src="http://imgur.com/vlUCgiX.png" alt="pol_surr_after" />
+<img src="http://imgur.com/4HTuxMs.png" alt="pol_ent_before" />
+<img src="http://imgur.com/W2pQrSG.png" alt="pol_ent_after" /></p>
+
+<hr />
+
+<p>And the final leaderboard looked like this.</p>
+
+<p><img src="https://i.imgur.com/eRXJmdb.png" alt="leaderboard" /></p>
+
+<h1>Observations</h1>
+
+<p>I wanted to put in walks from earlier iterations but recording iterations from earlier models is not very straight forward with osim_rl. If you look at earlier iterations you can see how the training is progressing and how my model is converging wrt the other competitors. I&rsquo;ll try to get to record earlier gaits when I get some time. I still have most of the models of respective iterations so it should be possible. They are very helpful in understanding how TRPO is converging and it gave me some ideas about how I can go about improving my model.</p>
+
+<p>The second and third place competitiors were also using TRPO, but their gaits resulted in 2245cms,1920cms respectively with a hopping gait, where mine resulted in a more or less walking/running gait with 2890cms displacement. And the fourth place submission is a CMA-ES model where it also converged into a walking gait with 1728cms displacement. One noticiable difference with my TRPO trained model and the other TRPO models is the type of gait. Even their initial models were hopping, as the iterations get better they were hopping better/farther. My initial iterations were sort of like a drunk person gait with left leg stunted, and it always moved right leg forward, dragging the rest of the body where the right leg is.. and so on.. I was initially worried the model was not able identify the symmetry existing between the left and right legs. Where as other top submissions were either hopping or walking where it felt like the existing symmetry is being exploited. Even though I was hanging in and around top of the leaderboard I thought this was a disadvantage. After further iterations of the model I realized my model is yet to converge unlike others where they converged to hopping prematurely, and it started walking by pushing on the toes in the intial steps to gain speed as fast as possible. My initial worries of it not exploiting the symmetry between the legs came as a blessing in disguise, and that made sure my gait didnt converge prematurely like in case of other TRPO hoppings. This made me question if we knew the type of gait it should take can we assist our algo to converge to that? As in here it is intuitive as humans that the fastest way to move for a biped is to walk/run and not hop, if its hopping we would be seeing a lot more hopping in olympics.</p>
+
+<h1>Further Speculations and ideas.</h1>
+
+<p>Another thing is that in actual running races just to gain a little bit of advantage in the end, the racer might try to extend the arm as far as possible to reach the  ribbon the earliest. As I see it there are three parts to a running race. The initial stage, where you pick up as much speed as possible by accelerating from resting position, the middle stage you  continue running, and the last stage you try to reach the ribbon by extending the arm or leg as far as possilbe. All three are slightly different things for an AI to learn. First two parts are obvious or any basic AI that is running should be doing it, but will an RL algo be able to do the 3rd stage. From my observations in some of the runs resulted from my final and previous model, it does seem like its trying to extend the leg as far as possible to reach the ribbon. I&rsquo;m just having fun speuculating what the AI might have tried to learn to maximise the displacement by the 500th step. Cant really say if that is exactly what is happening. I want to know how the no of steps in a single episode effects the gait resulting. In humans, obviously marathons and sprints need completely different gaits or strategies. But here the only reward mechanism is the amount of displacement from initial starting point. So no matter the no of steps it will result in similar gaits, as there is no &lsquo;getting tired&rsquo; signal or &lsquo;energy consumed&rsquo; signal available for the MDP. I wonder how multiple reward signals can be taken into consideration in RL problems. My hunch is basically while designing the MDP you define a reward function that takes into consideration all these things and throws up a number. Say for example consider the following variables, 1.some measure of the tension in the muscles, 2.work done, 3.displacement,  4.energy available to the model and etc. And reward is basically a function of all these variables. With a single reward signal we can use above algorithms for a more realistic as in similar to human. Maybe there are more comples algos that takes more than one reward signal, but I&rsquo;m not aware of them.</p>
+
+<p>Initially when my models were seemingly converging to a drunk type of gait where the symmetry between the legs is not being exploited, basically left leg and right leg are behaving differently. I wanted to fix it by collecting several episodes with this type of running and simply switch left and right side of the observations, and use some form of imitation learning to teach my neural net the symmetry between left and right legs. Or I can switch the left and right side observations every few iterations to make it learn. I almost got around to do this, but then without having to do this, after few more iterations my model started running.</p>
+
+<p>The fourth place submission was based on some sort of evolution strategy based algorithm (CMA ES) it was able to converge to a walking gait, but it was struck at 1600-1700cms for a long time but was not able to improve further.
+Mine and other top submissions were TRPO based, but converged to different gaits. Instead of having serveral different runs of the same algo and hoping for the best, I want to be able to control how the converging happens and dont want to get stuck in some local maxima(Here I&rsquo;m considering converging to a hopping gait as local maxima and premature convergence). Can we push the model away from a local maxima or if we already converged prematurely get out of it. It seems like the initial assymettry actually helped my model get into a better gait. Maybe forcing the model to explore the whole observation space especially injecting some sort of assymmetry into observations.</p>
+
+<p>Anothe question is if we knew what the gait should be, can we make the algo learn that? Say the 4th place submission is walking gait, but it was not able to improve the score, can I based on that model, generate a policy network and get started with this network as initial weights instead of some random initialization. Can I imporve the gait.</p>
+
+<p>From corresponce with other participants of the compitation the concesus is that TRPO is what gave best results for this task. Just like how in rllab paper, for mujoco humanoid env(similar to this env) TRPO gave the best results.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">syllogismos</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-10-04T02:48:02+05:30'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>2:48 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://syllogismos.github.io/blog/2017/10/04/learning-to-walk/" data-via="2abstract4me" data-counturl="http://syllogismos.github.io/blog/2017/10/04/learning-to-walk/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2017/08/02/miscellanious-notes/" title="Previous Post: Miscellanious Notes">&laquo; Miscellanious Notes</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2017/10/04/learning-to-walk/">Learning to Walk</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/08/02/miscellanious-notes/">Miscellanious Notes</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/07/30/elasticsearch-segmentation-moengage/">Elasticsearch, Segmentation, MoEngage</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2017/01/02/santander-product-recommendation-kaggle/">Santander Product Recommendation Kaggle</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/15/ghost-blog-as-your-github-profile-page/">Ghost Blog as Your Github User Page</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/syllogismos">@syllogismos</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'syllogismos',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - syllogismos -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
