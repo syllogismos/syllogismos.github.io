@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2018-01-19T11:37:14+05:30</updated>
+  <updated>2018-01-19T11:41:06+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -580,7 +580,7 @@ Mine and other top submissions were TRPO based, but converged to different gaits
 <ul>
 <li><p><code>python -u python_script.py &gt; python_logs.txt</code> Usually I want to capture all the print statement logs in some text file, so that I can save them for further reference, instead of throwing them off in stdout. So above all my print logs will be in <code>python_logs.txt</code>, and I follow along the logs using <code>tail -100f python_logs.txt</code>. And the <code>-u</code> flag forces the print statements to be not bufferred while writing them to <code>python_logs.txt</code>. Other wise even if your program is running you wont find the logs in the log file as soon as they get executed.</p></li>
 <li><p>Start a simple http server to serve static files temporarily. Change directory to the relevant directory and <code>python -m SimpleHTTPServer 8001</code>, <code>8001</code> is the port number, You can now navigate to <code>localhost:8001</code> to browse files.</p></li>
-<li><p>Use <code>%autoreload</code> while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don&rsquo;t have to quite ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.</p></li>
+<li><p>Use <code>%autoreload</code> while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don&rsquo;t have to restart ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.</p></li>
 </ul>
 
 
