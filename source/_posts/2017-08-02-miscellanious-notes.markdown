@@ -132,7 +132,7 @@ By clicking on the above words, the respective thing will be copied to clipboard
 Server setup is to setup my vim/github settings to any new server that I start. which basically copies `wget https://github.com/syllogismos/dotfiles/raw/master/server_setup.sh` into clipboard. and `sh server_setup.sh` will update my server vimrc and gitconfig files.
 
 ## git
-* add this alias in your `~/.gitconfig` under `[alias]`, so that you can do `git hist` that shows pretty tree version of git commit history.
+* add this alias in your `~/.gitconfig` under `[alias]`, so that you can do `git hist` that shows pretty tree version of git commit history. This is very useful for my sanity, while rebasing, merging pull requests and etc. This forces me to keep my commit tree sane.
     ```
     hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
     ```
