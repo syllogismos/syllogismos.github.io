@@ -36,7 +36,7 @@ Just a collection of some notes and tips that helps me in my development workflo
 * watch, executes the given command with the time interval mentioned
     1. `watch -d -n600 "cat train.log | grep EpRewMean | awk '{print \$2,\$1}' | sort -nr | head"`
     2. `n` flag gives the time interval, so in above example every 10 minutes it executes the command to give the best mean reward.
-    3. `d` flag highlights the difference between two concecutive runs.
+    3. `d` flag highlights the difference between two consecutive runs.
 * head tail, head and tail of the files
     1. `tail -1000f file.txt` # last 1000 lines and waits for more lines that are being added to the file
     2. `head -n 25 file.txt` # first 25 lines
