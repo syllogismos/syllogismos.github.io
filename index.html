@@ -628,6 +628,14 @@ Mine and other top submissions were TRPO based, but converged to different gaits
 <li>it does a lot more things, but this is what i end up using the most for</li>
 </ol>
 </li>
+<li>watch, executes the given command with the time interval mentioned
+
+<ol>
+<li><code>watch -d -n600 "cat train.log | grep EpRewMean | awk '{print \$2,\$1}' | sort -nr | head"</code></li>
+<li><code>n</code> flag gives the time interval, so in above example every 10 minutes it executes the command to give the best mean reward.</li>
+<li><code>d</code> flag highlights the difference between two concecutive runs.</li>
+</ol>
+</li>
 <li>head tail, head and tail of the files
 
 <ol>
@@ -660,8 +668,73 @@ Mine and other top submissions were TRPO based, but converged to different gaits
 <h2>python</h2>
 
 <ul>
-<li><code>python -u python_script.py &gt; python_logs.txt</code> Usually I want to capture all the print statement logs in some text file, so that I can save them for further reference, instead of throwing them off in stdout. So above all my print logs will be in <code>python_logs.txt</code>, and I follow along the logs using <code>tail -100f python_logs.txt</code>. And the <code>-u</code> flag forces the print statements to be not bufferred while writing them to <code>python_logs.txt</code>. Other wise even if your program is running you wont find the logs in the log file as soon as they get executed.</li>
+<li><p><code>python -u python_script.py &gt; python_logs.txt</code> Usually I want to capture all the print statement logs in some text file, so that I can save them for further reference, instead of throwing them off in stdout. So above all my print logs will be in <code>python_logs.txt</code>, and I follow along the logs using <code>tail -100f python_logs.txt</code>. And the <code>-u</code> flag forces the print statements to be not bufferred while writing them to <code>python_logs.txt</code>. Other wise even if your program is running you wont find the logs in the log file as soon as they get executed.</p></li>
+<li><p>Start a simple http server to serve static files temporarily. Change directory to the relevant directory and <code>python -m SimpleHTTPServer 8001</code>, <code>8001</code> is the port number, You can now navigate to <code>localhost:8001</code> to browse files.</p></li>
+<li><p>Use <code>%autoreload</code> while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don&rsquo;t have to quite ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.</p></li>
 </ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>In [1]: %load_ext autoreload
+</span><span class='line'>
+</span><span class='line'>In [2]: %autoreload 2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Use <code>?</code> to get function signature and function doc string, and <code>??</code> to get function source inside ipython terminal and jupyter notebook.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>In [3]: json.dump?
+</span><span class='line'>Signature: json.dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw)
+</span><span class='line'>Docstring:
+</span><span class='line'>Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
+</span><span class='line'>``.write()``-supporting file-like object).
+</span><span class='line'>
+</span><span class='line'>If ``skipkeys`` is true then ``dict`` keys that are not basic types
+</span><span class='line'>(``str``, ``unicode``, ``int``, ``long``, ``float``, ``bool``, ``None``)
+</span><span class='line'>will be skipped instead of raising a ``TypeError``.
+</span><span class='line'>
+</span><span class='line'>In [4]: json.dump??
+</span><span class='line'>Signature: json.dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw)
+</span><span class='line'>Source:
+</span><span class='line'>def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True,
+</span><span class='line'>        allow_nan=True, cls=None, indent=None, separators=None,
+</span><span class='line'>        encoding='utf-8', default=None, sort_keys=False, **kw):
+</span><span class='line'>    """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
+</span><span class='line'>    ``.write()``-supporting file-like object).</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Started using <code>conda</code> which made python dev much more saner. No more issues with <code>six</code> package in OSX while installing a new package, and other common dependency related issues while installing packages.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget https://repo.continuum.io/archive/Anaconda3-5.0.1-MacOSX-x86_64.sh
+</span><span class='line'>bash Anaconda3-5.0.1-MacOSX-x86_64.sh</span></code></pre></td></tr></table></div></figure>
 
 
 <h2><a href="https://github.com/matryer/bitbar">Bitbar</a></h2>
@@ -4511,7 +4584,7 @@ Here we have <em>psi</em></p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - syllogismos -
+  Copyright &copy; 2018 - syllogismos -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
