@@ -33,6 +33,10 @@ Just a collection of some notes and tips that helps me in my development workflo
 * awk, command line programming language?
     1. `cat file.txt | awk '{print $2}'` # prints the second column
     2. it does a lot more things, but this is what i end up using the most for
+* watch, executes the given command with the time interval mentioned
+    1. `watch -d -n600 "cat train.log | grep EpRewMean | awk '{print \$2,\$1}' | sort -nr | head"`
+    2. `n` flag gives the time interval, so in above example every 10 minutes it executes the command to give the best mean reward.
+    3. `d` flag highlights the difference between two concecutive runs.
 * head tail, head and tail of the files
     1. `tail -1000f file.txt` # last 1000 lines and waits for more lines that are being added to the file
     2. `head -n 25 file.txt` # first 25 lines
@@ -51,6 +55,46 @@ Just a collection of some notes and tips that helps me in my development workflo
 
 ## python
 * `python -u python_script.py > python_logs.txt` Usually I want to capture all the print statement logs in some text file, so that I can save them for further reference, instead of throwing them off in stdout. So above all my print logs will be in `python_logs.txt`, and I follow along the logs using `tail -100f python_logs.txt`. And the `-u` flag forces the print statements to be not bufferred while writing them to `python_logs.txt`. Other wise even if your program is running you wont find the logs in the log file as soon as they get executed.
+
+* Start a simple http server to serve static files temporarily. Change directory to the relevant directory and `python -m SimpleHTTPServer 8001`, `8001` is the port number, You can now navigate to `localhost:8001` to browse files.
+
+* Use `%autoreload` while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don't have to quite ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.
+
+```
+In [1]: %load_ext autoreload
+
+In [2]: %autoreload 2
+
+```
+* Use `?` to get function signature and function doc string, and `??` to get function source inside ipython terminal and jupyter notebook.
+
+```
+In [3]: json.dump?
+Signature: json.dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw)
+Docstring:
+Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
+``.write()``-supporting file-like object).
+
+If ``skipkeys`` is true then ``dict`` keys that are not basic types
+(``str``, ``unicode``, ``int``, ``long``, ``float``, ``bool``, ``None``)
+will be skipped instead of raising a ``TypeError``.
+
+In [4]: json.dump??
+Signature: json.dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw)
+Source:
+def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True,
+        allow_nan=True, cls=None, indent=None, separators=None,
+        encoding='utf-8', default=None, sort_keys=False, **kw):
+    """Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
+    ``.write()``-supporting file-like object).
+```
+
+* Started using `conda` which made python dev much more saner. No more issues with `six` package in OSX while installing a new package, and other common dependency related issues while installing packages.
+
+```
+wget https://repo.continuum.io/archive/Anaconda3-5.0.1-MacOSX-x86_64.sh
+bash Anaconda3-5.0.1-MacOSX-x86_64.sh
+```
 
 
 ## [Bitbar](https://github.com/matryer/bitbar)
