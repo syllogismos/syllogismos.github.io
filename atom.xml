@@ -4,7 +4,7 @@
   <title><![CDATA[My Blog]]></title>
   <link href="http://syllogismos.github.io/atom.xml" rel="self"/>
   <link href="http://syllogismos.github.io/"/>
-  <updated>2018-01-19T11:41:06+05:30</updated>
+  <updated>2018-01-19T11:47:37+05:30</updated>
   <id>http://syllogismos.github.io/</id>
   <author>
     <name><![CDATA[syllogismos]]></name>
@@ -691,7 +691,7 @@ Mine and other top submissions were TRPO based, but converged to different gaits
 <h2>git</h2>
 
 <ul>
-<li>add this alias in your <code>~/.gitconfig</code> under <code>[alias]</code>, so that you can do <code>git hist</code> that shows pretty tree version of git commit history.
+<li>add this alias in your <code>~/.gitconfig</code> under <code>[alias]</code>, so that you can do <code>git hist</code> that shows pretty tree version of git commit history. This is very useful for my sanity, while rebasing, merging pull requests and etc. This forces me to keep my commit tree sane.
   <code>
   hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
  </code>
