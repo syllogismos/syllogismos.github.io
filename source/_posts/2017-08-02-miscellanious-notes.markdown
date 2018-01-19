@@ -58,7 +58,7 @@ Just a collection of some notes and tips that helps me in my development workflo
 
 * Start a simple http server to serve static files temporarily. Change directory to the relevant directory and `python -m SimpleHTTPServer 8001`, `8001` is the port number, You can now navigate to `localhost:8001` to browse files.
 
-* Use `%autoreload` while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don't have to quite ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.
+* Use `%autoreload` while developing your jupyter notebooks and inside ipython, so that it will automatically reload changes of the imported modules and files. You don't have to restart ipython and reimport everything again to see the changes reflected. You have to be careful though, use it only while developing. Type the below two lines in the ipython terminal.
 
 ```
 In [1]: %load_ext autoreload
