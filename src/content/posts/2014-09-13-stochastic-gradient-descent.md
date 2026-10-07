@@ -3,17 +3,17 @@ title: "Stochastic Gradient Descent in AD."
 date: 2014-09-13T19:17:43+05:30
 ---
 
-In **stochastic gradient descent**, the true gradient is approximated by gradient at each single example.
+In **stochastic gradient descent**, the true gradient is approximated by the gradient at each single example.
 
 ![update rule](http://upload.wikimedia.org/math/7/d/9/7d9f6671a202d94d26730ef898d8d4f2.png)
 
-As the algorithm sweeps through the training set, it performs the above update for each training example. Several passes can be made over the training set until the algorithm converges, if this is done, the data can be shuffled for each pass to prevent cycles.
+As the algorithm sweeps through the training set, it performs the above update for each training example. Several passes can be made over the training set until the algorithm converges. If this is done, the data can be shuffled for each pass to prevent cycles.
 
-Obviously it is faster than normal gradient descent, cause we don’t have to compute cost function over the entire data set in each iteration in case of stochastic gradinet descent.
+Obviously it is faster than normal gradient descent, cause we don’t have to compute the cost function over the entire data set in each iteration in case of stochastic gradient descent.
 
 ## stochasticGradientDescent in AD:
 
-This is my implementation of Stochastic Gradient Descent in AD library, you can get it from [my fork](http://github.com/syllogismos/ad) of AD.
+This is my implementation of Stochastic Gradient Descent in the AD library, you can get it from [my fork](http://github.com/syllogismos/ad) of AD.
 
 Its type signature is
 
@@ -35,7 +35,7 @@ stochasticGradientDescent :: (Traversable f, Fractional a, Ord a)
 
 [Here](https://raw.githubusercontent.com/syllogismos/machine-learning-haskell/master/exampledata.txt) is the sample data I’m running `stochasticGradientDescent` on.
 
-Its just 97 rows of samples with two columns, first column is `y` and the other is `x`
+It’s just 97 rows of samples with two columns, first column is `y` and the other is `x`.
 
 Below is our error function, a simple squared loss error function. You can introduce regularization here if you want.
 
@@ -125,13 +125,13 @@ lambda: sgdRegressor [0, 0] !! (97*5 -1)
 [array([ 0.29815173]), array([ 1.20270826])]
 ```
 
-The only restriction we have in our implementation of stochasticGradientDescent is that we set the learning rate a default value of 0.001 and is a constant through out the algorithm.
+The only restriction we have in our implementation of stochasticGradientDescent is that we set the learning rate to a default value of 0.001 and it is a constant throughout the algorithm.
 
-The rest of the things like the sort of regulariztion, regularization parameter, loss function we are using, we can specify in `errorSingle`.
+The rest of the things like the sort of regularization, regularization parameter, loss function we are using, we can specify in `errorSingle`.
 
 ## Results:
 
-So when `n_iter = 1`, went through the entire data set once, so we must check `97th` theta from our regression result from **AD**. Similarly `n_iter = 2` implies `97*2` iteration in our implementation, and etc.,
+So when `n_iter = 1`, it went through the entire data set once, so we must check `97th` theta from our regression result from **AD**. Similarly `n_iter = 2` implies `97*2` iteration in our implementation, and etc.,
 
 ```
 n-iter = 1, i = 96
@@ -155,7 +155,7 @@ scikit-learn: [array([ 1.02141669]), array([ 1.12136124])]
 AD: [1.0214167,1.1213613]
 ```
 
-[Here](http://www.github.com/syllogismos/machine-learning-haskell) in this repository, you can find the ipython notebook and haskell code so that you can test these yourself.
+[Here](http://www.github.com/syllogismos/machine-learning-haskell) in this repository, you can find the ipython notebook and Haskell code so that you can test these yourself.
 
 ## References:
 

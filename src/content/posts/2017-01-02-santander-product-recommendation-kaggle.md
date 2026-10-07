@@ -9,7 +9,7 @@ Under their current system, a small number of Santander’s customers receive ma
 
 With a more effective recommendation system in place, Santander can better meet the individual needs of all customers and ensure their satisfaction no matter where they are in life.
 
-Based on Users history and previous products they subscribed to, predict what products he will be interested in future.
+Based on a user’s history and the previous products they subscribed to, predict what products they will be interested in, in future.
 
 # Data
 
@@ -72,29 +72,29 @@ The test and train sets are split by time, and public and private leaderboard se
 
 # My approach
 
-Best Private score: 0.030378(Rank 120/1785) {Notebook 11. and 12.}
+Best Private score: 0.030378 (Rank 120/1785) {Notebook 11. and 12.}
 
-Divided data month wise for so that it will be easier for my local computer to handle. So a simple month based grep will create files `train_2015_01_28.csv` that contain data from Jan 2015 and so on.
+Divided the data month wise so that it will be easier for my local computer to handle. So a simple month based grep will create files `train_2015_01_28.csv` that contain data from Jan 2015 and so on.
 
-And for each month, computed what users added in then next month, say for example for the month June 2015, there are total 631957 train data rows, but the number of products added in that month were 41746 by all the users combined. This data will be in files `added_product_2015_06_28.csv`. I precomputed all these so that I don’t have to do it again and again for each model. For each month we will be training on the users that added a new product the next month. That makes the data even more maneagable in terms of size. Foreach month there are on an average of 35-40k users who added a new product. We are interested how likely a user is interested in a new product. Thanks to `BreakfastPirate` for making the train data an order of magnitude lesser by showing in the forums this approach gives us meaningful results. The computation of `added_product_*` files can be found in `999. Less is more.ipynb` notebook.
+And for each month, computed what users added in the next month. Say for example for the month June 2015, there are a total of 631957 train data rows, but the number of products added in that month was 41746 by all the users combined. This data will be in files `added_product_2015_06_28.csv`. I precomputed all these so that I don’t have to do it again and again for each model. For each month we will be training on the users that added a new product the next month. That makes the data even more manageable in terms of size. For each month there are on an average 35-40k users who added a new product. We are interested in how likely a user is to be interested in a new product. Thanks to `BreakfastPirate` for making the train data an order of magnitude lesser by showing in the forums that this approach gives us meaningful results. The computation of `added_product_*` files can be found in the `999. Less is more.ipynb` notebook.
 
 ## Feature Engineering.
 
-So just to reiterate, the final training will be done on, for each month, we get all the users who added a product in the next month, which reduces the train size by 10x, and combine this data for all the months.
+So just to reiterate, the final training will be done as follows: for each month, we get all the users who added a product in the next month, which reduces the train size by 10x, and combine this data for all the months.
 
-And data clean up and imputation is done by assuming for categorical variables the median values, and for varibles like rent, mean based on the city of the user. This job was made a lot easier because of `Alan (AJ) Pryor, Jr.`’s script that cleans up the data and does imputation.
+And data clean up and imputation are done by assuming for categorical variables the median values, and for variables like rent, the mean based on the city of the user. This job was made a lot easier because of `Alan (AJ) Pryor, Jr.`’s script that cleans up the data and does imputation.
 
-Lag features from the last 4 months. Along with the raw lags of the product subscription history of a user, I computed 6 more features based on the past 4 month history of product subscription that goes as below.
+Lag features from the last 4 months. Along with the raw lags of the product subscription history of a user, I computed 6 more features based on the past 4 month history of product subscription that go as below.
 
--   product exists atleast once in the past
--   product exists all the months(last 4 months)
+-   product exists at least once in the past
+-   product exists all the months (last 4 months)
 -   product doesn’t exist at all
--   product removed in the past(removed before this current month)
--   product added in the past(added before this current month)
--   product removed recently(removed this current month)
--   product added recently(added this current month)
+-   product removed in the past (removed before this current month)
+-   product added in the past (added before this current month)
+-   product removed recently (removed this current month)
+-   product added recently (added this current month)
 
-These are the features that gave me the best results. Trained using xgboost. and you can find them in notebook `11.` and best hyperparameters through grid search in notebook `12.`
+These are the features that gave me the best results. Trained using XGBoost, and you can find them in notebook `11.` and the best hyperparameters through grid search in notebook `12.`
 
 **Best Hyperparameters through grid search**:  
 `num_class`: 24,  
@@ -112,13 +112,13 @@ These are the features that gave me the best results. Trained using xgboost. and
 
 ## Results:
 
-Notebooks convention is that the number of notebook will correspond to the notebook that start with that file, and the decimal number will also be an extra submission in the same notebook. So, you can find all 18, 18.4, 18.2 in the notebook that starts with 18. in my notebooks. And all the notebooks contain the results, graphs and etc.
+The notebooks convention is that the number of the notebook will correspond to the notebook that starts with that file, and the decimal number will also be an extra submission in the same notebook. So, you can find all 18, 18.4, 18.2 in the notebook that starts with 18. in my notebooks. And all the notebooks contain the results, graphs and etc.
 
 And notebooks that start with 999. are helper scripts and etc.
 
 ### Leaderboard scores of my various approaches:
 
-Just included the submission that scored more than 0.03 in private leaderboard
+Just included the submissions that scored more than 0.03 in the private leaderboard.
 
 | Notebook | Public Score | Private Score | Private Rank/1785 |
 | --- | --- | --- | --- |
@@ -138,7 +138,7 @@ Just included the submission that scored more than 0.03 in private leaderboard
 | 16.3 | 0.0297175 | 0.030066 | \- |
 | 17.1 | 0.0297196 | 0.0300583 | \- |
 
-### Map 7 score for each iteration of xgboost of my best submission:
+### Map 7 score for each iteration of XGBoost of my best submission:
 
 ![Imgur](http://i.imgur.com/FkB1alH.png)
 
@@ -146,9 +146,9 @@ Just included the submission that scored more than 0.03 in private leaderboard
 
 ![Imgur](http://i.imgur.com/6FpOBkG.png)
 
-## Additional appraoches that I tried.
+## Additional approaches that I tried.
 
-I looked at product histories of several users over months, to understand when, a product is more likely to be added, to help me with my intuitions, and add more features. Below are product histories of few users.
+I looked at product histories of several users over months, to understand when a product is more likely to be added, to help me with my intuitions, and add more features. Below are product histories of a few users.
 
 ![Imgur](http://i.imgur.com/HkqgN5b.png)  
 ![Imgur](http://i.imgur.com/DQXJYlq.png)  
@@ -166,22 +166,22 @@ Below is a representation of how similar each product is to other products if ea
 
 There are two important things from the above graphs, that I wanted to capture in terms of features.
 
--   From the product history vizs, if a particular product is being added and removed consitently and if it doesn’t exist it is more likely to be added.. So features like, is\_recently\_added, is\_recently\_removed, exists\_in\_the\_past, no\_of\_times\_product\_flanked no\_positive\_flanks, no\_negative\_flanks and etc.. In my training set, I only considered the past 4 months product subscription history, but from one of the top solution sharing posts I noticed that people used entire product history to generate these features. That might have increased my score just considering the entire history for each month to generate these features.
--   Another thing I wanted to capture is how likely is a product to be subscribed based on other products that were recently added. Say from the similarity vizs you can see that how closely `cno_fin` is correlated to `nomina` or `nom_pens` and from some product history vizs I observed that if `cno_fin` was added recently even though `nomina` never had a history for a given user, he is likely to add it next month. So additional features I generated are based on current months subscription data, from jacobian similarity weights and cosine similarity weights I simply summed the weights of unsubscribed products of the respective subscirbed products. These ended up being valuable features, with hight feature importance scores but I didn’t find them add more to my lb score. ![Imgur](http://i.imgur.com/cQGfa0p.png)
--   Additional features I tried are lag features related to user attributes, but I didn’t find these added much to my lb scores. Say a user changed from non primary subscriber to a primary subscriber, and he might be intersted in or be eligible for more products..
--   I wanted to caputure the trends and seasonality of product subscriptions, so along with raw month features, as jan is closer to december then what 1, 12 represents so instead use `np.cos`, `np.sin` of the month numbers. We can also use a period of 3 months by just using features `np.cos(month/4)` and `np.sin(month/4)`
+-   From the product history vizs, if a particular product is being added and removed consistently and if it doesn’t exist it is more likely to be added. So features like, is\_recently\_added, is\_recently\_removed, exists\_in\_the\_past, no\_of\_times\_product\_flanked, no\_positive\_flanks, no\_negative\_flanks and etc. In my training set, I only considered the past 4 months product subscription history, but from one of the top solution sharing posts I noticed that people used the entire product history to generate these features. That might have increased my score, just considering the entire history for each month to generate these features.
+-   Another thing I wanted to capture is how likely is a product to be subscribed based on other products that were recently added. Say from the similarity vizs you can see how closely `cno_fin` is correlated to `nomina` or `nom_pens`, and from some product history vizs I observed that if `cno_fin` was added recently even though `nomina` never had a history for a given user, he is likely to add it next month. So additional features I generated are based on the current month’s subscription data. From jacobian similarity weights and cosine similarity weights I simply summed the weights of unsubscribed products of the respective subscribed products. These ended up being valuable features, with high feature importance scores but I didn’t find them add more to my lb score. ![Imgur](http://i.imgur.com/cQGfa0p.png)
+-   Additional features I tried are lag features related to user attributes, but I didn’t find these added much to my lb scores. Say a user changed from a non primary subscriber to a primary subscriber, and he might be interested in or be eligible for more products.
+-   I wanted to capture the trends and seasonality of product subscriptions, so along with raw month features, as Jan is closer to December than what 1, 12 represents, so instead use `np.cos`, `np.sin` of the month numbers. We can also use a period of 3 months by just using features `np.cos(month/4)` and `np.sin(month/4)`.
 
 ## Things learned from post competition solution sharing.
 
--   Entire product history is much more use ful than limiting myself to just 4 past months
--   Likilyhood of a product getting subscribed is also dependent on the month. I was not able to successfully exploit this.
+-   Entire product history is much more useful than limiting myself to just 4 past months.
+-   Likelihood of a product getting subscribed is also dependent on the month. I was not able to successfully exploit this.
 
-Still reading various solutions, will update them once I get done with them.. Here are the direct links  
+Still reading various solutions, will update them once I get done with them. Here are the direct links  
 \* [1st place solution](https://www.kaggle.com/c/santander-product-recommendation/forums/t/26835/1-solution) \* [2nd place solution](https://www.kaggle.com/c/santander-product-recommendation/forums/t/26824/2nd-place-solution) \* [3rd place solution](https://www.kaggle.com/c/santander-product-recommendation/forums/t/26899/3rd-place-solution-with-code)
 
 ---
 
-# Premilinary data analysis
+# Preliminary data analysis
 
 ## 2\. ncodpers
 

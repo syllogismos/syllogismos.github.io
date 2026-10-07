@@ -3,10 +3,10 @@ title: "Octopress Blog as User Page in Github, Using Windows"
 date: 2014-08-10T16:15:42+05:30
 ---
 
-Step by step instructions to install Octopress blog on Windows to setup your github use page.
+Step by step instructions to install an Octopress blog on Windows to set up your GitHub user page.
 
 -   Download RubyInstaller and ruby dev kit from [here](http://dl.bintray.com/oneclick/rubyinstaller/rubyinstaller-1.9.3-p545.exe?direct) and [here](https://github.com/downloads/oneclick/rubyinstaller/DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe)
--   The above installer installs Ruby 1.9.3, eventhough the most recent stable version > 2.0.0
+-   The above installer installs Ruby 1.9.3, even though the most recent stable version is > 2.0.0
 -   Go to the directory where the dev-kit is installed and do the following
 
 ```
@@ -15,7 +15,7 @@ Step by step instructions to install Octopress blog on Windows to setup your git
 > ruby dk.rb install
 ```
 
--   Setup Octopress, change to the directory where you want your blog to reside
+-   Set up Octopress, change to the directory where you want your blog to reside
 
 ```
 > git clone git://github.com/imathis/octopress.git octopress
@@ -36,7 +36,7 @@ Step by step instructions to install Octopress blog on Windows to setup your git
 ```
 
 -   Configure your blog by updating \_config.yml, name of your blog, your name and things like that.
--   Create a new repo of the form YOUR-GITHUB-USER-NAME.github.io in github
+-   Create a new repo of the form YOUR-GITHUB-USER-NAME.github.io in GitHub
 
 ```
 > rake setup_github_pages
@@ -44,7 +44,7 @@ Step by step instructions to install Octopress blog on Windows to setup your git
 https://github.com/YOUR-GITHUB-USER-NAME/YOUR-GITHUB-USER-NAME.github.io
 ```
 
--   and run the following commands to deploy your local blog to github
+-   and run the following commands to deploy your local blog to GitHub
 
 ```
 > rake generate
@@ -53,8 +53,8 @@ https://github.com/YOUR-GITHUB-USER-NAME/YOUR-GITHUB-USER-NAME.github.io
 # files namely _deploy folder in your directory.
 ```
 
--   If everything worked fine, you will be able to see your blog with the defalt octopress template on YOUR-GITHUB-USER-NAME.github.io
--   Every time you update your blog you need ro do *rake generate* and *rake deploy* these commands will push your changes to your master branch on the remote
+-   If everything worked fine, you will be able to see your blog with the default Octopress template on YOUR-GITHUB-USER-NAME.github.io
+-   Every time you update your blog you need to do *rake generate* and *rake deploy*, these commands will push your changes to your master branch on the remote
 -   You can make a new post using *rake new\_post* command
 
 ```
@@ -71,13 +71,13 @@ https://github.com/YOUR-GITHUB-USER-NAME/YOUR-GITHUB-USER-NAME.github.io
 > git commit -m "my first blog post"
 ```
 
--   If you want can create a new branch called *source* in your remote repository for the source files
+-   If you want, you can create a new branch called *source* in your remote repository for the source files
 
 ```
 > git push origin source
 ```
 
-## This is what you do everytime you create a new post
+## This is what you do every time you create a new post
 
 ```
 > rake new_post["new blog post"]
