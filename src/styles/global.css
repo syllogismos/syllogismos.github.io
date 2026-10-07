@@ -1,0 +1,611 @@
+/* A notebook: black pen on white paper, one red pen for the descent paths. */
+
+/* HarshaFont has letters and digits only; punctuation falls through to Kalam. */
+@font-face {
+  font-family: "HarshaFont";
+  src: url("/fonts/HarshaFont-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --paper: #ffffff;
+  --ink: #000000;
+  --ink-soft: #6e6e6e;
+  --rule: #dedede;
+  --tint: #f3f3f1;
+  --accent: #f0125f;
+  --accent-text: #cc0e50;
+
+  /* To set only headings by hand, point --text at a typeface of your choice. */
+  --hand: "HarshaFont", "Kalam", "Bradley Hand", "Segoe Print", cursive;
+  --text: var(--hand);
+  --mono: "Commit Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --code-background: var(--tint);
+  --code-foreground: #1a1a1a;
+  --code-token-comment: #8a8a8a;
+  --code-token-keyword: var(--accent-text);
+  --code-token-string: #0b6a72;
+  --code-token-string-expression: #0b6a72;
+  --code-token-constant: #0b6a72;
+  --code-token-function: #1a1a1a;
+  --code-token-parameter: #1a1a1a;
+  --code-token-punctuation: #6e6e6e;
+  --code-token-link: #0b6a72;
+
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --wordmark: clamp(4.5rem, 16vw, 13rem);
+  --margin-col: 8rem;
+  --measure: 40rem;
+  --page: 62rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #000000;
+    --ink: #f4f4f4;
+    --ink-soft: #9a9a9a;
+    --rule: #2e2e2e;
+    --tint: #161616;
+    --accent: #ff3d7f;
+    --accent-text: #ff6b9c;
+    --code-foreground: #ececec;
+    --code-token-comment: #7c7c7c;
+    --code-token-string: #6fd3da;
+    --code-token-string-expression: #6fd3da;
+    --code-token-constant: #6fd3da;
+    --code-token-function: #ececec;
+    --code-token-parameter: #ececec;
+    --code-token-punctuation: #9a9a9a;
+    --code-token-link: #6fd3da;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 1.3125rem;
+  line-height: 1.55;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--accent-text);
+}
+
+a:focus-visible,
+pre:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: -999rem;
+}
+
+.skip:focus {
+  left: var(--gutter);
+  top: 0.5rem;
+  z-index: 2;
+  padding: 0.25rem 0.75rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ---------- site bar ---------- */
+
+.site-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  font-family: var(--hand);
+  font-size: 1.375rem;
+}
+
+.site-bar a {
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.75rem;
+}
+
+.site-nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- the map ---------- */
+
+.landscape {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--ink);
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.hero,
+.post-map {
+  margin: 0 calc(-1 * var(--gutter));
+  border-block: 1px solid var(--ink);
+}
+
+.hero {
+  position: relative;
+  height: clamp(21rem, 70vh, 44rem);
+}
+
+.wordmark {
+  position: absolute;
+  left: var(--gutter);
+  bottom: -0.16em;
+  margin: 0;
+  font-family: var(--hand);
+  font-size: var(--wordmark);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  /* a paper halo, so the letters cut through the contour lines */
+  -webkit-text-stroke: 0.09em var(--paper);
+  paint-order: stroke fill;
+  pointer-events: none;
+}
+
+.hero-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  flex-wrap: wrap;
+  max-width: var(--page);
+  /* clears the wordmark's descenders, which hang below the map */
+  margin: calc(var(--wordmark) * 0.42) 0 clamp(3rem, 8vw, 6rem);
+}
+
+.hero-foot p {
+  margin: 0;
+}
+
+.tagline {
+  font-size: 1.625rem;
+}
+
+.hint {
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+@media (hover: none) {
+  .hint {
+    display: none;
+  }
+}
+
+.post-map {
+  height: clamp(7rem, 17vw, 11.5rem);
+}
+
+/* ---------- post lists ---------- */
+
+.year {
+  max-width: var(--page);
+  margin: 0 0 3.5rem;
+}
+
+.year > h2 {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.posts {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--ink);
+}
+
+.posts a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 2rem;
+  align-items: baseline;
+  padding: 1.1rem 0 1.2rem;
+  border-bottom: 1px solid var(--rule);
+  text-decoration: none;
+}
+
+.posts a:hover {
+  color: inherit;
+}
+
+.posts h3 {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.posts a:hover h3 {
+  color: var(--accent-text);
+}
+
+.posts time {
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.posts p {
+  grid-column: 1;
+  max-width: var(--measure);
+  margin: 0.35rem 0 0;
+  font-size: 1.125rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.posts--compact a {
+  padding: 0.7rem 0 0.75rem;
+}
+
+.posts--compact h3 {
+  font-size: 1.5rem;
+}
+
+.page-head {
+  max-width: var(--page);
+  margin: clamp(2rem, 6vw, 4.5rem) 0 clamp(2rem, 5vw, 3.5rem);
+}
+
+.page-title {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: clamp(3rem, 9vw, 6rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.page-head p {
+  margin: 1.5rem 0 0;
+}
+
+/* ---------- post ---------- */
+
+.post-header {
+  max-width: var(--page);
+  margin: clamp(2rem, 5vw, 3.5rem) 0 clamp(2rem, 4vw, 3rem);
+}
+
+.post-header time {
+  display: block;
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+.entry-title {
+  margin: 0.35rem 0 0;
+  font-family: var(--hand);
+  font-size: clamp(2.75rem, 7vw, 5.25rem);
+  font-weight: 400;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+.post-body {
+  max-width: var(--measure);
+}
+
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose table,
+.prose .gist,
+.prose iframe {
+  margin: 0 0 1.3rem;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5 {
+  font-family: var(--hand);
+  font-weight: 400;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.prose h1 {
+  margin: 3.25rem 0 1rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--ink);
+  font-size: 2.5rem;
+}
+
+.prose h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.9375rem;
+}
+
+.prose h3,
+.prose h4,
+.prose h5 {
+  margin: 2rem 0 0.5rem;
+  font-size: 1.5rem;
+  color: var(--accent-text);
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.35rem;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin: 0.35rem 0 0;
+}
+
+.prose li > p {
+  margin-bottom: 0.35rem;
+}
+
+.prose blockquote {
+  margin-left: 0;
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--accent);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+.prose iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.prose hr {
+  width: 4rem;
+  margin: 2.75rem 0;
+  border: 0;
+  border-top: 2px solid var(--accent);
+}
+
+.prose sup {
+  line-height: 0;
+}
+
+.prose code {
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  background: var(--tint);
+  font-family: var(--mono);
+  font-size: 0.72em;
+  font-variant-ligatures: none;
+  overflow-wrap: anywhere;
+}
+
+.prose pre {
+  margin: 1.6rem 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  border-left: 2px solid var(--ink);
+  background: var(--code-background);
+  color: var(--code-foreground);
+  font-family: var(--mono);
+  font-size: 0.875rem;
+  line-height: 1.65;
+  font-variant-ligatures: none;
+  tab-size: 4;
+}
+
+.prose pre code {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font: inherit;
+  overflow-wrap: normal;
+}
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 1.125rem;
+}
+
+.prose th,
+.prose td {
+  padding: 0.35rem 1.25rem 0.35rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  border-bottom-color: var(--ink);
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+/* embedded gists bring their own (light) styling */
+.prose .gist {
+  font-size: 0.875rem;
+}
+
+.prose .gist a {
+  text-decoration: none;
+}
+
+.prose .gist table {
+  display: table;
+  margin: 0;
+}
+
+.prose .gist td {
+  border-bottom: 0;
+}
+
+/* ---------- end of post ---------- */
+
+.post-footer {
+  margin-top: 4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ink);
+}
+
+.byline {
+  margin: 0 0 2rem;
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2rem;
+}
+
+.post-nav a {
+  display: block;
+  font-family: var(--hand);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  text-decoration: none;
+  text-wrap: balance;
+}
+
+.post-nav small {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+.post-nav .next {
+  grid-column: 2;
+  text-align: right;
+}
+
+.site-footer {
+  margin-top: clamp(4rem, 10vw, 7rem);
+  padding: 1.25rem 0 2.5rem;
+  border-top: 1px solid var(--ink);
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ---------- wide layout: years and dates in a margin column ---------- */
+
+@media (min-width: 56rem) {
+  .year {
+    display: grid;
+    grid-template-columns: var(--margin-col) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .year > h2 {
+    position: sticky;
+    top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .post-header,
+  .post-body,
+  .page-head {
+    margin-left: var(--margin-col);
+  }
+
+  .post-header {
+    position: relative;
+  }
+
+  .post-header time {
+    position: absolute;
+    top: 0.9rem;
+    right: 100%;
+    width: var(--margin-col);
+  }
+
+  .post-header .entry-title {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose img {
+    background: #fff;
+  }
+}
+
+@media print {
+  .site-bar,
+  .post-nav,
+  .post-map,
+  .hero,
+  .hint,
+  .skip {
+    display: none;
+  }
+}

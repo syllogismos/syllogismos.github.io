@@ -1,0 +1,32 @@
+---
+import { shortDate, type Post } from '../lib/posts';
+
+interface Props {
+  posts: Post[];
+  compact?: boolean;
+}
+
+const { posts, compact = false } = Astro.props;
+const years = [...new Set(posts.map((post) => post.year))];
+---
+
+{
+  years.map((year) => (
+    <section class="year">
+      <h2>{year}</h2>
+      <ul class:list={['posts', { 'posts--compact': compact }]}>
+        {posts
+          .filter((post) => post.year === year)
+          .map((post) => (
+            <li>
+              <a href={post.url}>
+                <h3>{post.title}</h3>
+                <time datetime={post.date.toISOString()}>{shortDate(post.date)}</time>
+                {!compact && <p>{post.excerpt}</p>}
+              </a>
+            </li>
+          ))}
+      </ul>
+    </section>
+  ))
+}

@@ -1,0 +1,16 @@
+---
+// A loss landscape drawn as contour lines, unique to its seed. Click it to start a descent.
+interface Props {
+  seed: string;
+  /** How many descents run on their own when the page loads. */
+  paths?: number;
+}
+
+const { seed, paths = 2 } = Astro.props;
+---
+
+<canvas class="landscape" data-seed={seed} data-paths={paths} aria-hidden="true"></canvas>
+
+<script>
+  import '../scripts/landscape.ts';
+</script>

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://syllogismos.github.io/sitemap.xml

@@ -1,0 +1,62 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Landscape from '../../components/Landscape.astro';
+import { getPosts, longDate, type Post } from '../../lib/posts';
+import { SITE } from '../../site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: post.slug },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post.entry);
+---
+
+<Base title={post.title} description={post.excerpt}>
+  <article>
+    <div class="post-map">
+      <Landscape seed={post.slug} />
+    </div>
+    <header class="post-header">
+      <time datetime={post.date.toISOString()}>{longDate(post.date)}</time>
+      <h1 class="entry-title">{post.title}</h1>
+    </header>
+    <div class="post-body">
+      <div class="prose">
+        <Content />
+      </div>
+      <footer class="post-footer">
+        <p class="byline">Posted by {SITE.author}</p>
+        <nav class="post-nav" aria-label="Posts">
+          {
+            older && (
+              <a class="prev" href={older.url} rel="prev">
+                <small>Previous</small>
+                <span class="post-nav-title">{older.title}</span>
+              </a>
+            )
+          }
+          {
+            newer && (
+              <a class="next" href={newer.url} rel="next">
+                <small>Next</small>
+                <span class="post-nav-title">{newer.title}</span>
+              </a>
+            )
+          }
+        </nav>
+      </footer>
+    </div>
+  </article>
+</Base>

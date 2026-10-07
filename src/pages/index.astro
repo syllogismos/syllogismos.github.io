@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Landscape from '../components/Landscape.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/posts';
+import { SITE } from '../site';
+
+const posts = await getPosts();
+---
+
+<Base>
+  <div class="hero">
+    <Landscape seed={SITE.author} paths={3} />
+    <h1 class="wordmark">{SITE.title}</h1>
+  </div>
+  <div class="hero-foot">
+    <p class="tagline">{SITE.tagline}</p>
+    <p class="hint" aria-hidden="true">Click the map to start a descent.</p>
+  </div>
+  <PostList posts={posts} />
+</Base>
