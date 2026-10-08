@@ -15,6 +15,17 @@ Everything runs through `uv`, which fetches the Python packages each script
 names. The scripts sit in `scripts/` next to this file; run them from there, or
 give their full path.
 
+## 0. Get the scripts
+
+If `scripts/` and `assets/` are not beside this file (for example, these
+instructions were pasted into a chat), fetch them first and work from that
+folder. `uv` must be installed (https://docs.astral.sh/uv/).
+
+```sh
+git clone --depth 1 https://github.com/syllogismos/syllogismos.github.io /tmp/syllogismos
+cd /tmp/syllogismos/skills/handwriting-font
+```
+
 ## 1. Give them the template
 
 `assets/handwriting-font-template.pdf` is ready to print. Page 1 holds every
