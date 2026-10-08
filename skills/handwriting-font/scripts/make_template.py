@@ -37,7 +37,7 @@ LABEL_FONTS = [
 
 BLACK = 0.0
 BOX = 0.30  # box outlines: dark, so the boxes read clearly
-BASELINE = 0.58  # the line letters sit on: the strongest guide
+BASELINE = 0.64  # the line letters sit on: the strongest guide
 GUIDE = 0.80  # the other guides: light, so they drop out of a scan
 LABEL = 0.42
 TEXT = 0.25
@@ -78,9 +78,9 @@ def hline(c: canvas.Canvas, x: float, top: float, w: float, gray: float, width: 
 
 def guides(c: canvas.Canvas, x: float, top: float, w: float, asc: float, xh: float, base: float, desc: float) -> None:
     hline(c, x, top + asc, w, GUIDE, 0.45)
-    hline(c, x, top + xh, w, GUIDE, 0.45, dash=[1.6, 1.6])
+    hline(c, x, top + xh, w, GUIDE, 0.45, dash=[1.4, 1.4])
     hline(c, x, top + desc, w, GUIDE, 0.45)
-    hline(c, x, top + base, w, BASELINE, 0.7)
+    hline(c, x, top + base, w, BASELINE, 0.8)
 
 
 def draw_marks(c: canvas.Canvas, page_number: int) -> None:
@@ -99,27 +99,28 @@ def draw_marks(c: canvas.Canvas, page_number: int) -> None:
             c.rect(bx * mm, y(L.TOP + L.ID_BIT), L.ID_BIT * mm, L.ID_BIT * mm, stroke=0, fill=1)
 
 
-def draw_header(c: canvas.Canvas, font: str, page_number: int, title: str) -> None:
+def draw_header(c: canvas.Canvas, font: str, page_number: int, page: dict) -> None:
     x = L.LEFT + L.MARK + L.ID_BIT * (L.ID_BITS + 2)
     right = L.LEFT + L.CONTENT_W - L.MARK - 3
     c.setFillGray(BLACK)
     c.setFont(font, 12)
-    c.drawString(x * mm, y(L.TOP + 4.6), "Handwriting font template")
+    c.drawString(x * mm, y(L.TOP + 4.4), "Handwriting font template")
     c.setFont(font, 8.5)
     c.setFillGray(TEXT)
-    c.drawRightString(right * mm, y(L.TOP + 4.6), f"{title}    page {page_number} of {len(L.PAGES)}")
+    c.drawRightString(right * mm, y(L.TOP + 4.4), f"{page['title']}    page {page_number} of {len(L.PAGES)}")
     c.setFont(font, 7.6)
-    lines = [
-        "Use a black pen and write each character once, in its box. Sit every letter on the dark line. Capitals and tall",
-        "letters reach the top line, small letters reach the dashed line, and tails (g j p q y) drop to the bottom line.",
-    ]
-    if page_number > 1:
+    if page["cells"]:
         lines = [
-            "Black pen, one character per box, sitting on the dark line. Tall letters reach the top line, small letters",
-            "the dashed line, tails the bottom line. Stay clear of the box edges.",
+            "Use a black pen and write each character once, in its box. Sit every letter on the dark line. Capitals and tall",
+            "letters reach the top line, small letters reach the dashed line, and tails (g j p q y) drop to the bottom line.",
+        ]
+    else:
+        lines = [
+            "Optional, but it makes a better font. Copy each sentence on the lines below it in a black pen, at your normal",
+            "size and speed. It shows how you really space letters and words, which single boxes cannot.",
         ]
     for i, text in enumerate(lines):
-        c.drawString(x * mm, y(L.TOP + 9.4 + i * 3.5), text)
+        c.drawString(x * mm, y(L.TOP + 8.7 + i * 3.4), text)
 
 
 def draw_footer(c: canvas.Canvas, font: str) -> None:
@@ -140,22 +141,15 @@ def draw_cell(c: canvas.Canvas, font: str, index: int, char: str, name: str) -> 
     c.setLineWidth(0.8)
     c.rect(x * mm, y(top + L.CELL_H), L.CELL_W * mm, L.CELL_H * mm, stroke=1, fill=0)
     c.setFillGray(LABEL)
-    c.setFont(font_for(char), 10.5)
-    c.drawString((x + 1.6) * mm, y(top + 4.6), char)
+    c.setFont(font_for(char), 8)
+    c.drawString((x + 1.3) * mm, y(top + L.LABEL_BASELINE_Y), char)
     if name:
-        c.setFont(font, 6)
-        c.drawRightString((x + L.CELL_W - 1.6) * mm, y(top + 4.2), name)
+        c.setFont(font, 5.2)
+        c.drawRightString((x + L.CELL_W - 1.3) * mm, y(top + L.LABEL_BASELINE_Y - 0.1), name)
 
 
 def draw_sentences(c: canvas.Canvas, font: str, page: dict) -> None:
     top = L.sentences_top(page)
-    c.setFillGray(TEXT)
-    c.setFont(font, 8.5)
-    c.drawString(
-        L.LEFT * mm,
-        y(top - 2.2),
-        "Now copy each sentence on the lines below it, at your normal size and speed. This shows how you space letters.",
-    )
     for i, text in enumerate(L.SENTENCES):
         block = top + i * L.LINE_BLOCK_H
         c.setFillGray(LABEL)
@@ -182,7 +176,7 @@ def main() -> None:
     c.setSubject("Print, fill in by hand, then scan to make a font of your handwriting.")
     for number, page in enumerate(L.PAGES, start=1):
         draw_marks(c, number)
-        draw_header(c, text_font, number, page["title"])
+        draw_header(c, text_font, number, page)
         for index, (char, name) in enumerate(page["cells"]):
             draw_cell(c, text_font, index, char, name)
         if page["sentences"]:

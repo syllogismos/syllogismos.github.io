@@ -13,27 +13,29 @@ PAGE_W, PAGE_H = 210.0, 297.0  # A4. Everything sits inside the area US Letter a
 LEFT, TOP = 12.0, 18.0
 CONTENT_W, CONTENT_H = 186.0, 258.5
 
-HEADER_H = 16.0  # title and instructions, between the two top marks
+HEADER_H = 14.0  # title and instructions, between the two top marks
 FOOTER_H = 8.0  # between the two bottom marks
 
-COLS, ROWS = 6, 7
-CELL_W = CONTENT_W / COLS  # 31.0
-CELL_H = (CONTENT_H - HEADER_H - FOOTER_H) / ROWS  # 33.5
+# Every character fits on one side of one sheet: 9 x 12 = 108 boxes.
+COLS, ROWS = 9, 12
+CELL_W = CONTENT_W / COLS  # 20.67
+CELL_H = (CONTENT_H - HEADER_H - FOOTER_H) / ROWS  # 19.71
 GRID_TOP = TOP + HEADER_H
 
 # Guide lines inside a cell, as offsets from the top edge of the cell.
-LABEL_H = 5.0  # strip holding the printed reference character
-ASCENDER_Y = 8.0  # capitals and tall letters reach this line
-XHEIGHT_Y = 14.8  # small letters reach this dashed line
-BASELINE_Y = 23.5  # every letter sits on this line
-DESCENDER_Y = 30.0  # tails of g j p q y reach this line
+LABEL_H = 3.5  # strip holding the printed reference character; nothing is printed below it
+LABEL_BASELINE_Y = 2.8
+ASCENDER_Y = 5.1  # capitals and tall letters reach this line
+XHEIGHT_Y = 8.9  # small letters reach this dashed line
+BASELINE_Y = 13.7  # every letter sits on this line
+DESCENDER_Y = 17.4  # tails of g j p q y reach this line
 
 MARK = 6.0  # side of each square corner mark
 ID_BIT = 3.0  # side of each page-number bit, to the right of the top-left mark
 ID_BITS = 3
 
-# Handwriting lines on the last page, at a natural writing size.
-LINE_BLOCK_H = 28.0
+# Handwriting lines on the optional second page, at a natural writing size.
+LINE_BLOCK_H = 30.0
 LINE_ASCENDER_Y = 7.5
 LINE_XHEIGHT_Y = 11.3
 LINE_BASELINE_Y = 16.0
@@ -43,6 +45,8 @@ SENTENCES = [
     "Sphinx of black quartz, judge my vow.",
     "Pack my box with five dozen liquor jugs!",
     "\u201cWait,\u201d they\u2019ll say \u2014 it\u2019s 10:45 already?",
+    "The five boxing wizards jump quickly (again).",
+    "How vexingly quick daft zebras jump; 1,234 times.",
 ]
 
 # (character, name printed beside it). A name is given wherever the character
@@ -54,10 +58,10 @@ DIGITS = [(c, {"0": "zero", "1": "one"}.get(c, "")) for c in "0123456789"]
 PUNCT_1 = [
     (".", "full stop"),
     (",", "comma"),
-    ("!", "exclamation"),
+    ("!", "exclaim"),
     ("?", "question"),
-    ("'", "straight quote"),
-    ('"', "straight double"),
+    ("'", "straight"),
+    ('"', "straight"),
 ]
 PUNCT_2 = [
     (":", "colon"),
@@ -87,14 +91,14 @@ SYMBOLS = [
     ("*", "asterisk"),
     ("+", "plus"),
     ("=", "equals"),
-    ("<", "less than"),
-    (">", "greater than"),
+    ("<", "less"),
+    (">", "greater"),
     ("~", "tilde"),
     ("`", "backtick"),
-    ("\u2018", "opening quote"),
+    ("\u2018", "opening"),
     ("\u2019", "apostrophe"),
-    ("\u201c", "opening double"),
-    ("\u201d", "closing double"),
+    ("\u201c", "opening"),
+    ("\u201d", "closing"),
     ("\u2022", "bullet"),
     ("\u00b0", "degree"),
     ("\u20b9", "rupee"),
@@ -105,9 +109,8 @@ SYMBOLS = [
 ]
 
 PAGES = [
-    {"title": "Capitals, numbers", "cells": UPPER + DIGITS + PUNCT_1, "sentences": False},
-    {"title": "Small letters, punctuation", "cells": LOWER + PUNCT_2, "sentences": False},
-    {"title": "Symbols, sentences", "cells": SYMBOLS, "sentences": True},
+    {"title": "All characters", "cells": UPPER + LOWER + DIGITS + PUNCT_1 + PUNCT_2 + SYMBOLS, "sentences": False},
+    {"title": "Spacing sample (optional)", "cells": [], "sentences": True},
 ]
 
 
