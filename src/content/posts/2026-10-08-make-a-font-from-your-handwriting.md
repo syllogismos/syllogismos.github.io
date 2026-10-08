@@ -42,6 +42,7 @@ Almost everything above comes from the sheet of paper, not from the code. So the
 -   Four guide lines in every box. Capitals and tall letters reach the top line, small letters reach the dashed line, everything sits on the dark line, and tails drop to the bottom line. The lines are light gray so they disappear when the page is scanned.
 -   A black square in each corner. They let the software straighten a photo taken at an angle, and one of them tells it which way up the page is.
 -   A second page, which is optional, with five sentences to copy at your normal size. That shows how you really space letters, which separate boxes can’t.
+-   A third page that you don’t write on. It shows every character in a plain font on the same lines, so you can see where a comma, a quote mark or an asterisk is supposed to sit.
 
 ## The skill
 

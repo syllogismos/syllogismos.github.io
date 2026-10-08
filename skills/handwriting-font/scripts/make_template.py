@@ -43,7 +43,12 @@ LABEL = 0.42
 TEXT = 0.25
 
 
+# Typefaces for the reference page. Futura comes first because its small letters
+# are close to the height of the dashed line; the label fonts fill any gaps.
+REFERENCE_FONTS = ["/System/Library/Fonts/Supplemental/Futura.ttc"]
+
 FONTS: list[tuple[str, set[int]]] = []  # (registered name, code points it covers)
+REFERENCE: list[tuple[str, set[int], float]] = []  # (name, code points, cap height as a fraction of the size)
 
 
 def register_fonts() -> None:
@@ -53,6 +58,10 @@ def register_fonts() -> None:
         FONTS.append((f"Label{i}", set(font.face.charToGlyph)))
     if not FONTS:
         sys.exit("No label font found. Add the path of a Unicode TrueType font to LABEL_FONTS.")
+    for i, path in enumerate(f for f in REFERENCE_FONTS + LABEL_FONTS if Path(f).exists()):
+        font = TTFont(f"Reference{i}", path, subfontIndex=0)
+        pdfmetrics.registerFont(font)
+        REFERENCE.append((f"Reference{i}", set(font.face.charToGlyph), (font.face.capHeight or 700) / 1000))
 
 
 def font_for(char: str) -> str:
@@ -99,7 +108,7 @@ def draw_marks(c: canvas.Canvas, page_number: int) -> None:
             c.rect(bx * mm, y(L.TOP + L.ID_BIT), L.ID_BIT * mm, L.ID_BIT * mm, stroke=0, fill=1)
 
 
-def draw_header(c: canvas.Canvas, font: str, page_number: int, page: dict) -> None:
+def draw_header(c: canvas.Canvas, font: str, page_number: int, page: dict, total: int) -> None:
     x = L.LEFT + L.MARK + L.ID_BIT * (L.ID_BITS + 2)
     right = L.LEFT + L.CONTENT_W - L.MARK - 3
     c.setFillGray(BLACK)
@@ -107,7 +116,7 @@ def draw_header(c: canvas.Canvas, font: str, page_number: int, page: dict) -> No
     c.drawString(x * mm, y(L.TOP + 4.4), "Handwriting font template")
     c.setFont(font, 8.5)
     c.setFillGray(TEXT)
-    c.drawRightString(right * mm, y(L.TOP + 4.4), f"{page['title']}    page {page_number} of {len(L.PAGES)}")
+    c.drawRightString(right * mm, y(L.TOP + 4.4), f"{page['title']}    page {page_number} of {total}")
     c.setFont(font, 7.6)
     if page["cells"]:
         lines = [
@@ -148,6 +157,38 @@ def draw_cell(c: canvas.Canvas, font: str, index: int, char: str, name: str) -> 
         c.drawRightString((x + L.CELL_W - 1.3) * mm, y(top + L.LABEL_BASELINE_Y - 0.1), name)
 
 
+def draw_reference_page(c: canvas.Canvas, font: str, page_number: int, total: int) -> None:
+    """Every character in a plain typeface, in the same boxes on the same lines.
+
+    It is there to look at while writing: it shows where a comma, a quote mark or
+    an asterisk sits relative to the lines. It has no corner marks, so it cannot
+    be mistaken for a filled-in page.
+    """
+    c.setFillGray(BLACK)
+    c.setFont(font, 12)
+    c.drawString(L.LEFT * mm, y(L.TOP + 4.4), "Handwriting font template")
+    c.setFont(font, 8.5)
+    c.setFillGray(TEXT)
+    c.drawRightString((L.LEFT + L.CONTENT_W) * mm, y(L.TOP + 4.4), f"Reference    page {page_number} of {total}")
+    c.setFont(font, 7.6)
+    for i, text in enumerate(
+        [
+            "Do not write on this page. It shows where each character sits on the lines: how high a quote mark hangs, where",
+            "a comma dips, how far a tail drops. Copy the position, not the shape. The shapes should be your own handwriting.",
+        ]
+    ):
+        c.drawString(L.LEFT * mm, y(L.TOP + 8.7 + i * 3.4), text)
+
+    cap_mm = L.BASELINE_Y - L.ASCENDER_Y
+    for index, (char, name) in enumerate(L.PAGES[0]["cells"]):
+        draw_cell(c, font, index, char, name)
+        x, top = L.cell_origin(index)
+        face, _, cap = next(f for f in REFERENCE if ord(char) in f[1])
+        c.setFillGray(0.2)
+        c.setFont(face, cap_mm * mm / cap)
+        c.drawCentredString((x + L.CELL_W / 2) * mm, y(top + L.BASELINE_Y), char)
+
+
 def draw_sentences(c: canvas.Canvas, font: str, page: dict) -> None:
     top = L.sentences_top(page)
     for i, text in enumerate(L.SENTENCES):
@@ -174,17 +215,20 @@ def main() -> None:
     c.setTitle("Handwriting font template")
     c.setAuthor("syllogismos")
     c.setSubject("Print, fill in by hand, then scan to make a font of your handwriting.")
+    total = len(L.PAGES) + 1
     for number, page in enumerate(L.PAGES, start=1):
         draw_marks(c, number)
-        draw_header(c, text_font, number, page)
+        draw_header(c, text_font, number, page, total)
         for index, (char, name) in enumerate(page["cells"]):
             draw_cell(c, text_font, index, char, name)
         if page["sentences"]:
             draw_sentences(c, text_font, page)
         draw_footer(c, text_font)
         c.showPage()
+    draw_reference_page(c, text_font, total, total)
+    c.showPage()
     c.save()
-    print(f"wrote {out} ({len(L.PAGES)} pages, {sum(len(p['cells']) for p in L.PAGES)} characters)")
+    print(f"wrote {out} ({total} pages, {sum(len(p['cells']) for p in L.PAGES)} characters)")
 
     if layout_path:
         layout_path.write_text(json.dumps(L.as_dict(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

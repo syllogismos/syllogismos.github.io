@@ -19,7 +19,9 @@ give their full path.
 
 `assets/handwriting-font-template.pdf` is ready to print. Page 1 holds every
 character. Page 2 is optional: five sentences to copy at normal size, which you
-later use to judge spacing.
+later use to judge spacing. Page 3 is a reference to look at, not to fill in: it
+shows every character in a plain typeface on the same lines, so the writer can
+see where a comma, a quote mark or an asterisk sits.
 
 Pass these on with the file:
 
