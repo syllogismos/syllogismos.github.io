@@ -3,7 +3,7 @@ title: "Make a Font From Your Handwriting With a Coding Agent"
 date: 2026-10-08T18:30:00+05:30
 ---
 
-HarshaFont is a font made from a photo of a handwritten alphabet. You can [download HarshaFont (zip)](/downloads/HarshaFont.zip) and use it.
+This is a handwriting font, made from a photo of a handwritten alphabet. You can [download the handwriting font (zip)](/downloads/handwriting-font.zip) and use it.
 
 Here is how to make a font of your own handwriting. You print a page, fill it in, take a photo, and Claude Code or Codex does the rest.
 
