@@ -11,7 +11,7 @@ rotation. For every page the script finds the four corner marks, straightens
 the page, reads which page it is, and lifts the ink out of every box.
 
 Outputs, under --out:
-    glyphs/U+0041.png      ink mask of one box (white ink on black), not cropped
+    glyphs/U+0041.png      the ink of one box (brighter = darker ink), not cropped
     glyphs.json            where the guide lines fall in each mask, plus warnings
     check-page1.png        contact sheet to LOOK AT before building the font
     rectified-page1.jpg    the straightened page
@@ -192,7 +192,8 @@ def ink_threshold(dark: np.ndarray, cells: list[tuple[float, float]]) -> tuple[f
         inner.append(dark[int((y + L.LABEL_H + 0.5) * PPM) : int((y + L.CELL_H - 1.2) * PPM), x0:x1].ravel())
     guide = float(np.median(np.concatenate(guide_samples)))
     pen = float(np.percentile(np.concatenate(inner), 99.9))
-    threshold = max(guide + 0.5 * (pen - guide), guide * 1.2 + 10)
+    # Nearer the guide level than the pen level, so thin or faint strokes survive whole.
+    threshold = max(guide + 0.4 * (pen - guide), guide * 1.2 + 10)
     return threshold, guide, pen
 
 
@@ -232,11 +233,17 @@ def extract_page(bgr: np.ndarray, out: Path, record: dict) -> int:
         top = (top + bottom - L.CELL_H) / 2
         x0, x1 = round((left + INSET) * PPM), round((right - INSET) * PPM)
         y0, y1 = round((top + L.LABEL_H) * PPM), round((top + L.CELL_H - INSET) * PPM)
-        mask = clean(((dark[y0:y1, x0:x1] > threshold) * 255).astype(np.uint8))
+        patch = dark[y0:y1, x0:x1]
+        mask = clean(((patch > threshold) * 255).astype(np.uint8))
+        # Saved image: how dark the ink is (0-255, pen level = 255), kept only around the
+        # strokes. The font builder cuts its outlines from this, at `level`, which gives
+        # smoother and truer edges than a hard black-and-white mask.
+        near = cv2.dilate(mask, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))
+        soft = np.where(near > 0, np.clip(patch.astype(np.float32) / pen * 255, 0, 255), 0).astype(np.uint8)
 
         key = f"U+{ord(char):04X}"
         rows = {k: round((top + v) * PPM) - y0 for k, v in (("ascender", L.ASCENDER_Y), ("xheight", L.XHEIGHT_Y), ("baseline", L.BASELINE_Y), ("descender", L.DESCENDER_Y))}
-        entry = {"char": char, "name": name, "page": number, "ppm": PPM, "rows": rows, "flags": []}
+        entry = {"char": char, "name": name, "page": number, "ppm": PPM, "level": round(threshold / pen * 255), "rows": rows, "flags": []}
         ys, xs = np.nonzero(mask)
         if len(xs) < (0.5 * PPM) ** 2:
             entry["flags"].append("empty")
@@ -252,7 +259,7 @@ def extract_page(bgr: np.ndarray, out: Path, record: dict) -> int:
                 "bottom_below_baseline_mm": round((int(ys.max()) - rows["baseline"]) / PPM, 2),
             }
             entry["file"] = f"glyphs/{key}.png"
-            cv2.imwrite(str(out / entry["file"]), mask)
+            cv2.imwrite(str(out / entry["file"]), soft)
         record["glyphs"][key] = entry
         sheet_cells.append((key, entry, mask))
 
