@@ -8,9 +8,11 @@ import { SITE } from '../site';
 interface Props {
   title?: string;
   description?: string;
+  /** The home page shows the title under its map, so the bar leaves it out. */
+  home?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, home = false } = Astro.props;
 const path = Astro.url.pathname;
 const canonical = new URL(path, Astro.site);
 const nav = [
@@ -36,7 +38,7 @@ const nav = [
   <body>
     <a class="skip" href="#main">Skip to content</a>
     <header class="site-bar">
-      <a class="brand" href="/">{SITE.title}</a>
+      {home ? <span /> : <a class="brand" href="/">{SITE.title}</a>}
       <nav class="site-nav" aria-label="Site">
         {nav.map(({ href, label }) => <a href={href} aria-current={path === href ? 'page' : undefined}>{label}</a>)}
         <a href="/atom.xml">RSS</a>
@@ -47,6 +49,9 @@ const nav = [
     </main>
     <footer class="site-footer">
       <p>Copyright &copy; 2018 - {SITE.author}</p>
+      <nav class="elsewhere" aria-label="Elsewhere">
+        {SITE.links.map(({ label, href }) => <a href={href} rel="me">{label}</a>)}
+      </nav>
     </footer>
   </body>
 </html>

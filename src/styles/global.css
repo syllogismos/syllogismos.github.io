@@ -36,7 +36,6 @@
   --code-token-link: #0b6a72;
 
   --gutter: clamp(1.25rem, 5vw, 5rem);
-  --wordmark: clamp(4.5rem, 16vw, 13rem);
   --margin-col: 8rem;
   --measure: 40rem;
   --page: 62rem;
@@ -166,43 +165,39 @@ pre:focus-visible {
 }
 
 .hero {
-  position: relative;
-  height: clamp(21rem, 70vh, 44rem);
-}
-
-.wordmark {
-  position: absolute;
-  left: var(--gutter);
-  bottom: -0.16em;
-  margin: 0;
-  font-family: var(--hand);
-  font-size: var(--wordmark);
-  font-weight: 400;
-  line-height: 0.9;
-  letter-spacing: -0.02em;
-  /* a paper halo, so the letters cut through the contour lines */
-  -webkit-text-stroke: 0.09em var(--paper);
-  paint-order: stroke fill;
-  pointer-events: none;
+  /* short enough that the first posts show without scrolling */
+  height: clamp(13rem, 36vh, 24rem);
 }
 
 .hero-foot {
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 1rem 2rem;
   flex-wrap: wrap;
   max-width: var(--page);
-  /* clears the wordmark's descenders, which hang below the map */
-  margin: calc(var(--wordmark) * 0.42) 0 clamp(3rem, 8vw, 6rem);
+  margin: clamp(1.5rem, 3vw, 2.25rem) 0 clamp(2.25rem, 5vw, 3.25rem);
+}
+
+.wordmark {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: clamp(3rem, 6vw, 4.25rem);
+  font-weight: 400;
+  line-height: 1;
 }
 
 .hero-foot p {
-  margin: 0;
+  margin-bottom: 0;
+}
+
+.hero-foot .hint {
+  margin-top: 0;
 }
 
 .tagline {
-  font-size: 1.625rem;
+  margin-top: 0.35rem;
+  font-size: 1.5rem;
 }
 
 .hint {
@@ -544,6 +539,10 @@ pre:focus-visible {
 }
 
 .site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  flex-wrap: wrap;
   margin-top: clamp(4rem, 10vw, 7rem);
   padding: 1.25rem 0 2.5rem;
   border-top: 1px solid var(--ink);
@@ -553,6 +552,16 @@ pre:focus-visible {
 
 .site-footer p {
   margin: 0;
+}
+
+.elsewhere {
+  display: flex;
+  gap: 0.25rem 1.5rem;
+  flex-wrap: wrap;
+}
+
+.elsewhere a {
+  text-decoration: none;
 }
 
 /* ---------- wide layout: years and dates in a margin column ---------- */
