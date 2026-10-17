@@ -728,20 +728,6 @@ pre:focus-visible {
   margin-bottom: 1.25rem;
 }
 
-.project--lead .prose pre {
-  margin: 1.1rem 0 1.25rem;
-}
-
-.operator-intro {
-  max-width: var(--measure);
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--rule);
-}
-
-.operator-intro h3 {
-  margin-top: 0;
-}
-
 /* Nimbus at the top, a red line down to each business it runs */
 .operator {
   max-width: var(--measure);
@@ -757,14 +743,6 @@ pre:focus-visible {
   font-size: 1.625rem;
   font-weight: 400;
   line-height: 1.15;
-}
-
-.operator span {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 1.0625rem;
-  line-height: 1.3;
-  color: var(--ink-soft);
 }
 
 .operator-hub {
