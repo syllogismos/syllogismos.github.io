@@ -267,31 +267,15 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
   <section class="work-section">
     <h2>Jobs</h2>
     <div>
-      <article class="project">
-        <header>
-          <h3>Zenskar</h3>
-        </header>
-        <div class="prose">
-          <p>Billing and revenue automation for B2B companies.</p>
-        </div>
-      </article>
-
-      <article class="project">
-        <header>
-          <h3>MoEngage</h3>
-        </header>
-        <div class="prose">
-          <p>
-            One of the early engineers at the marketing automation company. I built segmentation from the ground up on
-            Elasticsearch: which of an app's users match a marketer's rule, fast enough to message them.
-          </p>
-        </div>
-        <ul class="project-links">
-          <li><a href="/blog/2017/07/30/elasticsearch-segmentation-moengage/">Write-up</a></li>
-        </ul>
-      </article>
-
-      <p class="work-more">Titles, dates and the rest are on <a href={linkedin}>LinkedIn</a>.</p>
+      {
+        ['Zenskar', 'MoEngage'].map((company) => (
+          <article class="project">
+            <h3>
+              <a href={linkedin}>{company}</a>
+            </h3>
+          </article>
+        ))
+      }
     </div>
   </section>
 </Base>

@@ -827,10 +827,6 @@ pre:focus-visible {
   color: var(--accent-text);
 }
 
-.work-more {
-  margin: 1.25rem 0 0;
-}
-
 /* ---------- home: what I'm doing now ---------- */
 
 .now {
