@@ -33,7 +33,7 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
 
 <Base
   title="Work"
-  description="Anil Karaka's work: Nimbus, an AI browser that runs two small businesses, plus everything built on the way there."
+  description="Anil Karaka is building Nimbus, an AI browser, and runs two small businesses with it."
 >
   <div class="hero route-map">
     <Landscape seed="work" paths={0} wells={wells} route={stops.map(({ x, y }) => [x, y])} />
@@ -64,7 +64,14 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
           <p class="kicker">An AI browser</p>
         </header>
         <div class="prose">
-          <p>I'm dogfooding it right now by running my other small businesses with it.</p>
+          <p>
+            Tell it what you want done on the web. It opens the pages, fills in the forms, and checks with you before
+            anything it can't undo.
+          </p>
+          <p>
+            Works with Claude, Gemini and OpenAI models, or your ChatGPT subscription. Mac, Windows and Linux, in alpha.
+          </p>
+          <p>I'm dogfooding it by running my other small businesses with it.</p>
         </div>
         <ul class="project-links">
           <li><a href="https://usenimbus.app">usenimbus.app</a></li>
@@ -93,17 +100,10 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            Indian exporters claiming a GST refund have to upload two JSON files, Statement 3 and Annexure B. The
-            government expects you to make them with a pair of Windows Excel utilities. Fast GST Refund makes them in
-            the browser: paste your records, fix the problems it lists, pay ₹499 once per GSTIN and refund period,
-            download.
+            Makes the two JSON files Indian exporters upload to claim a GST refund, byte-identical to what the
+            government's Excel utilities produce. ₹499 per GSTIN per refund period.
           </p>
-          <p>
-            It's a micro-SaaS, and an experiment in how much of a business can be AI-native, end to end. It was built in
-            Claude Code sessions, and the transcripts are committed with the code. Its files are byte-identical to the
-            official utilities', checked against a real filing the portal accepted. And it ships as an MCP server, so
-            your AI assistant can check your records and make the files itself.
-          </p>
+          <p>A micro-SaaS, and an experiment in running a business AI-native, end to end.</p>
         </div>
         <ul class="project-links">
           <li><a href="https://fastgstrefund.com">fastgstrefund.com</a></li>
@@ -117,15 +117,7 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
           <time>2025</time>
         </header>
         <div class="prose">
-          <p>
-            AI color analysis and a daily outfit, on the iPhone. Find out which colors actually suit you, get outfit
-            ideas for your body type and your week, and stop buying clothes in the wrong colors.
-          </p>
-          <p>
-            My second fashion app. The <a href="/blog/2014/09/04/tinder-like-android-app-that-showcases-products-from-a-fashion-website/"
-              >first</a
-            > was Tinder for clothes, on Android, in 2014.
-          </p>
+          <p>AI color analysis and daily outfit suggestions, on the iPhone.</p>
         </div>
         <ul class="project-links">
           <li><a href="https://apps.apple.com/app/lookwise-color-analysis/id6747015605">App Store</a></li>
@@ -139,14 +131,10 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            An eval for personal agents. Your agent becomes the authorised representative of two founders in the
-            fictional Republic of Bandelia, and has to incorporate their company and carry it all the way to a
-            Certificate of Commencement of Business. It works by email and through deliberately janky government
-            websites, on a real working-day calendar. There is no map: each office's letters point to the next.
+            An eval for personal agents: incorporate a company in a fictional country by email and through janky
+            government websites, on a real working-day calendar.
           </p>
-          <p>
-            It takes months, and most agents never finish. Register your agent's email address, and give it a shot.
-          </p>
+          <p>It takes months and most agents never finish. Register yours and give it a shot.</p>
         </div>
         <ul class="project-links">
           <li><a href="https://redtapeeval.usenimbus.app/register">Register your agent</a></li>
@@ -166,9 +154,8 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            The baby monitor, floating over whatever I'm working on. A native menu bar app for macOS that plays ONVIF and
-            RTSP cameras on your local network in a small always-on-top window. Drag it, resize it, double-click to
-            zoom. No cloud, no recording.
+            A Mac menu bar app that shows the cameras on your local network, like a baby monitor, in a small
+            always-on-top window. No cloud.
           </p>
         </div>
         <ul class="project-links">
@@ -183,10 +170,7 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
           <time>2021</time>
         </header>
         <div class="prose">
-          <p>
-            The AWS console as a native Mac app. It shows what each EC2 instance really costs, attached EBS volumes
-            included, starts, stops and terminates them, lists spot prices, and browses S3 with drag-and-drop uploads.
-          </p>
+          <p>The AWS console as a native Mac app. Manage EC2 and S3, and see what each instance really costs.</p>
         </div>
         <ul class="project-links">
           <li><a href="https://apps.apple.com/app/compute-manager/id1579078660">Mac App Store</a></li>
@@ -201,8 +185,8 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            Twitter DM automation. It downloads all your followers, even past a million, lets you filter them, and sends
-            them targeted direct-message campaigns, with link clicks and conversions tracked per campaign.
+            Twitter DM automation. Download all your followers, even past a million, and send filtered DM campaigns with
+            clicks and conversions tracked.
           </p>
         </div>
         <ul class="project-links">
@@ -218,10 +202,8 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            Developer tools for machine learning, built right after the walking challenge below. Draw a neural network
-            in an editor instead of writing it, launch supervised or reinforcement learning experiments on cloud GPUs,
-            and track every run. Angular, Django, Celery and Elasticsearch. The backend README doubles as my notes on
-            running all of that on AWS.
+            Draw a neural network in a visual editor instead of writing it. Launch ML and RL experiments on cloud GPUs
+            and track every run.
           </p>
         </div>
         <ul class="project-links">
@@ -237,9 +219,8 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
         </header>
         <div class="prose">
           <p>
-            The reinforcement learning experiment that started it. A skeleton with 18 muscles, a physics engine, and five
-            seconds to get as far as it can without falling over. My TRPO agent won crowdAI's Learning How to Walk
-            challenge with almost 29 metres. Second and third place learned to hop. Mine learned to walk.
+            My reinforcement learning agent won crowdAI's Learning How to Walk challenge. Second and third place learned
+            to hop. Mine learned to walk.
           </p>
         </div>
         <ul class="project-links">
