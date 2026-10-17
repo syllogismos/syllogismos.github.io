@@ -1,15 +1,27 @@
 ---
 // A loss landscape drawn as contour lines, unique to its seed. Click it to start a descent.
+import type { Well } from '../scripts/landscape';
+
 interface Props {
   seed: string;
   /** How many descents run on their own when the page loads. */
   paths?: number;
+  /** Fixed basins and hills, in place of the seeded ones. */
+  wells?: Well[];
+  /** Points (fractions of the width and height) for one planned path to pass through, in order. */
+  route?: [number, number][];
 }
 
-const { seed, paths = 2 } = Astro.props;
+const { seed, paths = 2, wells, route } = Astro.props;
 ---
 
-<canvas class="landscape" data-seed={seed} data-paths={paths} aria-hidden="true"></canvas>
+<canvas
+  class="landscape"
+  data-seed={seed}
+  data-paths={paths}
+  data-wells={wells && JSON.stringify(wells)}
+  data-route={route && JSON.stringify(route)}
+  aria-hidden="true"></canvas>
 
 <script>
   import '../scripts/landscape.ts';

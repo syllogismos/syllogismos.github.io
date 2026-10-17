@@ -124,9 +124,10 @@ pre:focus-visible {
 
 .site-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1.5rem;
+  gap: 0.25rem 1.5rem;
   padding: 1.25rem 0;
   font-family: var(--hand);
   font-size: 1.375rem;
@@ -564,20 +565,319 @@ pre:focus-visible {
   text-decoration: none;
 }
 
+/* ---------- work ---------- */
+
+.route-map {
+  position: relative;
+  height: clamp(16rem, 42vh, 26rem);
+}
+
+.route-labels {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.route-labels li {
+  --tx: -50%;
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  font-size: 1.125rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  transform: translate(var(--tx), calc(-100% - 0.7rem));
+  pointer-events: none;
+}
+
+.route-labels .below {
+  transform: translate(var(--tx), 0.7rem);
+}
+
+.route-labels .start {
+  --tx: -0.6rem;
+}
+
+.route-labels .end {
+  --tx: calc(-100% + 0.6rem);
+}
+
+.route-labels a {
+  padding: 0.1rem 0.3rem;
+  background: var(--paper);
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.route-labels small {
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+}
+
+.route-labels .here {
+  font-size: 1.75rem;
+  color: var(--accent-text);
+}
+
+.route-labels .here small {
+  font-size: 1.125rem;
+  color: inherit;
+}
+
+/* on a phone the map is too small to name every ring; the list below does that */
+@media (max-width: 40rem) {
+  .route-labels li:not(.here) {
+    display: none;
+  }
+}
+
+.work-head {
+  margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.work-head p {
+  max-width: var(--measure);
+}
+
+.work-section {
+  max-width: var(--page);
+  margin: 0 0 3.5rem;
+}
+
+.work-section > h2 {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.work-section > div {
+  border-top: 1px solid var(--ink);
+}
+
+.project {
+  max-width: var(--measure);
+  padding: 1.1rem 0 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 1rem;
+}
+
+.project > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.project h3 {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 1.875rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.project time {
+  font-size: 1.125rem;
+  color: var(--ink-soft);
+}
+
+.project .prose p,
+.project .prose ul {
+  margin-bottom: 0.75rem;
+}
+
+.project:target h3 {
+  color: var(--accent-text);
+}
+
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.125rem;
+}
+
+.project-links a::after {
+  content: " \2192";
+}
+
+.project--lead {
+  border-bottom: 0;
+}
+
+.project--lead h3 {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  line-height: 1;
+  color: var(--accent-text);
+}
+
+.kicker {
+  margin: 0.4rem 0 0;
+  font-size: 1.5rem;
+}
+
+.project--lead > header {
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.project--lead .prose pre {
+  margin: 1.1rem 0 1.25rem;
+}
+
+.operator-intro {
+  max-width: var(--measure);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+.operator-intro h3 {
+  margin-top: 0;
+}
+
+/* Nimbus at the top, a red line down to each business it runs */
+.operator {
+  max-width: var(--measure);
+  margin: 2rem 0 0;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--rule);
+  text-align: center;
+}
+
+.operator strong {
+  display: block;
+  font-family: var(--hand);
+  font-size: 1.625rem;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.operator span {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+.operator-hub {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 2.75rem;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid var(--accent);
+}
+
+.operator-hub strong {
+  font-size: 2.25rem;
+  color: var(--accent-text);
+}
+
+.operator-hub::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  height: 1.4rem;
+  border-left: 2px solid var(--accent);
+}
+
+.operator-arms {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* the crossbar spans from the middle of the first node to the middle of the last */
+.operator-arms::before {
+  content: "";
+  position: absolute;
+  top: -1.35rem;
+  left: calc(25% - 0.25rem);
+  right: calc(25% - 0.25rem);
+  border-top: 2px solid var(--accent);
+}
+
+.operator-node {
+  position: relative;
+  padding: 0.75rem 0.75rem 0.9rem;
+  border: 1px solid var(--ink);
+  text-decoration: none;
+}
+
+.operator-node::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  height: 1.35rem;
+  border-left: 2px solid var(--accent);
+}
+
+.operator-node:hover strong {
+  color: var(--accent-text);
+}
+
+.work-more {
+  margin: 1.25rem 0 0;
+}
+
+/* ---------- home: what I'm doing now ---------- */
+
+.now {
+  max-width: var(--page);
+  margin: 0 0 3.5rem;
+}
+
+.now h2 {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 2.25rem;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.now p {
+  max-width: var(--measure);
+  margin: 0;
+  padding: 1.1rem 0 1.2rem;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.5rem;
+  line-height: 1.35;
+}
+
 /* ---------- wide layout: years and dates in a margin column ---------- */
 
 @media (min-width: 56rem) {
-  .year {
+  .year,
+  .work-section,
+  .now {
     display: grid;
     grid-template-columns: var(--margin-col) minmax(0, 1fr);
     align-items: start;
   }
 
-  .year > h2 {
+  .year > h2,
+  .work-section > h2,
+  .now h2 {
     position: sticky;
     top: 1rem;
     padding-top: 0.9rem;
     border-top: 1px solid var(--ink);
+  }
+
+  .now p {
+    max-width: none;
   }
 
   .post-header,
@@ -613,6 +913,7 @@ pre:focus-visible {
   .post-nav,
   .post-map,
   .hero,
+  .route-labels,
   .hint,
   .skip {
     display: none;

@@ -8,6 +8,7 @@ export const GET: APIRoute = async ({ site }) => {
   const urls = [
     ...posts.map((post) => url(post.url, post.date)),
     url('/', posts[0]?.date),
+    url('/work/'),
     url('/blog/archives/', posts[0]?.date),
   ];
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

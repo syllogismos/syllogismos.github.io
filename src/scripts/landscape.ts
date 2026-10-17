@@ -1,7 +1,8 @@
 // Draws a loss landscape as contour lines and runs gradient descent across it.
-// Every <canvas class="landscape" data-seed="..."> gets its own surface, generated from its seed.
+// Every <canvas class="landscape" data-seed="..."> gets its own surface, generated from its seed,
+// unless it brings its own wells (data-wells) and a route to draw through them (data-route).
 
-interface Well {
+export interface Well {
   x: number; // centre, as a fraction of the canvas width
   y: number; // centre, as a fraction of the canvas height
   depth: number; // negative for a basin, positive for a hill
@@ -11,11 +12,14 @@ interface Well {
 interface Descent {
   points: number[]; // x0, y0, x1, y1, ...
   born: number;
+  ms: number; // how long it takes to draw
+  stops?: number[]; // indices of points that get a ring once the line reaches them
 }
 
 const CELL = 5; // contour sampling grid, in CSS pixels
 const LEVELS = 20;
 const DRAW_MS = 2200;
+const ROUTE_MS = 5000;
 const MAX_DESCENTS = 14;
 
 function hash(text: string) {
@@ -41,6 +45,8 @@ class Landscape {
   private contours = document.createElement('canvas');
   private wells: Well[] = [];
   private starts: [number, number][] = [];
+  private route: [number, number][];
+  private trail?: Descent;
   private descents: Descent[] = [];
   private rand: () => number;
   private width = 0;
@@ -53,14 +59,18 @@ class Landscape {
     this.ctx = canvas.getContext('2d')!;
     this.rand = random(hash(canvas.dataset.seed ?? ''));
 
-    for (let i = 0; i < 8; i++) {
-      this.wells.push({
-        x: 0.06 + this.rand() * 0.88,
-        y: 0.1 + this.rand() * 0.8,
-        depth: i % 3 === 2 ? 0.45 + this.rand() * 0.5 : -(0.5 + this.rand() * 0.5),
-        spread: 0.14 + this.rand() * 0.2,
-      });
+    if (canvas.dataset.wells) this.wells = JSON.parse(canvas.dataset.wells);
+    else {
+      for (let i = 0; i < 8; i++) {
+        this.wells.push({
+          x: 0.06 + this.rand() * 0.88,
+          y: 0.1 + this.rand() * 0.8,
+          depth: i % 3 === 2 ? 0.45 + this.rand() * 0.5 : -(0.5 + this.rand() * 0.5),
+          spread: 0.14 + this.rand() * 0.2,
+        });
+      }
     }
+    this.route = JSON.parse(canvas.dataset.route ?? '[]');
     const count = Number(canvas.dataset.paths ?? 2);
     for (let i = 0; i < count; i++) this.starts.push([0.08 + this.rand() * 0.84, 0.12 + this.rand() * 0.76]);
 
@@ -115,6 +125,7 @@ class Landscape {
     // Paths are in pixels, so a resize starts them over from the same seeded points.
     const now = performance.now();
     this.descents = [];
+    if (this.route.length > 1) this.trace(first ? now + 350 : -Infinity);
     this.starts.forEach(([x, y], i) => this.descend(x * this.width, y * this.height, first ? now + 350 + i * 450 : -Infinity));
     this.paint(now);
   }
@@ -192,9 +203,36 @@ class Landscape {
       points.push(x, y);
       calm = Math.hypot(vx, vy) < 0.08 ? calm + 1 : 0;
     }
-    this.descents.push({ points, born: this.still ? -Infinity : born });
+    this.descents.push({ points, born: this.still ? -Infinity : born, ms: DRAW_MS });
     if (this.descents.length > MAX_DESCENTS) this.descents.shift();
     if (!this.frame) this.frame = requestAnimationFrame((now) => this.paint(now));
+  }
+
+  /** A planned path through the route's points (fractions of the canvas), smoothed with Catmull-Rom. */
+  private trace(born: number) {
+    const stops = this.route.map(([x, y]) => [x * this.width, y * this.height]);
+    const last = stops.length - 1;
+    const points: number[] = [];
+    const marks: number[] = [];
+    for (let i = 0; i < last; i++) {
+      const [p0, p1, p2, p3] = [stops[Math.max(0, i - 1)], stops[i], stops[i + 1], stops[Math.min(last, i + 2)]];
+      marks.push(points.length / 2);
+      for (let step = 0; step < 40; step++) {
+        const t = step / 40;
+        for (const k of [0, 1]) {
+          const a = p0[k];
+          const b = p1[k];
+          const c = p2[k];
+          const d = p3[k];
+          // a little tremor, so it reads as pen rather than plotter
+          const wobble = (this.rand() - 0.5) * 0.8;
+          points.push(0.5 * (2 * b + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (3 * b - a - 3 * c + d) * t ** 3) + wobble);
+        }
+      }
+    }
+    marks.push(points.length / 2);
+    points.push(...stops[last]);
+    this.trail = { points, born: this.still ? -Infinity : born, ms: ROUTE_MS, stops: marks };
   }
 
   private paint(now: number) {
@@ -209,8 +247,8 @@ class Landscape {
     ctx.lineWidth = 1.75;
     ctx.lineJoin = 'round';
     ctx.strokeStyle = accent;
-    for (const { points, born } of this.descents) {
-      const t = Math.min(1, Math.max(0, (now - born) / DRAW_MS));
+    for (const { points, born, ms, stops = [] } of this.trail ? [this.trail, ...this.descents] : this.descents) {
+      const t = Math.min(1, Math.max(0, (now - born) / ms));
       if (t < 1) moving = true;
       if (now < born) continue;
       const eased = 1 - (1 - t) ** 3;
@@ -220,12 +258,14 @@ class Landscape {
       for (let i = 1; i <= last && i * 2 < points.length; i++) ctx.lineTo(points[i * 2], points[i * 2 + 1]);
       ctx.stroke();
 
-      // where it started (open ring) and where it is now (solid dot)
+      // where it started and every stop it has passed (open rings), and where it is now (solid dot)
       ctx.fillStyle = paper;
-      ctx.beginPath();
-      ctx.arc(points[0], points[1], 3.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
+      for (const i of [0, ...stops.filter((i) => i > 0 && i <= last)]) {
+        ctx.beginPath();
+        ctx.arc(points[i * 2], points[i * 2 + 1], 3.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
       const head = Math.min(last, points.length / 2 - 1) * 2;
       ctx.fillStyle = accent;
       ctx.beginPath();

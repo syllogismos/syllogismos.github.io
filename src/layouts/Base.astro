@@ -17,6 +17,7 @@ const path = Astro.url.pathname;
 const canonical = new URL(path, Astro.site);
 const nav = [
   { href: '/', label: 'Blog' },
+  { href: '/work/', label: 'Work' },
   { href: '/blog/archives/', label: 'Archives' },
 ];
 ---
@@ -31,6 +32,11 @@ const nav = [
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content={title ?? SITE.title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href="/fonts/HarshaFont-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="alternate" href="/atom.xml" title={SITE.title} type="application/atom+xml" />
