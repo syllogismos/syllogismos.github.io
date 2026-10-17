@@ -827,6 +827,15 @@ pre:focus-visible {
   color: var(--accent-text);
 }
 
+.jobs {
+  max-width: var(--measure);
+  margin: 0;
+  padding: 1.1rem 0 1.2rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.5rem;
+  line-height: 1.35;
+}
+
 /* ---------- home: what I'm doing now ---------- */
 
 .now {

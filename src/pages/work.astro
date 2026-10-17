@@ -267,15 +267,7 @@ const linkedin = SITE.links.find(({ label }) => label === 'LinkedIn')!.href;
   <section class="work-section">
     <h2>Jobs</h2>
     <div>
-      {
-        ['Zenskar', 'MoEngage'].map((company) => (
-          <article class="project">
-            <h3>
-              <a href={linkedin}>{company}</a>
-            </h3>
-          </article>
-        ))
-      }
+      <p class="jobs">Early employee at Zenskar and MoEngage. More on <a href={linkedin}>LinkedIn</a>.</p>
     </div>
   </section>
 </Base>
